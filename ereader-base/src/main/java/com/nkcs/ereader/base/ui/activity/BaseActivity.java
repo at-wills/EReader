@@ -81,7 +81,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements RxLife
      * @param fragment
      */
     public void addFragment(BaseFragment fragment) {
-        if (null != fragment) {
+        if (fragment != null) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(getFragmentContainerId(), fragment, fragment.getClass().getName())
@@ -94,7 +94,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements RxLife
      * @param fragment
      */
     public void replaceFragment(BaseFragment fragment) {
-        if (null != fragment) {
+        if (fragment != null) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(getFragmentContainerId(), fragment, fragment.getClass().getName())
@@ -108,7 +108,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements RxLife
      */
     public <T extends BaseFragment> T getStoredFragment(Class clazz) {
         T fragment = (T) getSupportFragmentManager().findFragmentByTag(clazz.getName());
-        if (null == fragment) {
+        if (fragment == null) {
             try {
                 fragment = (T) Class.forName(clazz.getName()).newInstance();
             } catch (Exception e) {

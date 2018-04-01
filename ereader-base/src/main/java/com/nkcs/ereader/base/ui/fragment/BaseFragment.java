@@ -29,13 +29,13 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        if (null == mRootView) {
+        if (mRootView == null) {
             mRootView = inflater.inflate(getLayoutResource(), container, false);
             onInitView();
         }
 
         ViewGroup parentView = (ViewGroup) mRootView.getParent();
-        if (null != parentView) {
+        if (parentView != null) {
             parentView.removeView(mRootView);
         }
 
@@ -73,7 +73,7 @@ public abstract class BaseFragment extends Fragment {
      * @param fragment
      */
     protected void addFragment(BaseFragment fragment) {
-        if (null != fragment) {
+        if (fragment != null) {
             getHoldingActivity().addFragment(fragment);
         }
     }
@@ -82,7 +82,7 @@ public abstract class BaseFragment extends Fragment {
      * @param fragment
      */
     protected void replaceFragment(BaseFragment fragment) {
-        if (null != fragment){
+        if (fragment != null){
             getHoldingActivity().replaceFragment(fragment);
         }
     }
