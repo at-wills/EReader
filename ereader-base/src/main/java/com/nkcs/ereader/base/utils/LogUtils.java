@@ -77,7 +77,9 @@ public class LogUtils {
     }
 
     public static void w(String tag, Object msg, Throwable tr) {
-        if (msg == null) return;
+        if (msg == null) {
+            return;
+        }
         log(tag, msg.toString(), tr, 'w');
     }
 
@@ -93,7 +95,9 @@ public class LogUtils {
     }
 
     public static void e(String tag, Object msg, Throwable tr) {
-        if (msg == null) return;
+        if (msg == null) {
+            return;
+        }
         log(tag, msg.toString(), tr, 'e');
     }
 
@@ -109,7 +113,9 @@ public class LogUtils {
     }
 
     public static void d(String tag, Object msg, Throwable tr) {
-        if (msg == null) return;
+        if (msg == null) {
+            return;
+        }
         log(tag, msg.toString(), tr, 'd');
     }
 
@@ -125,7 +131,9 @@ public class LogUtils {
     }
 
     public static void i(String tag, Object msg, Throwable tr) {
-        if (msg == null) return;
+        if (msg == null) {
+            return;
+        }
         log(tag, msg.toString(), tr, 'i');
     }
 
@@ -141,7 +149,9 @@ public class LogUtils {
     }
 
     public static void v(String tag, Object msg, Throwable tr) {
-        if (msg == null) return;
+        if (msg == null) {
+            return;
+        }
         log(tag, msg.toString(), tr, 'v');
     }
 
@@ -153,7 +163,7 @@ public class LogUtils {
      * @param level
      */
     private static void log(String tag, String msg, Throwable tr, char level) {
-        if (tag == null || msg == null || tr == null) {
+        if (tag == null || msg == null) {
             return;
         }
         if (LOG_SWITCH) {
@@ -246,9 +256,9 @@ public class LogUtils {
      * @return
      */
     private static Date getDateBefore() {
-        Date nowtime = new Date();
+        Date nowTime = new Date();
         Calendar now = Calendar.getInstance();
-        now.setTime(nowtime);
+        now.setTime(nowTime);
         now.set(Calendar.DATE, now.get(Calendar.DATE) - LOG_SAVE_DAYS);
         return now.getTime();
     }
