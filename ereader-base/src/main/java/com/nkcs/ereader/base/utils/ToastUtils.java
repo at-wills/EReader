@@ -9,7 +9,7 @@ import com.nkcs.ereader.base.BaseApplication;
  * @date 2018/3/24
  */
 
-public class ToastUtil {
+public class ToastUtils {
 
     public static void showText(String text) {
         Toast.makeText(BaseApplication.getContext(), text, Toast.LENGTH_SHORT).show();

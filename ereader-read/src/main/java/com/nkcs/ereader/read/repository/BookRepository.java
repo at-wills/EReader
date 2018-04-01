@@ -5,7 +5,7 @@ import com.nkcs.ereader.base.db.DbHelper;
 import com.nkcs.ereader.base.entity.Book;
 import com.nkcs.ereader.base.repository.BaseRepository;
 import com.nkcs.ereader.base.repository.RxLifecycleBinder;
-import com.nkcs.ereader.base.utils.RxUtil;
+import com.nkcs.ereader.base.utils.RxUtils;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public class BookRepository extends BaseRepository {
     }
 
     public Observable<List<Book>> getBooks() {
-        return RxUtil
+        return RxUtils
                 .dbToObservable(() -> mBookDao.loadAll())
                 .compose(defaultRxConfig());
     }

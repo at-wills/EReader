@@ -4,11 +4,9 @@ import android.widget.TextView;
 
 import com.nkcs.ereader.base.entity.Book;
 import com.nkcs.ereader.base.ui.fragment.BaseFragment;
-import com.nkcs.ereader.base.utils.ToastUtil;
+import com.nkcs.ereader.base.utils.ToastUtils;
 import com.nkcs.ereader.read.R;
 import com.nkcs.ereader.read.contract.ReadContract;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -47,6 +45,6 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
 
     @Override
     public void showTips(String text) {
-        ToastUtil.showText(text);
+        ToastUtils.showText(text);
     }
 }

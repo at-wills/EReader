@@ -17,7 +17,7 @@ import io.reactivex.schedulers.Schedulers;
  * @date 2018/3/20
  */
 
-public class RxUtil {
+public class RxUtils {
 
     /**
      * 默认net配置
