@@ -26,7 +26,7 @@ public abstract class BaseRepository {
      * @return ObservableTransformer
      */
     public <T> ObservableTransformer<T, T> defaultRxConfig() {
-        if (null == mLifecycleBinder) {
+        if (mLifecycleBinder == null) {
             return tObservable -> tObservable
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io());
