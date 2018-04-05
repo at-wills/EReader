@@ -1,5 +1,7 @@
 package com.nkcs.ereader.base.ui.adapter;
 
+import android.content.Context;
+import android.support.annotation.IdRes;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,13 +22,13 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
 
     protected abstract int getItemLayoutResource();
 
-    protected abstract ViewHolder createViewHolder(View view);
+    protected abstract ViewHolder createViewHolder(ViewGroup parent, View view);
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(getItemLayoutResource(), parent, false);
-        ViewHolder holder = createViewHolder(view);
+        ViewHolder holder = createViewHolder(parent, view);
         return holder;
     }
 
@@ -96,15 +98,29 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
         mList.clear();
     }
 
-    public abstract class ViewHolder extends RecyclerView.ViewHolder {
 
-        public ViewHolder(View view) {
+    public abstract static class ViewHolder<R> extends RecyclerView.ViewHolder {
+
+        private View mView;
+        private Context mContext;
+
+        public ViewHolder(ViewGroup parent, View view) {
             super(view);
-            initView(view);
+            mView = view;
+            mContext = parent.getContext();
+            onInitView();
         }
 
-        protected abstract void initView(View view);
+        protected View findViewById(@IdRes int id){
+            return mView.findViewById(id);
+        }
 
-        protected abstract void onBind(T data, int position);
+        protected Context getContext() {
+            return mContext;
+        }
+
+        protected abstract void onInitView();
+
+        protected abstract void onBind(R data, int position);
     }
 }
