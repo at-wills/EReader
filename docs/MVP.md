@@ -42,8 +42,9 @@ public class ReadActivity extends BaseActivity {
 ### MVP各层分割及对应关系
 
 * VP层为一对一关系，数据的展示和相应加工过程对应
-* 复杂的页面，Fragment和VP层关系可为一对一，也可为一对多
+* Fragment和VP层为一对一关系
 * VP层和M层为多对一关系
+* 复杂的页面，Activity和Fragment关系可为一对一，也可为一对多
 
 ## 完整的MVP流程示例
 
