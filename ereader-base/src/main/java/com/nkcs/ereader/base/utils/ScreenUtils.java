@@ -19,7 +19,7 @@ public class ScreenUtils {
 
     public static int dpToPx(int dp) {
         DisplayMetrics metrics = getDisplayMetrics();
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,dp,metrics);
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, metrics);
     }
 
     public static int pxToDp(int px) {
@@ -29,7 +29,7 @@ public class ScreenUtils {
 
     public static int spToPx(int sp) {
         DisplayMetrics metrics = getDisplayMetrics();
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP,sp,metrics);
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, sp, metrics);
     }
 
     public static int pxToSp(int px) {
@@ -69,7 +69,7 @@ public class ScreenUtils {
      */
     public static int getStatusBarHeight() {
         Resources resources = BaseApplication.getContext().getResources();
-        int resourceId = resources.getIdentifier("status_bar_height","dimen","android");
+        int resourceId = resources.getIdentifier("status_bar_height", "dimen", "android");
         return resources.getDimensionPixelSize(resourceId);
     }
 

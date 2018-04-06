@@ -27,7 +27,7 @@ public class BookRepository extends BaseRepository {
 
     public Observable<List<Book>> getBooks() {
         return RxUtils
-                .dbToObservable(() -> mBookDao.loadAll())
+                .toObservable(() -> mBookDao.loadAll())
                 .compose(defaultRxConfig());
     }
 }
