@@ -52,11 +52,11 @@ public class RxUtils {
     }
 
     /**
-     * db转Observable
+     * 转Observable
      * @param callable
      * @return Observable
      */
-    public static <T> Observable<T> dbToObservable(Callable<T> callable) {
+    public static <T> Observable<T> toObservable(Callable<T> callable) {
         return Observable.defer(() -> {
             try {
                 return Observable.just(callable.call());

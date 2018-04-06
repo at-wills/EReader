@@ -58,7 +58,7 @@ M层实现类，从本地数据库获取图书的相关信息
 
 * 需继承 BaseRepository 类
 * 构造函数中获取需要的 DAO
-* 其他方法需返回 Observable&lt;T&gt; 对象，通过 RxUtil.dbToObservable 可将同步操作变为异步
+* 其他方法需返回 Observable&lt;T&gt; 对象，通过 RxUtil.toObservable 可将同步操作变为异步
 
 ```java
 public class BookRepository extends BaseRepository {
@@ -72,7 +72,7 @@ public class BookRepository extends BaseRepository {
 
     public Observable<List<Book>> getBooks() {
         return RxUtil
-                .dbToObservable(() -> mBookDao.loadAll())
+                .toObservable(() -> mBookDao.loadAll())
                 .compose(defaultRxConfig());
     }
 }
