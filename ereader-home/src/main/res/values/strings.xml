@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ereader-home</string>
+    <string name="home_page_title">书架</string>
+    <string name="search_describe">search books</string>
+    <string name="more_describe">more options</string>
+    <string name="menu_describe">show slide function panel</string>
 </resources>
