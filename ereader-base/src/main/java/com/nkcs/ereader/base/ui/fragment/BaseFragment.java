@@ -50,6 +50,13 @@ public abstract class BaseFragment extends Fragment {
     }
 
     /**
+     * 返回值拦截
+     */
+    public boolean onBackPressed() {
+        return false;
+    }
+
+    /**
      * 获取layout
      *
      * @return int
