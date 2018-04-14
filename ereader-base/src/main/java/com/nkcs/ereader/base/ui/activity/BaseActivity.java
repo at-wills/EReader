@@ -119,7 +119,10 @@ public abstract class BaseActivity extends RxAppCompatActivity implements RxLife
 
     @Override
     public void onBackPressed() {
-        removeFragment();
+        BaseFragment fragment = (BaseFragment) getSupportFragmentManager().findFragmentById(getFragmentContainerId());
+        if (fragment != null && !fragment.onBackPressed()) {
+            removeFragment();
+        }
     }
 
     // endregion
