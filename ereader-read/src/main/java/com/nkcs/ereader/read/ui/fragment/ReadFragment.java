@@ -28,8 +28,11 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
 
     @Override
     protected void onInitView() {
-        mTextView = (TextView) findViewById(R.id.read_content);
+        mTextView = findViewById(R.id.read_content);
+    }
 
+    @Override
+    protected void onLoadData() {
         mPresenter.getBooks();
     }
 
@@ -39,7 +42,7 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
     }
 
     @Override
-    public void showBooks(List<Book> books) {
+    public void onGetBooks(List<Book> books) {
         mTextView.setText(books.toString());
     }
 

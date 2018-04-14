@@ -91,7 +91,7 @@ public interface ReadContract {
 
     interface IView extends BaseView<IPresenter> {
 
-        void showBooks(List<Book> books);
+        void onGetBooks(List<Book> books);
 
         void showTips(String text);
     }
@@ -145,7 +145,7 @@ public class ReadPresenter implements ReadContract.IPresenter {
 
         @Override
         protected void onSuccess(List<Book> books) {
-            mView.showBooks(books);
+            mView.onGetBooks(books);
         }
 
         @Override
@@ -230,8 +230,11 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
 
     @Override
     protected void onInitView() {
-        mTextView = (TextView) findViewById(R.id.read_content);
+        mTextView = findViewById(R.id.read_content);
+    }
 
+    @Override
+    protected void onLoadData() {
         mPresenter.getBooks();
     }
 
@@ -241,7 +244,7 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
     }
 
     @Override
-    public void showBooks(List<Book> books) {
+    public void onGetBooks(List<Book> books) {
         mTextView.setText(books.toString());
     }
 
