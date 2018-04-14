@@ -27,6 +27,12 @@ public abstract class BaseDialog extends Dialog {
         onInitView();
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        onLoadData();
+    }
+
     /**
      * 获取layout
      *
@@ -38,6 +44,11 @@ public abstract class BaseDialog extends Dialog {
      * 初始化视图
      */
     protected abstract void onInitView();
+
+    /**
+     * 加载数据，在每次显示的时候
+     */
+    protected void onLoadData() {}
 
     /**
      * 初始化窗口
