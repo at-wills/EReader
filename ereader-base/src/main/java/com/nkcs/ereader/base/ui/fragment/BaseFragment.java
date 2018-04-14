@@ -32,6 +32,7 @@ public abstract class BaseFragment extends Fragment {
         if (mRootView == null) {
             mRootView = inflater.inflate(getLayoutResource(), container, false);
             onInitView();
+            onLoadData();
         }
 
         ViewGroup parentView = (ViewGroup) mRootView.getParent();
@@ -59,6 +60,11 @@ public abstract class BaseFragment extends Fragment {
      * 初始化视图
      */
     protected abstract void onInitView();
+
+    /**
+     * 加载数据，在初始视图之后
+     */
+    protected void onLoadData() {}
 
     /**
      * 获取父activity
