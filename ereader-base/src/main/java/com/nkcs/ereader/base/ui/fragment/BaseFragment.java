@@ -21,7 +21,7 @@ public abstract class BaseFragment extends Fragment {
     protected View mRootView;
     protected BaseActivity mActivity;
 
-    public View findViewById(@IdRes int id){
+    public <T extends View> T findViewById(@IdRes int id){
         return mRootView.findViewById(id);
     }
 

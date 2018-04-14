@@ -34,7 +34,7 @@ public class ReadPresenter implements ReadContract.IPresenter {
 
         @Override
         protected void onSuccess(List<Book> books) {
-            mView.showBooks(books);
+            mView.onGetBooks(books);
         }
 
         @Override

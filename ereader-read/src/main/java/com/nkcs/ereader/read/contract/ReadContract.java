@@ -15,7 +15,7 @@ public interface ReadContract {
 
     interface IView extends BaseView<IPresenter> {
 
-        void showBooks(List<Book> books);
+        void onGetBooks(List<Book> books);
 
         void showTips(String text);
     }
