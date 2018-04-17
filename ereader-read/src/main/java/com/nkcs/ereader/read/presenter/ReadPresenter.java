@@ -4,10 +4,11 @@ import android.support.annotation.NonNull;
 
 import com.nkcs.ereader.base.entity.Book;
 import com.nkcs.ereader.base.subscriber.BaseDbSubscriber;
+import com.nkcs.ereader.base.utils.BrightnessUtils;
 import com.nkcs.ereader.read.contract.ReadContract;
+import com.nkcs.ereader.read.entity.Config;
 import com.nkcs.ereader.read.repository.BookRepository;
-
-import java.util.List;
+import com.nkcs.ereader.read.repository.ConfigRepository;
 
 /**
  * @author faunleaf
@@ -17,29 +18,80 @@ import java.util.List;
 public class ReadPresenter implements ReadContract.IPresenter {
 
     private ReadContract.IView mView;
-    private BookRepository mRepository;
+    private BookRepository mBookRepository;
+    private ConfigRepository mConfigRepository;
 
-    public ReadPresenter(@NonNull ReadContract.IView view, BookRepository repository) {
+    public ReadPresenter(@NonNull ReadContract.IView view, BookRepository bookRepository,
+            ConfigRepository configRepository) {
         mView = view;
         mView.setPresenter(this);
-        mRepository = repository;
+        mBookRepository = bookRepository;
+        mConfigRepository = configRepository;
     }
 
     @Override
-    public void getBooks() {
-        mRepository.getBooks().subscribe(new BookListSubscriber());
+    public void getBook(Long bookId) {
+        mBookRepository.getBookById(bookId).subscribe(new BaseDbSubscriber<Book>() {
+
+            @Override
+            protected void onSuccess(Book book) {
+                mView.onGetBook(book);
+            }
+
+            @Override
+            protected void onFailure(Throwable e) {
+                mView.showTips(e.getMessage());
+            }
+        });
     }
 
-    private class BookListSubscriber extends BaseDbSubscriber<List<Book>> {
+    @Override
+    public void changeBrightness(int brightness, boolean systemBrightness) {
+        mConfigRepository.saveBrigtnessConfig(brightness, systemBrightness).subscribe(new BaseDbSubscriber<Config>() {
 
-        @Override
-        protected void onSuccess(List<Book> books) {
-            mView.onGetBooks(books);
-        }
+            @Override
+            protected void onSuccess(Config config) {
+                mView.onChangeBrightness(config);
+            }
 
-        @Override
-        protected void onFailure(Throwable e) {
-            mView.showTips(e.getMessage());
-        }
+            @Override
+            protected void onFailure(Throwable e) {
+                mView.showTips(e.getMessage());
+            }
+        });
     }
+
+    @Override
+    public void changeNightMode(boolean nightMode) {
+        mConfigRepository.saveNightModeConfig(nightMode).subscribe(new BaseDbSubscriber<Config>() {
+
+            @Override
+            protected void onSuccess(Config config) {
+                mView.onChangeNightMode(config);
+            }
+
+            @Override
+            protected void onFailure(Throwable e) {
+                mView.showTips(e.getMessage());
+            }
+        });
+    }
+
+    @Override
+    public void getReadConfig() {
+        mConfigRepository.getAllConfig().subscribe(new BaseDbSubscriber<Config>() {
+
+            @Override
+            protected void onSuccess(Config config) {
+                mView.onGetReadConfig(config);
+            }
+
+            @Override
+            protected void onFailure(Throwable e) {
+                mView.showTips(e.getMessage());
+            }
+        });
+    }
+
+
 }

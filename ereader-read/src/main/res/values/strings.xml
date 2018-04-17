@@ -1,6 +1,12 @@
 <resources>
-    <string name="app_name">ereader-read</string>
+    <string name="prev_chapter">上一章</string>
+    <string name="next_chapter">下一章</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="read_menu_catalogue">目录</string>
+    <string name="read_menu_brightness">亮度</string>
+    <string name="read_menu_day">日间</string>
+    <string name="read_menu_night">夜间</string>
+    <string name="read_menu_setting">设置</string>
+
+    <string name="system_brightness">系统亮度</string>
 </resources>

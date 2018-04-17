@@ -1,0 +1,43 @@
+<resources>
+
+    <!-- read theme. -->
+    <style name="ReadTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorReadDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="Read"/>
+
+    <style name="Read.TopMenu">
+        <item name="android:layout_width">50dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/read_menu_text</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="Read.BottomMenu">
+        <item name="android:textColor">@color/read_menu_text</item>
+        <item name="android:textSize">13dp</item>
+    </style>
+
+    <style name="Read.BottomMenu.Button"
+        parent="Read.BottomMenu">
+        <item name="android:gravity">center_horizontal|bottom</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="Read.BottomDialog" parent="@style/Theme.AppCompat.Light.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <!--<item name="android:windowAnimation">@style/anim_slide_bottom_in_out</item>-->
+    </style>
+
+</resources>

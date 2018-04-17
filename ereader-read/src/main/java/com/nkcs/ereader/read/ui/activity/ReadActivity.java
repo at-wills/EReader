@@ -6,6 +6,7 @@ import com.nkcs.ereader.base.ui.activity.RouterConstant;
 import com.nkcs.ereader.read.R;
 import com.nkcs.ereader.read.presenter.ReadPresenter;
 import com.nkcs.ereader.read.repository.BookRepository;
+import com.nkcs.ereader.read.repository.ConfigRepository;
 import com.nkcs.ereader.read.ui.fragment.ReadFragment;
 
 /**
@@ -31,7 +32,7 @@ public class ReadActivity extends BaseActivity {
     @Override
     protected void onInitView() {
         mReadFragment = getStoredFragment(ReadFragment.class);
-        new ReadPresenter(mReadFragment, new BookRepository(this));
+        new ReadPresenter(mReadFragment, new BookRepository(this), new ConfigRepository(this));
         addFragment(mReadFragment);
     }
 }

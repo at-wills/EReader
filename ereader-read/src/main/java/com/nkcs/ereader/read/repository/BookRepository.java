@@ -25,9 +25,9 @@ public class BookRepository extends BaseRepository {
         mBookDao = DbHelper.getInstance().getSession().getBookDao();
     }
 
-    public Observable<List<Book>> getBooks() {
+    public Observable<Book> getBookById(Long bookId) {
         return RxUtils
-                .toObservable(() -> mBookDao.loadAll())
+                .toObservable(() -> mBookDao.load(bookId))
                 .compose(defaultRxConfig());
     }
 }
