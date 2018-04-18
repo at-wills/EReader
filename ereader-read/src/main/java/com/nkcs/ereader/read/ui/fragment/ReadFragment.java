@@ -25,6 +25,7 @@ import com.nkcs.ereader.read.R;
 import com.nkcs.ereader.read.contract.ReadContract;
 import com.nkcs.ereader.read.entity.Config;
 import com.nkcs.ereader.read.ui.adapter.CatalogueAdapter;
+import com.nkcs.ereader.read.ui.widget.PageView;
 import com.nkcs.ereader.read.ui.widget.ReadBrightnessDialog;
 import com.nkcs.ereader.read.ui.widget.ReadView;
 
@@ -76,7 +77,7 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
 
         // 阅读区
         mRvPage = findViewById(R.id.read_rv_page);
-        mRvPage.setTouchListener(new ReadView.TouchListener() {
+        mRvPage.setOnPageTouchListener(new ReadView.OnPageTouchListener() {
 
             @Override
             public void center() {
@@ -84,19 +85,13 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
             }
 
             @Override
-            public void prePage() {
-
-            }
+            public void prevPage() {}
 
             @Override
-            public void nextPage() {
-
-            }
+            public void nextPage() {}
 
             @Override
-            public void cancel() {
-
-            }
+            public void cancel() {}
         });
         // 蒙版
         mRlMask = findViewById(R.id.read_rl_mask);
@@ -202,7 +197,6 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
         mBrightnessDialog.setSystemBrightness(config.isSystemBrightness());
         onChangeBrightness(config);
 
-        // night_mode需在page_style之后
         toggleNightMode(config.isNightMode());
         mRvPage.setNightMode(config.isNightMode());
 

@@ -3,7 +3,6 @@ package com.nkcs.ereader.read.ui.widget;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -15,9 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 
-import com.nkcs.ereader.base.utils.LogUtils;
 import com.nkcs.ereader.base.utils.ScreenUtils;
-import com.nkcs.ereader.base.utils.StringUtils;
 import com.nkcs.ereader.read.R;
 import com.nkcs.ereader.read.ui.animation.BaseHorizontalPageAnim;
 import com.nkcs.ereader.read.ui.animation.BasePageAnimation;
@@ -28,10 +25,7 @@ import com.nkcs.ereader.read.ui.animation.SlidePageAnim;
  * @date 2018/3/27
  */
 
-public class ReadView extends View {
-
-    private int mViewWidth = 0;
-    private int mViewHeight = 0;
+public class ReadView extends PageView {
 
     private int mMarginWidth = ScreenUtils.dpToPx(18);
     private int mMarginHeight = ScreenUtils.dpToPx(20);
@@ -39,19 +33,11 @@ public class ReadView extends View {
     private int mVisibleWidth;
     private int mVisibleHeight;
 
-    private int mStartX = 0;
-    private int mStartY = 0;
-    private boolean isMove = false;
-
-    private boolean isPrepare;
-
     private boolean mNightMode;
     private int mTextSize;
     private PageStyle mPageStyle = PageStyle.BG_1;
     private int mBgColor;
     private int mTextColor;
-
-    private PageMode mPageMode;
 
     private Paint mTipPaint;
     private Paint mBgPaint;
@@ -59,31 +45,6 @@ public class ReadView extends View {
 
     private int mBatteryLevel;
 
-    /**
-     * 唤醒菜单的区域
-     */
-    private RectF mCenterRect = null;
-
-    private BasePageAnimation mPageAnim;
-    private BasePageAnimation.OnPageChangeListener mPageAnimListener = new BasePageAnimation.OnPageChangeListener() {
-
-        @Override
-        public boolean hasPrev() {
-            return ReadView.this.hasPrevPage();
-        }
-
-        @Override
-        public boolean hasNext() {
-            return ReadView.this.hasNextPage();
-        }
-
-        @Override
-        public void pageCancel() {
-            ReadView.this.pageCancel();
-        }
-    };
-
-    private TouchListener mTouchListener;
 
     public ReadView(Context context) {
         this(context, null);
@@ -188,34 +149,6 @@ public class ReadView extends View {
         drawCurPage(false);
     }
 
-    public enum PageMode {
-        SIMULATION, SLIDE
-    }
-
-    /**
-     * 翻页动画
-     *
-     * @param pageMode
-     */
-    public void setPageMode(PageMode pageMode) {
-        mPageMode = pageMode;
-        // 视图未初始化的时候，禁止调用
-        if (mViewWidth == 0 || mViewHeight == 0) {
-            return;
-        }
-
-        switch (mPageMode) {
-//            case SIMULATION:
-//                mPageAnim = new SimulationPageAnim(mViewWidth, mViewHeight, this, mPageAnimListener);
-//                break;
-            case SLIDE:
-                mPageAnim = new SlidePageAnim(mViewWidth, mViewHeight, this, mPageAnimListener);
-                break;
-            default:
-                break;
-        }
-    }
-
     /**
      * 更新电量
      *
@@ -228,105 +161,21 @@ public class ReadView extends View {
         }
     }
 
-    public void setTouchListener(TouchListener listener) {
-        mTouchListener = listener;
-    }
-
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        super.onTouchEvent(event);
-
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                mStartX = (int) event.getX();
-                mStartY = (int) event.getY();
-                isMove = false;
-                mPageAnim.onTouchEvent(event);
-                break;
-            case MotionEvent.ACTION_MOVE:
-                int touchSlop = ViewConfiguration.get(getContext()).getScaledTouchSlop();
-                if (!isMove) {
-                    isMove = Math.abs(mStartX - event.getX()) > touchSlop
-                            || Math.abs(mStartY - event.getY()) > touchSlop;
-                }
-                if (isMove) {
-                    mPageAnim.onTouchEvent(event);
-                }
-                break;
-            case MotionEvent.ACTION_UP:
-                if (!isMove) {
-                    // 设置中间区域范围
-                    if (mCenterRect == null) {
-                        mCenterRect = new RectF(mViewWidth / 5, mViewHeight / 3,
-                                mViewWidth * 4 / 5, mViewHeight * 2 / 3);
-                    }
-
-                    // 是否点击了中间
-                    if (mCenterRect.contains(event.getX(), event.getY())) {
-                        if (mTouchListener != null) {
-                            mTouchListener.center();
-                        }
-                        return true;
-                    }
-                }
-                mPageAnim.onTouchEvent(event);
-                break;
-            default:
-                break;
-        }
-        return true;
-    }
-
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        isPrepare = true;
-        prepareDisplay(w, h);
-    }
-
-    private void prepareDisplay(int w, int h) {
-        mViewWidth = w;
-        mViewHeight = h;
-
+    protected void prepareDisplay(int w, int h) {
         mVisibleWidth = mViewWidth - mMarginWidth * 2;
         mVisibleHeight = mViewHeight - mMarginHeight * 2;
 
-        setPageMode(PageMode.SLIDE);
-
+        setPageMode(mPageMode);
         drawCurPage(false);
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        mPageAnim.draw(canvas);
-    }
-
-    private void drawNextPage() {
-        if (!isPrepare) {
-            return;
-        }
-        if (mPageAnim instanceof BaseHorizontalPageAnim) {
-            ((BaseHorizontalPageAnim) mPageAnim).changePage();
-        }
-        drawPage(mPageAnim.getNextBitmap(), false);
-    }
-
-    private void drawCurPage(boolean isUpdate) {
-        if (!isPrepare) {
-            return;
-        }
-
-//        if (!isUpdate){
-//            if (mPageAnim instanceof ScrollPageAnim) {
-//                ((ScrollPageAnim) mPageAnim).resetBitmap();
-//            }
-//        }
-        drawPage(mPageAnim.getNextBitmap(), isUpdate);
-    }
-
-    private void drawPage(Bitmap bitmap, boolean isUpdate) {
+    protected void drawPage(Bitmap bitmap, boolean isUpdate) {
         drawBackground(mPageAnim.getBgBitmap(), isUpdate);
+        if (!isUpdate) {
+            drawContent(bitmap);
+        }
         invalidate();
     }
 
@@ -401,31 +250,29 @@ public class ReadView extends View {
         canvas.drawText(progress, mViewWidth - mMarginWidth - mTipPaint.measureText(progress), y, mTipPaint);
     }
 
-    private boolean hasPrevPage() {
-//        mTouchListener.prePage();
+    private void drawContent(Bitmap bitmap) {
+        Canvas canvas = new Canvas(bitmap);
+
+
+    }
+
+    @Override
+    protected boolean hasPrevPage() {
+        super.hasPrevPage();
 //        return mPageLoader.prev();
         return true;
     }
 
-    private boolean hasNextPage() {
-//        mTouchListener.nextPage();
+    @Override
+    protected boolean hasNextPage() {
+        super.hasNextPage();
 //        return mPageLoader.next();
         return true;
     }
 
-    private void pageCancel() {
-//        mTouchListener.cancel();
+    @Override
+    protected void pageCancel() {
+        super.pageCancel();
 //        mPageLoader.pageCancel();
-    }
-
-    public interface TouchListener {
-
-        void center();
-
-        void prePage();
-
-        void nextPage();
-
-        void cancel();
     }
 }

@@ -16,7 +16,7 @@ public abstract class BasePageAnimation {
 
     protected View mView;
     protected Scroller mScroller;
-    protected OnPageChangeListener mListener;
+    protected OnPageChangeListener mOnPageChangeListener;
 
     protected Direction mDirection = Direction.NEXT;
     protected boolean isRunning = false;
@@ -46,9 +46,13 @@ public abstract class BasePageAnimation {
         mViewHeight = mScreenHeight - mMarginHeight * 2;
 
         mView = view;
-        mListener = listener;
+        mOnPageChangeListener = listener;
 
         mScroller = new Scroller(mView.getContext(), new LinearInterpolator());
+    }
+
+    public void setDirection(Direction direction) {
+        mDirection = direction;
     }
 
     public boolean isRunning() {
@@ -66,10 +70,21 @@ public abstract class BasePageAnimation {
     }
 
     /**
+     * 滚动动画
+     * 必须放在computeScroll()方法中执行
+     */
+    public abstract void scrollAnim();
+
+    /**
+     * 取消动画
+     */
+    public abstract void abortAnim();
+
+    /**
      * 点击事件的处理
      * @param event
      */
-    public abstract boolean onTouchEvent(MotionEvent event);
+    public abstract void onTouchEvent(MotionEvent event);
 
     /**
      * 绘制图形
@@ -89,7 +104,7 @@ public abstract class BasePageAnimation {
     public abstract Bitmap getNextBitmap();
 
     public enum Direction {
-        PRE, NEXT
+        PREV, NEXT
     }
 
     public interface OnPageChangeListener {
