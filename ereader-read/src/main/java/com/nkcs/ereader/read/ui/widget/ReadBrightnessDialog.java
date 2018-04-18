@@ -53,9 +53,7 @@ public class ReadBrightnessDialog extends BaseDialog {
                 if (mSwitchSystemBrightness.isChecked()) {
                     mSwitchSystemBrightness.setChecked(false);
                 }
-                if (mOnBrightnessChangeListener != null) {
-                    mOnBrightnessChangeListener.onBrightnessChanged(mSbBrightness.getProgress(), mSwitchSystemBrightness.isChecked());
-                }
+                brightnessChanged(mSbBrightness.getProgress(), mSwitchSystemBrightness.isChecked());
             }
 
             @Override
@@ -73,9 +71,7 @@ public class ReadBrightnessDialog extends BaseDialog {
         });
         mSwitchSystemBrightness = findViewById(R.id.read_switch_system_brightness);
         mSwitchSystemBrightness.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (mOnBrightnessChangeListener != null) {
-                mOnBrightnessChangeListener.onBrightnessChanged(mSbBrightness.getProgress(), mSwitchSystemBrightness.isChecked());
-            }
+            brightnessChanged(mSbBrightness.getProgress(), mSwitchSystemBrightness.isChecked());
         });
     }
 
@@ -95,6 +91,14 @@ public class ReadBrightnessDialog extends BaseDialog {
 
     public void setOnBrightnessChangeListener(OnBrightnessChangeListener l) {
         mOnBrightnessChangeListener = l;
+    }
+
+    private void brightnessChanged(int brightness, boolean systemBrightness) {
+        mBrightness = brightness;
+        mSystemBrightness = systemBrightness;
+        if (mOnBrightnessChangeListener != null) {
+            mOnBrightnessChangeListener.onBrightnessChanged(brightness, systemBrightness);
+        }
     }
 
     public interface OnBrightnessChangeListener {
