@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/import_item"
+        android:title="@string/import_item" />
+    <item
+        android:id="@+id/manage_item"
+        android:title="@string/manage_item" />
+    <item
+        android:id="@+id/switch_show_mode_item"
+        android:title="@string/switch_show_mode_item" />
+    <item
+        android:id="@+id/sort_item"
+        android:title="@string/sort_item" />
+</menu>

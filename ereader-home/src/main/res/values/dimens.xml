@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="nav_header_img_height">180dp</dimen>
+    <dimen name="homepage_button_side">50dp</dimen>
+    <dimen name="homepage_quick_button_side">60dp</dimen>
+    <dimen name="homepage_title_height">60dp</dimen>
+</resources>

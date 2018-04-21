@@ -5,4 +5,17 @@
     <string name="more_describe">more options</string>
     <string name="menu_describe">show slide function panel</string>
     <string name="quick_read_button">go on your last reading</string>
+    <string name="nav_header_des">an image</string>
+    <string name="drawer_open">slide bar open</string>
+    <string name="drawer_close">slide bar close</string>
+    <string name="about">关于</string>
+    <string name="about_group">About</string>
+    <string name="setting">设置</string>
+    <string name="night_mode">夜间模式</string>
+    <string name="bookmark">书签</string>
+    <string name="home">项目主页</string>
+    <string name="import_item">本地导入</string>
+    <string name="manage_item">书架管理</string>
+    <string name="switch_show_mode_item">列表模式</string>
+    <string name="sort_item">排序</string>
 </resources>
