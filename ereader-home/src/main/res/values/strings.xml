@@ -16,6 +16,8 @@
     <string name="home">项目主页</string>
     <string name="import_item">本地导入</string>
     <string name="manage_item">书架管理</string>
-    <string name="switch_show_mode_item">列表模式</string>
-    <string name="sort_item">排序</string>
+    <string name="list_show_books">列表模式</string>
+    <string name="tradition_show_books">书架模式</string>
+    <string name="sort_item_by_name">按名称排序</string>
+    <string name="sort_item_by_time">按时间排序</string>
 </resources>

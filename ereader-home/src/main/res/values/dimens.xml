@@ -3,5 +3,6 @@
     <dimen name="nav_header_img_height">180dp</dimen>
     <dimen name="homepage_button_side">50dp</dimen>
     <dimen name="homepage_quick_button_side">60dp</dimen>
-    <dimen name="homepage_title_height">60dp</dimen>
+    <dimen name="homepage_title_height">55dp</dimen>
+    <dimen name="homepage_elevation">4dp</dimen>
 </resources>

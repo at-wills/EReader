@@ -13,77 +13,84 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clipToPadding="false">
 
-        <TextView
-            android:id="@+id/textView3"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/homepage_title_height"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:background="@color/colorPrimaryDark"
-            android:gravity="fill_vertical|center_horizontal"
-            android:text="@string/home_page_title"
-            android:textAlignment="center"
-            android:textColor="#ffffff"
-            android:textSize="18sp" />
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/homepage_elevation"
+            android:outlineProvider="bounds">
 
-        <ImageButton
-            android:id="@+id/menu_btn"
-            android:layout_width="@dimen/homepage_button_side"
-            android:layout_height="@dimen/homepage_button_side"
-            android:layout_alignBottom="@+id/textView3"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:background="@color/colorPrimaryDark"
-            android:contentDescription="@string/more_describe"
-            android:padding="14dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/more" />
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/homepage_title_height"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:background="@color/colorPrimaryDark"
+                android:gravity="fill_vertical|center_horizontal"
+                android:text="@string/home_page_title"
+                android:textAlignment="center"
+                android:textColor="#ffffff"
+                android:textSize="18sp" />
 
-        <ImageButton
-            android:id="@+id/search_btn"
-            android:layout_width="@dimen/homepage_button_side"
-            android:layout_height="@dimen/homepage_button_side"
-            android:layout_alignBottom="@+id/textView3"
-            android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@+id/menu_btn"
-            android:layout_toStartOf="@+id/menu_btn"
-            android:background="@color/colorPrimaryDark"
-            android:contentDescription="@string/search_describe"
-            android:padding="14dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/search" />
+            <ImageButton
+                android:id="@+id/menu_btn"
+                android:layout_width="@dimen/homepage_button_side"
+                android:layout_height="@dimen/homepage_button_side"
+                android:layout_alignBottom="@+id/textView3"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="@color/colorPrimaryDark"
+                android:contentDescription="@string/more_describe"
+                android:padding="14dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/more" />
 
-        <ImageButton
-            android:id="@+id/slide_bar_btn"
-            android:layout_width="@dimen/homepage_button_side"
-            android:layout_height="@dimen/homepage_button_side"
-            android:layout_alignBottom="@+id/textView3"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:background="@color/colorPrimaryDark"
-            android:contentDescription="@string/menu_describe"
-            android:padding="14dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/menu" />
+            <ImageButton
+                android:id="@+id/search_btn"
+                android:layout_width="@dimen/homepage_button_side"
+                android:layout_height="@dimen/homepage_button_side"
+                android:layout_alignBottom="@+id/textView3"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/menu_btn"
+                android:layout_toStartOf="@+id/menu_btn"
+                android:background="@color/colorPrimaryDark"
+                android:contentDescription="@string/search_describe"
+                android:padding="14dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/search" />
 
-        <ImageButton
+            <ImageButton
+                android:id="@+id/slide_bar_btn"
+                android:layout_width="@dimen/homepage_button_side"
+                android:layout_height="@dimen/homepage_button_side"
+                android:layout_alignBottom="@+id/textView3"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:background="@color/colorPrimaryDark"
+                android:contentDescription="@string/menu_describe"
+                android:padding="14dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/menu" />
+        </RelativeLayout>
+
+        <android.support.design.widget.FloatingActionButton
             android:id="@+id/quick_read_btn"
-            android:layout_width="@dimen/homepage_button_side"
-            android:layout_height="@dimen/homepage_button_side"
+            android:layout_width="@dimen/homepage_quick_button_side"
+            android:layout_height="@dimen/homepage_quick_button_side"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginBottom="25dp"
-            android:layout_marginEnd="25dp"
-            android:layout_marginRight="25dp"
+            android:layout_marginBottom="19dp"
+            android:layout_marginEnd="17dp"
+            android:layout_marginRight="17dp"
             android:background="@drawable/quick_read_btn_background"
             android:contentDescription="@string/quick_read_button"
-            android:elevation="12dp"
             android:padding="12dp"
             android:scaleType="fitCenter"
             android:src="@drawable/book" />
