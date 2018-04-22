@@ -3,7 +3,7 @@
     package="com.nkcs.ereader.home">
 
     <application>
-        <activity android:name=".ui.HomeActivity" />
+        <fragment android:name=".ui.HomeActivity" />
     </application>
 
 </manifest>
