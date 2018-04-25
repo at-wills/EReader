@@ -26,7 +26,6 @@ public class HomeFragment extends BaseFragment
         implements NavigationView.OnNavigationItemSelectedListener {
     private WindowTool windowTool;
     private DrawerLayout drawer;
-    private boolean isFullScreen = false;
     private boolean doubleBackToExitFirst = false;
 
     @Override
@@ -50,12 +49,8 @@ public class HomeFragment extends BaseFragment
 
         ImageButton quick = findViewById(R.id.quick_read_btn);
         quick.setOnClickListener(view -> {
-            if (!isFullScreen) {
-                windowTool.setFullWindow();
-            } else {
-                windowTool.setNoLimitsWindow();
-            }
-            isFullScreen = !isFullScreen;
+            ManageFragment manageFragment = new ManageFragment();
+            getHoldingActivity().addFragment(manageFragment);
         });
 
         ImageButton menuBtn = findViewById(R.id.menu_btn);
@@ -107,6 +102,6 @@ public class HomeFragment extends BaseFragment
             Toast.makeText(getHoldingActivity(), "再次按下返回键退出应用程序", Toast.LENGTH_SHORT).show();
             new Handler().postDelayed(() -> doubleBackToExitFirst = false, 2000);
         }
-        return false;
+        return true;
     }
 }
