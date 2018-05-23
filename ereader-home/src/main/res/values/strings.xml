@@ -30,4 +30,6 @@
     <string name="share">分享</string>
     <string name="edit">编辑</string>
     <string name="complete">完成</string>
+    <string name="import_from_file">导入</string>
+    <string name="book_picture">book picture</string>
 </resources>

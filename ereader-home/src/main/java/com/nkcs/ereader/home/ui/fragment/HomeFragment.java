@@ -6,6 +6,10 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +20,7 @@ import android.widget.Toast;
 
 import com.nkcs.ereader.base.ui.fragment.BaseFragment;
 import com.nkcs.ereader.home.R;
+import com.nkcs.ereader.home.ui.adaptor.BookAdapter;
 import com.nkcs.ereader.home.ui.utils.WindowTool;
 
 /**
@@ -24,9 +29,9 @@ import com.nkcs.ereader.home.ui.utils.WindowTool;
 
 public class HomeFragment extends BaseFragment
         implements NavigationView.OnNavigationItemSelectedListener {
-    private WindowTool windowTool;
     private DrawerLayout drawer;
     private boolean doubleBackToExitFirst = false;
+    private RecyclerView recyclerView;
 
     @Override
     protected int getLayoutResource() {
@@ -35,8 +40,10 @@ public class HomeFragment extends BaseFragment
 
     @Override
     protected void onInitView() {
-        windowTool = new WindowTool(this);
+        WindowTool windowTool = new WindowTool(this);
         windowTool.setNoLimitsWindow();
+
+        initRecyclerView();
 
         drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -58,6 +65,19 @@ public class HomeFragment extends BaseFragment
         menuBtn.setOnClickListener(view -> showPopupMenu(view, searchBtn));
     }
 
+    private void initRecyclerView() {
+        recyclerView = findViewById(R.id.recycler_books);
+
+        GridLayoutManager layoutManager = new GridLayoutManager(getHoldingActivity(), BookAdapter.GRID_COLUMNS);
+        recyclerView.setLayoutManager(layoutManager);
+
+        BookAdapter adapter = new BookAdapter();
+        recyclerView.setAdapter(adapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        adapter.addData();
+    }
+
     private void showPopupMenu(View view, View standByView) {
         // the view is which the popup menu relays on
         PopupMenu popupMenu;
@@ -69,15 +89,13 @@ public class HomeFragment extends BaseFragment
         popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
         setPopupMenuItemHide(popupMenu.getMenu());
         popupMenu.show();
-        popupMenu.setOnMenuItemClickListener(item -> {
-            return true;
-        });
+        popupMenu.setOnMenuItemClickListener(item -> true);
         popupMenu.setOnDismissListener(menu -> {
         });
     }
 
     /*
-    * hide popupmenu item according to configure database */
+     * hide popupmenu item according to configure database */
     private void setPopupMenuItemHide(Menu menu) {
         //todo
         menu.findItem(R.id.sort_item_by_name).setVisible(false);
