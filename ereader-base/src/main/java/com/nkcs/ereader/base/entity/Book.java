@@ -3,6 +3,7 @@ package com.nkcs.ereader.base.entity;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
+import org.greenrobot.greendao.annotation.OrderBy;
 import org.greenrobot.greendao.annotation.ToMany;
 import org.greenrobot.greendao.annotation.ToOne;
 
@@ -27,16 +28,19 @@ public class Book extends BaseEntity {
     private String title;
     @Index(unique = true)
     private String hash;
+    private String path;
     private String cover;
+    private String format;
     private Integer totalChapter;
     private Boolean hasFormat;
     private Date created;
 
-    @ToOne(joinProperty = "id")
-    private Chapter lastRead;
+    private Integer lastReadChapter;
+    private Integer lastReadPage;
     private Double progress;
 
     @ToMany(referencedJoinProperty = "bookId")
+    @OrderBy("sequence ASC")
     private List<Chapter> chapterList;
     /** Used to resolve relations */
     @Generated(hash = 2040040024)
@@ -45,17 +49,21 @@ public class Book extends BaseEntity {
     @Generated(hash = 1097957864)
     private transient BookDao myDao;
 
-    @Generated(hash = 1697284973)
-    public Book(Long id, String title, String hash, String cover,
-            Integer totalChapter, Boolean hasFormat, Date created,
-            Double progress) {
+    @Generated(hash = 1236338351)
+    public Book(Long id, String title, String hash, String path, String cover,
+            String format, Integer totalChapter, Boolean hasFormat, Date created,
+            Integer lastReadChapter, Integer lastReadPage, Double progress) {
         this.id = id;
         this.title = title;
         this.hash = hash;
+        this.path = path;
         this.cover = cover;
+        this.format = format;
         this.totalChapter = totalChapter;
         this.hasFormat = hasFormat;
         this.created = created;
+        this.lastReadChapter = lastReadChapter;
+        this.lastReadPage = lastReadPage;
         this.progress = progress;
     }
 
@@ -87,12 +95,28 @@ public class Book extends BaseEntity {
         this.hash = hash;
     }
 
+    public String getPath() {
+        return this.path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
     public String getCover() {
         return this.cover;
     }
 
     public void setCover(String cover) {
         this.cover = cover;
+    }
+
+    public String getFormat() {
+        return this.format;
+    }
+
+    public void setFormat(String format) {
+        this.format = format;
     }
 
     public Integer getTotalChapter() {
@@ -119,44 +143,28 @@ public class Book extends BaseEntity {
         this.created = created;
     }
 
+    public Integer getLastReadChapter() {
+        return this.lastReadChapter;
+    }
+
+    public void setLastReadChapter(Integer lastReadChapter) {
+        this.lastReadChapter = lastReadChapter;
+    }
+
+    public Integer getLastReadPage() {
+        return this.lastReadPage;
+    }
+
+    public void setLastReadPage(Integer lastReadPage) {
+        this.lastReadPage = lastReadPage;
+    }
+
     public Double getProgress() {
         return this.progress;
     }
 
     public void setProgress(Double progress) {
         this.progress = progress;
-    }
-
-    @Generated(hash = 1683791001)
-    private transient Long lastRead__resolvedKey;
-
-    /** To-one relationship, resolved on first access. */
-    @Generated(hash = 664993600)
-    public Chapter getLastRead() {
-        Long __key = this.id;
-        if (lastRead__resolvedKey == null || !lastRead__resolvedKey.equals(__key)) {
-            final DaoSession daoSession = this.daoSession;
-            if (daoSession == null) {
-                throw new DaoException("Entity is detached from DAO context");
-            }
-            ChapterDao targetDao = daoSession.getChapterDao();
-            Chapter lastReadNew = targetDao.load(__key);
-            synchronized (this) {
-                lastRead = lastReadNew;
-                lastRead__resolvedKey = __key;
-            }
-        }
-        return lastRead;
-    }
-
-    /** called by internal mechanisms, do not call yourself. */
-    @Generated(hash = 642867227)
-    public void setLastRead(Chapter lastRead) {
-        synchronized (this) {
-            this.lastRead = lastRead;
-            id = lastRead == null ? null : lastRead.getId();
-            lastRead__resolvedKey = id;
-        }
     }
 
     /**
@@ -229,5 +237,4 @@ public class Book extends BaseEntity {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getBookDao() : null;
     }
-
 }
