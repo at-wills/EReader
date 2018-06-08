@@ -1,6 +1,8 @@
 package com.nkcs.ereader.base.repository;
 
 import com.nkcs.ereader.base.R;
+import com.nkcs.ereader.base.db.DaoSession;
+import com.nkcs.ereader.base.db.DbHelper;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableSource;
@@ -17,8 +19,11 @@ public abstract class BaseRepository {
 
     protected RxLifecycleBinder mLifecycleBinder;
 
+    protected DaoSession mSession;
+
     public BaseRepository(RxLifecycleBinder binder) {
         mLifecycleBinder = binder;
+        mSession = DbHelper.getInstance().getSession();
     }
 
     /**

@@ -4,6 +4,9 @@ import android.support.annotation.StringRes;
 
 import com.nkcs.ereader.base.BaseApplication;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * @author faunleaf
  * @date 2018/4/1
@@ -21,6 +24,12 @@ public class StringUtils {
 
     public static String getString(@StringRes int id, Object... formatArgs) {
         return BaseApplication.getContext().getResources().getString(id, formatArgs);
+    }
+
+    public static String dateConvert(long time,String pattern) {
+        Date date = new Date(time);
+        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        return format.format(date);
     }
 
     /**
@@ -67,5 +76,22 @@ public class StringUtils {
             }
         }
         return new String(c);
+    }
+
+    /**
+     * 拼接字符串
+     *
+     * @param delimiter
+     * @param elements
+     */
+    public static String join(CharSequence delimiter, Iterable<? extends CharSequence> elements) {
+        StringBuilder sb = new StringBuilder();
+        for (CharSequence element : elements) {
+            sb.append(element).append(delimiter);
+        }
+        if (sb.length() > 0) {
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        return sb.toString();
     }
 }

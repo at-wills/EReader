@@ -1,18 +1,13 @@
 package com.nkcs.ereader.base.db;
 
-import java.util.List;
-import java.util.ArrayList;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteStatement;
 
 import org.greenrobot.greendao.AbstractDao;
 import org.greenrobot.greendao.Property;
-import org.greenrobot.greendao.internal.SqlUtils;
 import org.greenrobot.greendao.internal.DaoConfig;
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.database.DatabaseStatement;
-
-import com.nkcs.ereader.base.entity.Chapter;
 
 import com.nkcs.ereader.base.entity.Book;
 
@@ -32,11 +27,15 @@ public class BookDao extends AbstractDao<Book, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Title = new Property(1, String.class, "title", false, "TITLE");
         public final static Property Hash = new Property(2, String.class, "hash", false, "HASH");
-        public final static Property Cover = new Property(3, String.class, "cover", false, "COVER");
-        public final static Property TotalChapter = new Property(4, Integer.class, "totalChapter", false, "TOTAL_CHAPTER");
-        public final static Property HasFormat = new Property(5, Boolean.class, "hasFormat", false, "HAS_FORMAT");
-        public final static Property Created = new Property(6, java.util.Date.class, "created", false, "CREATED");
-        public final static Property Progress = new Property(7, Double.class, "progress", false, "PROGRESS");
+        public final static Property Path = new Property(3, String.class, "path", false, "PATH");
+        public final static Property Cover = new Property(4, String.class, "cover", false, "COVER");
+        public final static Property Format = new Property(5, String.class, "format", false, "FORMAT");
+        public final static Property TotalChapter = new Property(6, Integer.class, "totalChapter", false, "TOTAL_CHAPTER");
+        public final static Property HasFormat = new Property(7, Boolean.class, "hasFormat", false, "HAS_FORMAT");
+        public final static Property Created = new Property(8, java.util.Date.class, "created", false, "CREATED");
+        public final static Property LastReadChapter = new Property(9, Integer.class, "lastReadChapter", false, "LAST_READ_CHAPTER");
+        public final static Property LastReadPage = new Property(10, Integer.class, "lastReadPage", false, "LAST_READ_PAGE");
+        public final static Property Progress = new Property(11, Double.class, "progress", false, "PROGRESS");
     }
 
     private DaoSession daoSession;
@@ -58,11 +57,15 @@ public class BookDao extends AbstractDao<Book, Long> {
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"TITLE\" TEXT," + // 1: title
                 "\"HASH\" TEXT," + // 2: hash
-                "\"COVER\" TEXT," + // 3: cover
-                "\"TOTAL_CHAPTER\" INTEGER," + // 4: totalChapter
-                "\"HAS_FORMAT\" INTEGER," + // 5: hasFormat
-                "\"CREATED\" INTEGER," + // 6: created
-                "\"PROGRESS\" REAL);"); // 7: progress
+                "\"PATH\" TEXT," + // 3: path
+                "\"COVER\" TEXT," + // 4: cover
+                "\"FORMAT\" TEXT," + // 5: format
+                "\"TOTAL_CHAPTER\" INTEGER," + // 6: totalChapter
+                "\"HAS_FORMAT\" INTEGER," + // 7: hasFormat
+                "\"CREATED\" INTEGER," + // 8: created
+                "\"LAST_READ_CHAPTER\" INTEGER," + // 9: lastReadChapter
+                "\"LAST_READ_PAGE\" INTEGER," + // 10: lastReadPage
+                "\"PROGRESS\" REAL);"); // 11: progress
         // Add Indexes
         db.execSQL("CREATE UNIQUE INDEX " + constraint + "IDX_BOOK_HASH ON \"BOOK\"" +
                 " (\"HASH\" ASC);");
@@ -93,29 +96,49 @@ public class BookDao extends AbstractDao<Book, Long> {
             stmt.bindString(3, hash);
         }
  
+        String path = entity.getPath();
+        if (path != null) {
+            stmt.bindString(4, path);
+        }
+ 
         String cover = entity.getCover();
         if (cover != null) {
-            stmt.bindString(4, cover);
+            stmt.bindString(5, cover);
+        }
+ 
+        String format = entity.getFormat();
+        if (format != null) {
+            stmt.bindString(6, format);
         }
  
         Integer totalChapter = entity.getTotalChapter();
         if (totalChapter != null) {
-            stmt.bindLong(5, totalChapter);
+            stmt.bindLong(7, totalChapter);
         }
  
         Boolean hasFormat = entity.getHasFormat();
         if (hasFormat != null) {
-            stmt.bindLong(6, hasFormat ? 1L: 0L);
+            stmt.bindLong(8, hasFormat ? 1L: 0L);
         }
  
         java.util.Date created = entity.getCreated();
         if (created != null) {
-            stmt.bindLong(7, created.getTime());
+            stmt.bindLong(9, created.getTime());
+        }
+ 
+        Integer lastReadChapter = entity.getLastReadChapter();
+        if (lastReadChapter != null) {
+            stmt.bindLong(10, lastReadChapter);
+        }
+ 
+        Integer lastReadPage = entity.getLastReadPage();
+        if (lastReadPage != null) {
+            stmt.bindLong(11, lastReadPage);
         }
  
         Double progress = entity.getProgress();
         if (progress != null) {
-            stmt.bindDouble(8, progress);
+            stmt.bindDouble(12, progress);
         }
     }
 
@@ -138,29 +161,49 @@ public class BookDao extends AbstractDao<Book, Long> {
             stmt.bindString(3, hash);
         }
  
+        String path = entity.getPath();
+        if (path != null) {
+            stmt.bindString(4, path);
+        }
+ 
         String cover = entity.getCover();
         if (cover != null) {
-            stmt.bindString(4, cover);
+            stmt.bindString(5, cover);
+        }
+ 
+        String format = entity.getFormat();
+        if (format != null) {
+            stmt.bindString(6, format);
         }
  
         Integer totalChapter = entity.getTotalChapter();
         if (totalChapter != null) {
-            stmt.bindLong(5, totalChapter);
+            stmt.bindLong(7, totalChapter);
         }
  
         Boolean hasFormat = entity.getHasFormat();
         if (hasFormat != null) {
-            stmt.bindLong(6, hasFormat ? 1L: 0L);
+            stmt.bindLong(8, hasFormat ? 1L: 0L);
         }
  
         java.util.Date created = entity.getCreated();
         if (created != null) {
-            stmt.bindLong(7, created.getTime());
+            stmt.bindLong(9, created.getTime());
+        }
+ 
+        Integer lastReadChapter = entity.getLastReadChapter();
+        if (lastReadChapter != null) {
+            stmt.bindLong(10, lastReadChapter);
+        }
+ 
+        Integer lastReadPage = entity.getLastReadPage();
+        if (lastReadPage != null) {
+            stmt.bindLong(11, lastReadPage);
         }
  
         Double progress = entity.getProgress();
         if (progress != null) {
-            stmt.bindDouble(8, progress);
+            stmt.bindDouble(12, progress);
         }
     }
 
@@ -181,11 +224,15 @@ public class BookDao extends AbstractDao<Book, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // title
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // hash
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // cover
-            cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4), // totalChapter
-            cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0, // hasFormat
-            cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)), // created
-            cursor.isNull(offset + 7) ? null : cursor.getDouble(offset + 7) // progress
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // path
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // cover
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // format
+            cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6), // totalChapter
+            cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0, // hasFormat
+            cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)), // created
+            cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9), // lastReadChapter
+            cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10), // lastReadPage
+            cursor.isNull(offset + 11) ? null : cursor.getDouble(offset + 11) // progress
         );
         return entity;
     }
@@ -195,11 +242,15 @@ public class BookDao extends AbstractDao<Book, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setTitle(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setHash(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setCover(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setTotalChapter(cursor.isNull(offset + 4) ? null : cursor.getInt(offset + 4));
-        entity.setHasFormat(cursor.isNull(offset + 5) ? null : cursor.getShort(offset + 5) != 0);
-        entity.setCreated(cursor.isNull(offset + 6) ? null : new java.util.Date(cursor.getLong(offset + 6)));
-        entity.setProgress(cursor.isNull(offset + 7) ? null : cursor.getDouble(offset + 7));
+        entity.setPath(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setCover(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setFormat(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setTotalChapter(cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6));
+        entity.setHasFormat(cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0);
+        entity.setCreated(cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)));
+        entity.setLastReadChapter(cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9));
+        entity.setLastReadPage(cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10));
+        entity.setProgress(cursor.isNull(offset + 11) ? null : cursor.getDouble(offset + 11));
      }
     
     @Override
@@ -227,95 +278,4 @@ public class BookDao extends AbstractDao<Book, Long> {
         return true;
     }
     
-    private String selectDeep;
-
-    protected String getSelectDeep() {
-        if (selectDeep == null) {
-            StringBuilder builder = new StringBuilder("SELECT ");
-            SqlUtils.appendColumns(builder, "T", getAllColumns());
-            builder.append(',');
-            SqlUtils.appendColumns(builder, "T0", daoSession.getChapterDao().getAllColumns());
-            builder.append(" FROM BOOK T");
-            builder.append(" LEFT JOIN CHAPTER T0 ON T.\"_id\"=T0.\"_id\"");
-            builder.append(' ');
-            selectDeep = builder.toString();
-        }
-        return selectDeep;
-    }
-    
-    protected Book loadCurrentDeep(Cursor cursor, boolean lock) {
-        Book entity = loadCurrent(cursor, 0, lock);
-        int offset = getAllColumns().length;
-
-        Chapter lastRead = loadCurrentOther(daoSession.getChapterDao(), cursor, offset);
-        entity.setLastRead(lastRead);
-
-        return entity;    
-    }
-
-    public Book loadDeep(Long key) {
-        assertSinglePk();
-        if (key == null) {
-            return null;
-        }
-
-        StringBuilder builder = new StringBuilder(getSelectDeep());
-        builder.append("WHERE ");
-        SqlUtils.appendColumnsEqValue(builder, "T", getPkColumns());
-        String sql = builder.toString();
-        
-        String[] keyArray = new String[] { key.toString() };
-        Cursor cursor = db.rawQuery(sql, keyArray);
-        
-        try {
-            boolean available = cursor.moveToFirst();
-            if (!available) {
-                return null;
-            } else if (!cursor.isLast()) {
-                throw new IllegalStateException("Expected unique result, but count was " + cursor.getCount());
-            }
-            return loadCurrentDeep(cursor, true);
-        } finally {
-            cursor.close();
-        }
-    }
-    
-    /** Reads all available rows from the given cursor and returns a list of new ImageTO objects. */
-    public List<Book> loadAllDeepFromCursor(Cursor cursor) {
-        int count = cursor.getCount();
-        List<Book> list = new ArrayList<Book>(count);
-        
-        if (cursor.moveToFirst()) {
-            if (identityScope != null) {
-                identityScope.lock();
-                identityScope.reserveRoom(count);
-            }
-            try {
-                do {
-                    list.add(loadCurrentDeep(cursor, false));
-                } while (cursor.moveToNext());
-            } finally {
-                if (identityScope != null) {
-                    identityScope.unlock();
-                }
-            }
-        }
-        return list;
-    }
-    
-    protected List<Book> loadDeepAllAndCloseCursor(Cursor cursor) {
-        try {
-            return loadAllDeepFromCursor(cursor);
-        } finally {
-            cursor.close();
-        }
-    }
-    
-
-    /** A raw-style query where you can pass any WHERE clause and arguments. */
-    public List<Book> queryDeep(String where, String... selectionArg) {
-        Cursor cursor = db.rawQuery(getSelectDeep() + where, selectionArg);
-        return loadDeepAllAndCloseCursor(cursor);
-    }
- 
 }
