@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.nkcs.ereader.base.BaseApplication;
 
 import org.greenrobot.greendao.database.Database;
+import org.greenrobot.greendao.identityscope.IdentityScopeType;
 
 /**
  * @author faunleaf
@@ -41,7 +42,7 @@ public class DbHelper {
 
         mDb = openHelper.getWritableDatabase();
         mDaoMaster = new DaoMaster(mDb);
-        mSession = mDaoMaster.newSession();
+        mSession = mDaoMaster.newSession(IdentityScopeType.None);
     }
 
     public static DbHelper getInstance(){
@@ -57,13 +58,5 @@ public class DbHelper {
 
     public DaoSession getSession() {
         return mSession;
-    }
-
-    public SQLiteDatabase getDatabase() {
-        return mDb;
-    }
-
-    public DaoSession getNewSession() {
-        return mDaoMaster.newSession();
     }
 }
