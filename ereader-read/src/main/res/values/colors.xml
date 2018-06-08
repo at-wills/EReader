@@ -18,12 +18,14 @@
     <color name="read_bg_2">#CCEBCC</color>
     <color name="read_bg_3">#AAAAAA</color>
     <color name="read_bg_4">#D1CEC5</color>
+    <color name="read_bg_5">#001C27</color>
     <color name="read_bg_night">#000000</color>
 
     <color name="read_font_1">#2C2C2C</color>
-    <color name="read_font_2">#2F332D</color>
-    <color name="read_font_3">#92918C</color>
-    <color name="read_font_4">#383429</color>
+    <color name="read_font_2">#2C2C2C</color>
+    <color name="read_font_3">#2C2C2C</color>
+    <color name="read_font_4">#2C2C2C</color>
+    <color name="read_font_5">#627176</color>
     <color name="read_font_night">#99ffffff</color>
 
 </resources>

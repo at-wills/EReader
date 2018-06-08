@@ -2,6 +2,7 @@ package com.nkcs.ereader.read.ui.adapter;
 
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -29,9 +30,20 @@ public class CatalogueAdapter extends BaseRecyclerAdapter<Chapter> {
         return new ViewHolder(parent, view);
     }
 
-    public void setChapter(int position) {
+    public void setCurChapter(int position) {
         currentSelected = position;
         notifyDataSetChanged();
+    }
+
+    public int getCurChapter() {
+        return currentSelected;
+    }
+
+    public void scrollToSelected() {
+        if (mView != null) {
+            LinearLayoutManager layoutManager = (LinearLayoutManager) mView.getLayoutManager();
+            layoutManager.scrollToPositionWithOffset(currentSelected, 0);
+        }
     }
 
     public class ViewHolder extends BaseRecyclerAdapter.ViewHolder<Chapter> {
@@ -50,10 +62,13 @@ public class CatalogueAdapter extends BaseRecyclerAdapter<Chapter> {
         @Override
         protected void onBind(Chapter data, int position) {
             Drawable drawable = null;
-            drawable = ContextCompat.getDrawable(getContext(), R.drawable.selector_catalogue_unread);
+            if (data.getHasRead()) {
+                drawable = ContextCompat.getDrawable(getContext(), R.drawable.selector_catalogue_read);
+            } else {
+                drawable = ContextCompat.getDrawable(getContext(), R.drawable.selector_catalogue_unread);
+            }
 
-            mTvChapter.setSelected(false);
-            mTvChapter.setTextColor(ContextCompat.getColor(getContext(), R.color.read_text_default));
+            mTvChapter.setSelected(currentSelected == position);
             mTvChapter.setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
             mTvChapter.setText(data.getTitle());
         }

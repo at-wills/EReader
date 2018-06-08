@@ -8,6 +8,7 @@ import android.widget.Switch;
 
 import com.nkcs.ereader.base.ui.activity.BaseActivity;
 import com.nkcs.ereader.base.ui.widget.BaseDialog;
+import com.nkcs.ereader.base.utils.LogUtils;
 import com.nkcs.ereader.read.R;
 
 /**
@@ -50,6 +51,9 @@ public class ReadBrightnessDialog extends BaseDialog {
 
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (!isShowing()) {
+                    return;
+                }
                 if (mSwitchSystemBrightness.isChecked()) {
                     mSwitchSystemBrightness.setChecked(false);
                 }

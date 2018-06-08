@@ -1,7 +1,7 @@
 package com.nkcs.ereader.read.entity;
 
-import com.nkcs.ereader.read.ui.widget.PageStyle;
-import com.nkcs.ereader.read.ui.widget.ReadView;
+import com.nkcs.ereader.read.ui.widget.read.PageStyle;
+import com.nkcs.ereader.read.ui.widget.read.ReadView;
 
 /**
  * @author faunleaf

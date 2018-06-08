@@ -13,9 +13,11 @@
         android:drawableLeft="@drawable/selector_catalogue_read"
         android:drawablePadding="10dp"
         android:padding="15dp"
-        android:text="1.第一章 八十大寿"
+        android:text="第一章 八十大寿"
         android:textColor="@color/selector_chapter"
-        android:textSize="15sp" />
+        android:textSize="15sp"
+        android:singleLine="true"
+        android:ellipsize="end" />
 
     <View
         android:layout_width="match_parent"

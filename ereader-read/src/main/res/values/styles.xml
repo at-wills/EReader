@@ -9,6 +9,10 @@
 
     <style name="Read"/>
 
+    <style name="Read.PopupMenu" parent="Widget.AppCompat.Light.ListPopupWindow">
+        <item name="android:popupBackground">@color/read_menu_bg</item>
+    </style>
+
     <style name="Read.TopMenu">
         <item name="android:layout_width">50dp</item>
         <item name="android:layout_height">match_parent</item>

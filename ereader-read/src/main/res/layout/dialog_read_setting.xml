@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/read_menu_bg"
+    android:clickable="true"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="18dp"
+        android:paddingBottom="12dp">
+
+        <TextView
+            android:id="@+id/read_tv_text_size_minus"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_marginRight="15dp"
+            android:text="@string/text_size_minus"
+            android:background="@drawable/shape_setting_btn_normal"
+            style="@style/Read.BottomMenu"/>
+
+        <TextView
+            android:id="@+id/read_tv_text_size"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_marginRight="15dp"
+            android:text="15"
+            style="@style/Read.BottomMenu" />
+
+        <TextView
+            android:id="@+id/read_tv_text_size_plus"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/text_size_plus"
+            android:background="@drawable/shape_setting_btn_normal"
+            style="@style/Read.BottomMenu" />
+    </LinearLayout>
+
+    <RadioGroup
+        android:id="@+id/read_rg_page_mode"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="12dp">
+
+        <RadioButton
+            android:id="@+id/read_rb_slide"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:text="@string/page_mode_slide"
+            android:gravity="center"
+            android:layout_marginRight="15dp"
+            android:button="@null"
+            android:background="@drawable/selector_setting_btn"
+            style="@style/Read.BottomMenu"/>
+
+        <RadioButton
+            android:id="@+id/read_rb_simulation"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:text="@string/page_mode_simulation"
+            android:gravity="center"
+            android:layout_marginRight="15dp"
+            android:button="@null"
+            android:background="@drawable/selector_setting_btn"
+            style="@style/Read.BottomMenu"/>
+
+        <RadioButton
+            android:id="@+id/read_rb_translation"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:text="@string/page_mode_translation"
+            android:gravity="center"
+            android:button="@null"
+            android:background="@drawable/selector_setting_btn"
+            style="@style/Read.BottomMenu"/>
+
+    </RadioGroup>
+
+    <RadioGroup
+        android:id="@+id/read_rg_page_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="18dp">
+
+        <RadioButton
+            android:id="@+id/read_rb_page_style_1"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_marginRight="12dp"
+            android:button="@null"
+            android:background="@color/read_bg_1"
+            android:drawableLeft="@drawable/ic_read_unchecked"
+            android:paddingLeft="20dp"
+            style="@style/Read.BottomMenu"/>
+
+        <RadioButton
+            android:id="@+id/read_rb_page_style_2"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_marginRight="12dp"
+            android:button="@null"
+            android:background="@color/read_bg_2"
+            android:drawableLeft="@drawable/ic_read_unchecked"
+            android:paddingLeft="20dp"
+            style="@style/Read.BottomMenu"/>
+
+        <RadioButton
+            android:id="@+id/read_rb_page_style_3"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_marginRight="12dp"
+            android:button="@null"
+            android:background="@color/read_bg_3"
+            android:drawableLeft="@drawable/ic_read_unchecked"
+            android:paddingLeft="20dp"
+            style="@style/Read.BottomMenu"/>
+
+        <RadioButton
+            android:id="@+id/read_rb_page_style_4"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_marginRight="12dp"
+            android:button="@null"
+            android:background="@color/read_bg_4"
+            android:drawableLeft="@drawable/ic_read_unchecked"
+            android:paddingLeft="20dp"
+            style="@style/Read.BottomMenu"/>
+
+        <RadioButton
+            android:id="@+id/read_rb_page_style_5"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:button="@null"
+            android:background="@color/read_bg_5"
+            android:drawableLeft="@drawable/ic_read_unchecked"
+            android:paddingLeft="20dp"
+            style="@style/Read.BottomMenu"/>
+
+    </RadioGroup>
+
+</LinearLayout>

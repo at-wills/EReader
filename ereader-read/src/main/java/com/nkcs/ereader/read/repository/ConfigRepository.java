@@ -6,11 +6,11 @@ import android.content.SharedPreferences;
 import com.nkcs.ereader.base.BaseApplication;
 import com.nkcs.ereader.base.repository.BaseRepository;
 import com.nkcs.ereader.base.repository.RxLifecycleBinder;
-import com.nkcs.ereader.base.utils.BrightnessUtils;
 import com.nkcs.ereader.base.utils.RxUtils;
 import com.nkcs.ereader.read.entity.Config;
-import com.nkcs.ereader.read.ui.widget.PageStyle;
-import com.nkcs.ereader.read.ui.widget.ReadView;
+import com.nkcs.ereader.read.ui.widget.read.PageStyle;
+import com.nkcs.ereader.read.ui.widget.read.PageView;
+import com.nkcs.ereader.read.ui.widget.read.ReadView;
 
 import io.reactivex.Observable;
 
@@ -57,13 +57,37 @@ public class ConfigRepository extends BaseRepository {
                 }).compose(defaultRxConfig());
     }
 
+    public Observable<Config> saveTextSizeConfig(int textSize) {
+        return RxUtils
+                .toObservable(() -> {
+                    saveConfig(CONFIG_TEXT_SIZE, textSize);
+                    return getAll();
+                }).compose(defaultRxConfig());
+    }
+
+    public Observable<Config> savePageModeConfig(PageView.PageMode pageMode) {
+        return RxUtils
+                .toObservable(() -> {
+                    saveConfig(CONFIG_PAGE_MODE, pageMode);
+                    return getAll();
+                }).compose(defaultRxConfig());
+    }
+
+    public Observable<Config> savePageStyleConfig(PageStyle pageStyle) {
+        return RxUtils
+                .toObservable(() -> {
+                    saveConfig(CONFIG_PAGE_STYLE, pageStyle);
+                    return getAll();
+                }).compose(defaultRxConfig());
+    }
+
     private Config getAll() {
         SharedPreferences sp = BaseApplication.getContext()
                 .getSharedPreferences(USER_CONFIG, Context.MODE_PRIVATE);
         return new Config(sp.getInt(CONFIG_BRIGHTNESS, 255),
                 sp.getBoolean(CONFIG_SYSTEM_BRIGHTNESS, true),
                 sp.getBoolean(CONFIG_NIGHT_MODE, false),
-                sp.getInt(CONFIG_TEXT_SIZE, 18),
+                sp.getInt(CONFIG_TEXT_SIZE, 36),
                 PageStyle.values()[sp.getInt(CONFIG_PAGE_STYLE, PageStyle.BG_1.ordinal())],
                 ReadView.PageMode.values()[sp.getInt(CONFIG_PAGE_MODE, ReadView.PageMode.SIMULATION.ordinal())]);
     }

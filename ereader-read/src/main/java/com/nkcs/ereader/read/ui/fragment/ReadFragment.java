@@ -1,6 +1,14 @@
 package com.nkcs.ereader.read.ui.fragment;
 
+import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -10,11 +18,17 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.nkcs.ereader.base.entity.Book;
+import com.nkcs.ereader.base.entity.Chapter;
 import com.nkcs.ereader.base.ui.fragment.BaseFragment;
 import com.nkcs.ereader.base.utils.BrightnessUtils;
 import com.nkcs.ereader.base.utils.ScreenUtils;
@@ -25,9 +39,14 @@ import com.nkcs.ereader.read.R;
 import com.nkcs.ereader.read.contract.ReadContract;
 import com.nkcs.ereader.read.entity.Config;
 import com.nkcs.ereader.read.ui.adapter.CatalogueAdapter;
-import com.nkcs.ereader.read.ui.widget.PageView;
 import com.nkcs.ereader.read.ui.widget.ReadBrightnessDialog;
-import com.nkcs.ereader.read.ui.widget.ReadView;
+import com.nkcs.ereader.read.ui.widget.ReadSettingDialog;
+import com.nkcs.ereader.read.ui.widget.read.PageStyle;
+import com.nkcs.ereader.read.ui.widget.read.PageView;
+import com.nkcs.ereader.read.ui.widget.read.ReadView;
+
+import java.io.File;
+import java.util.List;
 
 /**
  * @author faunleaf
@@ -47,12 +66,21 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
     private RelativeLayout mRlTopMenu;
     private LinearLayout mLlBottomMenu;
 
+    private ImageView mIvBack;
+    private ImageView mIvMore;
+
+    private TextView mTvChapterTip;
+    private TextView mTvPrevChapter;
+    private SeekBar mSbChapterProgress;
+    private TextView mTvNextChapter;
+
     private TextView mTvCatalogue;
     private TextView mTvBrightness;
     private TextView mTvMode;
     private TextView mTvSetting;
 
     private ReadBrightnessDialog mBrightnessDialog;
+    private ReadSettingDialog mSettingDialog;
 
     private TextView mTvTitle;
     private RecyclerView mRvCatalogue;
@@ -62,6 +90,21 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
     private Animation mTopOutAnim;
     private Animation mBottomInAnim;
     private Animation mBottomOutAnim;
+
+    /**
+     * 接收电池信息和时间更新的广播
+     */
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Intent.ACTION_BATTERY_CHANGED)) {
+                int level = intent.getIntExtra("level", 0);
+                mRvPage.updateBattery(level);
+            } else if (intent.getAction().equals(Intent.ACTION_TIME_TICK)) {
+                mRvPage.updateTime();
+            }
+        }
+    };
 
     @Override
     protected int getLayoutResource() {
@@ -80,18 +123,15 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
         mRvPage.setOnPageTouchListener(new ReadView.OnPageTouchListener() {
 
             @Override
-            public void center() {
+            public void onCenterTouch() {
                 toggleMenu(true);
             }
 
             @Override
-            public void prevPage() {}
+            public void onPrevPage() {}
 
             @Override
-            public void nextPage() {}
-
-            @Override
-            public void cancel() {}
+            public void onNextPage() {}
         });
         // 蒙版
         mRlMask = findViewById(R.id.read_rl_mask);
@@ -108,10 +148,66 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
         // 底部菜单
         mLlBottomMenu = findViewById(R.id.read_ll_bottom_menu);
 
+        // 后退
+        mIvBack = findViewById(R.id.read_iv_back);
+        mIvBack.setOnClickListener(v -> {
+            removeFragment();
+        });
+        // 更多选项
+        mIvMore = findViewById(R.id.read_iv_more);
+        mIvMore.setOnClickListener(v -> {
+            showPopupWindow(v);
+        });
+
+        mTvChapterTip = findViewById(R.id.read_tv_chapter_tip);
+        // 上一章
+        mTvPrevChapter = findViewById(R.id.read_tv_prev_chapter);
+        mTvPrevChapter.setOnClickListener(v -> {
+            int prevChapter = mCatalogueAdapter.getCurChapter() - 1;
+            if (prevChapter >= 0) {
+                mRvPage.skipToChapter(prevChapter);
+            }
+        });
+        // 章节滚动条
+        mSbChapterProgress = findViewById(R.id.read_sb_chapter_progress);
+        mSbChapterProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (mLlBottomMenu.getVisibility() == View.VISIBLE) {
+                    String tip = mCatalogueAdapter.getItem(progress).getTitle() + "\n"
+                            + (progress + 1) + "/" + mCatalogueAdapter.getItemCount();
+                    mTvChapterTip.setText(tip);
+                    mTvChapterTip.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                int pos = mSbChapterProgress.getProgress();
+                if (pos != mCatalogueAdapter.getCurChapter()) {
+                    mRvPage.skipToChapter(pos);
+                }
+                mTvChapterTip.setVisibility(View.GONE);
+            }
+        });
+        // 下一章
+        mTvNextChapter = findViewById(R.id.read_tv_next_chapter);
+        mTvNextChapter.setOnClickListener(v -> {
+            int nextChapter = mCatalogueAdapter.getCurChapter() + 1;
+            if (nextChapter < mCatalogueAdapter.getItemCount()) {
+                mRvPage.skipToChapter(nextChapter);
+            }
+        });
+
         // 目录
         mTvCatalogue = findViewById(R.id.read_tv_catalogue);
         mTvCatalogue.setOnClickListener(v -> {
             toggleMenu(true);
+            mCatalogueAdapter.scrollToSelected();
             mDlSlide.openDrawer(mDrawerDirection);
         });
         // 亮度
@@ -127,6 +223,10 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
         });
         // 设置
         mTvSetting = findViewById(R.id.read_tv_setting);
+        mTvSetting.setOnClickListener(v -> {
+            toggleMenu(false);
+            toggleSettingDialog();
+        });
 
         // 亮度
         mBrightnessDialog = new ReadBrightnessDialog(getHoldingActivity());
@@ -136,20 +236,71 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
         mBrightnessDialog.setOnDismissListener((dialog) -> {
             hideSystemBar();
         });
+        // 设置
+        mSettingDialog = new ReadSettingDialog(getHoldingActivity());
+        mSettingDialog.setOnSettingChangeListener(new ReadSettingDialog.OnSettingChangeListener() {
+            @Override
+            public void onTextSizeChanged(int textSize) {
+                mPresenter.changeTextSize(textSize);
+            }
+
+            @Override
+            public void onPageModeChanged(PageView.PageMode pageMode) {
+                mPresenter.changePageMode(pageMode);
+            }
+
+            @Override
+            public void onPageStyleChanged(PageStyle pageStyle) {
+                mPresenter.changePageStyle(pageStyle);
+            }
+        });
+        mSettingDialog.setOnDismissListener((dialog) -> {
+            hideSystemBar();
+        });
 
         mTvTitle = findViewById(R.id.read_tv_title);
         mRvCatalogue = findViewById(R.id.read_rv_catalogue);
         mRvCatalogue.setLayoutManager(new LinearLayoutManager(getHoldingActivity()));
         mCatalogueAdapter = new CatalogueAdapter();
         mRvCatalogue.setAdapter(mCatalogueAdapter);
+        mCatalogueAdapter.setOnItemClickListener((v, chapter, position) -> {
+            mRvPage.skipToChapter(chapter.getSequence());
+            onBackPressed();
+        });
 
-        hideSystemBar();
+        // 注册广播
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_BATTERY_CHANGED);
+        intentFilter.addAction(Intent.ACTION_TIME_TICK);
+        getHoldingActivity().registerReceiver(mReceiver, intentFilter);
     }
 
     @Override
     protected void onLoadData() {
-        mPresenter.getBook(bookId);
+//        mPresenter.getBook(bookId);
         mPresenter.getReadConfig();
+        callWithPermissions("go");
+    }
+
+    @NeedsPermission(permissions = { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+            permissionsText = { "读写手机存储" })
+    public void go() {
+        mPresenter.getBook(bookId);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mRlTopMenu.getVisibility() != View.VISIBLE && !mBrightnessDialog.isShowing()
+                && !mSettingDialog.isShowing()) {
+            hideSystemBar();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getHoldingActivity().unregisterReceiver(mReceiver);
     }
 
     @Override
@@ -174,6 +325,23 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
     public void onGetBook(Book book) {
         mTvTitle.setText(book.getTitle());
         mCatalogueAdapter.refreshItems(book.getChapterList());
+        mRvPage.setBook(book, new ReadView.OnBookChangeListener() {
+
+            @Override
+            public void onFormatChapters(Book book, List<Chapter> chapterList) {
+                mPresenter.formatChapters(book, chapterList);
+            }
+
+            @Override
+            public void onChapterChange(Book book, Chapter chapter) {
+                mCatalogueAdapter.setCurChapter(chapter.getSequence());
+                mSbChapterProgress.setProgress(chapter.getSequence());
+                mPresenter.changeLastReadChapter(book, chapter);
+                mTvChapterTip.setVisibility(View.GONE);
+            }
+        });
+        mSbChapterProgress.setMax(book.getChapterList().size() - 1);
+        mSbChapterProgress.setProgress(book.getLastReadChapter());
     }
 
     @Override
@@ -192,10 +360,32 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
     }
 
     @Override
+    public void onChangeTextSize(Config config) {
+        mRvPage.setTextSize(config.getTextSize());
+    }
+
+    @Override
+    public void onChangePageMode(Config config) {
+        mRvPage.setPageMode(config.getPageMode());
+    }
+
+    @Override
+    public void onChangePageStyle(Config config) {
+        mRvPage.setPageStyle(config.getPageStyle());
+    }
+
+    @Override
     public void onGetReadConfig(Config config) {
         mBrightnessDialog.setBrightness(config.getBrightness());
         mBrightnessDialog.setSystemBrightness(config.isSystemBrightness());
         onChangeBrightness(config);
+
+        mSettingDialog.setTextSize(config.getTextSize());
+        onChangeTextSize(config);
+        mSettingDialog.setPageMode(config.getPageMode());
+        onChangePageMode(config);
+        mSettingDialog.setPageStyle(config.getPageStyle());
+        onChangePageStyle(config);
 
         toggleNightMode(config.isNightMode());
         mRvPage.setNightMode(config.isNightMode());
@@ -203,6 +393,7 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
         mRvPage.setTextSize(config.getTextSize());
         mRvPage.setPageStyle(config.getPageStyle());
         mRvPage.setPageMode(config.getPageMode());
+        mRvPage.setPageStyle(config.getPageStyle());
     }
 
     @Override
@@ -220,6 +411,7 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
             mLlBottomMenu.startAnimation(mBottomOutAnim);
             mRlTopMenu.setVisibility(View.GONE);
             mLlBottomMenu.setVisibility(View.GONE);
+            mTvChapterTip.setVisibility(View.GONE);
 
             if (hideStatusBar) {
                 hideSystemBar();
@@ -266,11 +458,48 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
         }
     }
 
+    private void toggleSettingDialog() {
+        if (mSettingDialog.isShowing()) {
+            mSettingDialog.dismiss();
+            hideSystemBar();
+        } else {
+            mSettingDialog.show();
+            showSystemBar();
+        }
+    }
+
     private void showSystemBar() {
         SystemBarUtils.showUnStableStatusBar(getHoldingActivity());
     }
 
     private void hideSystemBar() {
         SystemBarUtils.hideStableStatusBar(getHoldingActivity());
+    }
+
+    private void showPopupWindow(View view) {
+        View popupView = getHoldingActivity().getLayoutInflater().inflate(R.layout.popup_read_more, null);
+        PopupWindow window = new PopupWindow(popupView, 280, 200);
+        window.setBackgroundDrawable(ContextCompat.getDrawable(getHoldingActivity(), R.color.read_menu_bg));
+        window.setFocusable(true);
+        window.setOutsideTouchable(true);
+        window.update();
+        window.showAsDropDown(view, 0, 20);
+
+        TextView tvFulltextRetrieval = popupView.findViewById(R.id.read_tv_fulltext_retrieval);
+        tvFulltextRetrieval.setOnClickListener(v -> {
+
+        });
+        TextView tvShare = popupView.findViewById(R.id.read_tv_share);
+        tvShare.setOnClickListener(v -> {
+            window.dismiss();
+            Book book = mRvPage.getBook();
+            if (book == null) {
+                return;
+            }
+            Intent share = new Intent(Intent.ACTION_SEND);
+            share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(book.getPath())));
+            share.setType("*/*");
+            startActivity(Intent.createChooser(share, "分享"));
+        });
     }
 }
