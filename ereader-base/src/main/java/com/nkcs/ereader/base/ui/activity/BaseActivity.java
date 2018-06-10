@@ -16,18 +16,13 @@ import com.trello.rxlifecycle2.LifecycleTransformer;
 
 public abstract class BaseActivity extends RxAppCompatActivity implements RxLifecycleBinder {
 
-    public BaseApplication application;
-
     // region 初始化相关
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initConfigBeforeSetContentView();
-        if (getLayoutResource() != 0) {
-            setContentView(getLayoutResource());
-        }
-        onInitData();
+        setContentView(getLayoutResource());
         onInitView();
     }
 
@@ -49,13 +44,6 @@ public abstract class BaseActivity extends RxAppCompatActivity implements RxLife
      * 初始化视图
      */
     protected abstract void onInitView();
-
-    /**
-     * 初始化数据，在初始化视图前调用
-     */
-    protected void onInitData() {
-        application = (BaseApplication) getApplication();
-    }
 
     /**
      * 设置布局前调用该方法
@@ -131,7 +119,10 @@ public abstract class BaseActivity extends RxAppCompatActivity implements RxLife
 
     @Override
     public void onBackPressed() {
-        removeFragment();
+        BaseFragment fragment = (BaseFragment) getSupportFragmentManager().findFragmentById(getFragmentContainerId());
+        if (fragment != null && !fragment.onBackPressed()) {
+            removeFragment();
+        }
     }
 
     // endregion

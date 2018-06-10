@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.nkcs.ereader.base.R;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,7 +20,13 @@ import java.util.List;
 
 public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRecyclerAdapter.ViewHolder> {
 
+    protected RecyclerView mView = null;
+
     protected final List<T> mList = new ArrayList<>();
+
+    protected OnItemClickListener<T> mOnItemClickListener = null;
+
+    protected OnItemLongClickListener<T> mOnItemLongClickListener = null;
 
     protected abstract int getItemLayoutResource();
 
@@ -34,9 +42,25 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        T data = getItem(position);
         holder.onBind(getItem(position), position);
-        holder.itemView.setOnClickListener(v -> onItemClick(v, position));
-        holder.itemView.setOnLongClickListener(v -> onItemLongClick(v, position));
+        holder.itemView.setOnClickListener(v -> {
+            if (mOnItemClickListener != null) {
+                mOnItemClickListener.onItemClick(v, data, position);
+            }
+        });
+        holder.itemView.setOnLongClickListener(v -> {
+            if (mOnItemLongClickListener != null) {
+                return mOnItemLongClickListener.onItemLongClick(v, data, position);
+            }
+            return false;
+        });
+    }
+
+    @Override
+    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+        super.onAttachedToRecyclerView(recyclerView);
+        mView = recyclerView;
     }
 
     @Override
@@ -44,11 +68,12 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
         return mList.size();
     }
 
-    protected void onItemClick(View view, int position) {
+    public void setOnItemClickListener(OnItemClickListener<T> listener) {
+        mOnItemClickListener = listener;
     }
 
-    protected boolean onItemLongClick(View view, int position) {
-        return false;
+    public void setOnItemLongClickListener(OnItemLongClickListener<T> listener) {
+        mOnItemLongClickListener = listener;
     }
 
     public void addItem(T value) {
@@ -84,10 +109,6 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
         return Collections.unmodifiableList(mList);
     }
 
-    public int getItemSize() {
-        return mList.size();
-    }
-
     public void refreshItems(List<T> list) {
         mList.clear();
         mList.addAll(list);
@@ -96,10 +117,11 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
 
     public void clear() {
         mList.clear();
+        notifyDataSetChanged();
     }
 
 
-    public abstract static class ViewHolder<R> extends RecyclerView.ViewHolder {
+    public abstract static class ViewHolder<T> extends RecyclerView.ViewHolder {
 
         private View mView;
         private Context mContext;
@@ -121,6 +143,16 @@ public abstract class BaseRecyclerAdapter<T> extends RecyclerView.Adapter<BaseRe
 
         protected abstract void onInitView();
 
-        protected abstract void onBind(R data, int position);
+        protected abstract void onBind(T data, int position);
+    }
+
+    public interface OnItemClickListener<T> {
+
+        void onItemClick(View view, T data, int position);
+    }
+
+    public interface OnItemLongClickListener<T> {
+
+        boolean onItemLongClick(View view, T data, int position);
     }
 }

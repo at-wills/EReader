@@ -30,8 +30,10 @@ public class ChapterDao extends AbstractDao<Chapter, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Title = new Property(1, String.class, "title", false, "TITLE");
         public final static Property BookId = new Property(2, Long.class, "bookId", false, "BOOK_ID");
-        public final static Property Start = new Property(3, Long.class, "start", false, "START");
-        public final static Property End = new Property(4, Long.class, "end", false, "END");
+        public final static Property Sequence = new Property(3, Integer.class, "sequence", false, "SEQUENCE");
+        public final static Property Start = new Property(4, Long.class, "start", false, "START");
+        public final static Property End = new Property(5, Long.class, "end", false, "END");
+        public final static Property HasRead = new Property(6, Boolean.class, "hasRead", false, "HAS_READ");
     }
 
     private Query<Chapter> book_ChapterListQuery;
@@ -51,11 +53,15 @@ public class ChapterDao extends AbstractDao<Chapter, Long> {
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"TITLE\" TEXT," + // 1: title
                 "\"BOOK_ID\" INTEGER," + // 2: bookId
-                "\"START\" INTEGER," + // 3: start
-                "\"END\" INTEGER);"); // 4: end
+                "\"SEQUENCE\" INTEGER," + // 3: sequence
+                "\"START\" INTEGER," + // 4: start
+                "\"END\" INTEGER," + // 5: end
+                "\"HAS_READ\" INTEGER);"); // 6: hasRead
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_CHAPTER_BOOK_ID ON \"CHAPTER\"" +
                 " (\"BOOK_ID\" ASC);");
+        db.execSQL("CREATE UNIQUE INDEX " + constraint + "IDX_CHAPTER_SEQUENCE ON \"CHAPTER\"" +
+                " (\"SEQUENCE\" ASC);");
     }
 
     /** Drops the underlying database table. */
@@ -83,14 +89,24 @@ public class ChapterDao extends AbstractDao<Chapter, Long> {
             stmt.bindLong(3, bookId);
         }
  
+        Integer sequence = entity.getSequence();
+        if (sequence != null) {
+            stmt.bindLong(4, sequence);
+        }
+ 
         Long start = entity.getStart();
         if (start != null) {
-            stmt.bindLong(4, start);
+            stmt.bindLong(5, start);
         }
  
         Long end = entity.getEnd();
         if (end != null) {
-            stmt.bindLong(5, end);
+            stmt.bindLong(6, end);
+        }
+ 
+        Boolean hasRead = entity.getHasRead();
+        if (hasRead != null) {
+            stmt.bindLong(7, hasRead ? 1L: 0L);
         }
     }
 
@@ -113,14 +129,24 @@ public class ChapterDao extends AbstractDao<Chapter, Long> {
             stmt.bindLong(3, bookId);
         }
  
+        Integer sequence = entity.getSequence();
+        if (sequence != null) {
+            stmt.bindLong(4, sequence);
+        }
+ 
         Long start = entity.getStart();
         if (start != null) {
-            stmt.bindLong(4, start);
+            stmt.bindLong(5, start);
         }
  
         Long end = entity.getEnd();
         if (end != null) {
-            stmt.bindLong(5, end);
+            stmt.bindLong(6, end);
+        }
+ 
+        Boolean hasRead = entity.getHasRead();
+        if (hasRead != null) {
+            stmt.bindLong(7, hasRead ? 1L: 0L);
         }
     }
 
@@ -135,8 +161,10 @@ public class ChapterDao extends AbstractDao<Chapter, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // title
             cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2), // bookId
-            cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3), // start
-            cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4) // end
+            cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3), // sequence
+            cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4), // start
+            cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5), // end
+            cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0 // hasRead
         );
         return entity;
     }
@@ -146,8 +174,10 @@ public class ChapterDao extends AbstractDao<Chapter, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setTitle(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setBookId(cursor.isNull(offset + 2) ? null : cursor.getLong(offset + 2));
-        entity.setStart(cursor.isNull(offset + 3) ? null : cursor.getLong(offset + 3));
-        entity.setEnd(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
+        entity.setSequence(cursor.isNull(offset + 3) ? null : cursor.getInt(offset + 3));
+        entity.setStart(cursor.isNull(offset + 4) ? null : cursor.getLong(offset + 4));
+        entity.setEnd(cursor.isNull(offset + 5) ? null : cursor.getLong(offset + 5));
+        entity.setHasRead(cursor.isNull(offset + 6) ? null : cursor.getShort(offset + 6) != 0);
      }
     
     @Override
@@ -181,6 +211,7 @@ public class ChapterDao extends AbstractDao<Chapter, Long> {
             if (book_ChapterListQuery == null) {
                 QueryBuilder<Chapter> queryBuilder = queryBuilder();
                 queryBuilder.where(Properties.BookId.eq(null));
+                queryBuilder.orderRaw("T.'SEQUENCE' ASC");
                 book_ChapterListQuery = queryBuilder.build();
             }
         }
