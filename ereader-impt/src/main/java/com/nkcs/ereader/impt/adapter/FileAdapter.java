@@ -2,14 +2,11 @@ package com.nkcs.ereader.impt.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,22 +15,16 @@ import com.nkcs.ereader.impt.adapter.base.RecyclerViewAdapter;
 import com.nkcs.ereader.impt.adapter.base.RecyclerViewHolder;
 import com.nkcs.ereader.impt.bean.FileBean;
 import com.nkcs.ereader.impt.bean.FileType;
-import com.nkcs.ereader.impt.eventbus.Eventbuses;
 import com.nkcs.ereader.impt.util.FileUtil;
 
-import org.greenrobot.eventbus.EventBus;
-
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import static com.nkcs.ereader.impt.util.FileUtil.comparator;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class FileAdapter extends RecyclerViewAdapter {
@@ -51,8 +42,7 @@ public class FileAdapter extends RecyclerViewAdapter {
             fileName = (TextView) view.findViewById(R.id.fileName);
             fileChildCount = (TextView) view.findViewById(R.id.fileChildCount);
             fileSize = (TextView) view.findViewById(R.id.fileSize);
-            checkBox = (CheckBox)view.findViewById(R.id.checkBox);
-
+            checkBox = (CheckBox) view.findViewById(R.id.checkBox);
         }
 
         @Override
@@ -60,13 +50,15 @@ public class FileAdapter extends RecyclerViewAdapter {
             FileBean fileBean = (FileBean) adapter.getItem(position);
             fileHolder.fileName.setText(fileBean.getName());
 
-            if(fileBean.getFileType()!= FileType.directory) {
+            if (fileBean.getFileType() != FileType.directory) {
                 fileHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                        map.put(position, b);
-                        if (mCheckedChangeListener != null){
-                            mCheckedChangeListener.onCheckedChanged(position,compoundButton, b);
+                        if(map.keySet().contains(position)) {
+                            map.put(position, b);
+                        }
+                        if (mCheckedChangeListener != null) {
+                            mCheckedChangeListener.onCheckedChanged(position, compoundButton, b);
                         }
                     }
                 });
@@ -116,10 +108,10 @@ public class FileAdapter extends RecyclerViewAdapter {
 
 
     private Context context;
-    private List<FileBean> list ;
+    private List<FileBean> list;
     private List<FileBean> alist;
-    private LayoutInflater mLayoutInflater ;
-    private Map<Integer, Boolean> map = new HashMap<>();
+    private LayoutInflater mLayoutInflater;
+    private Map<Integer, Boolean> map = new ConcurrentHashMap<>();
     private CheckedChangeListener mCheckedChangeListener;
 
     public static final int SORT_TIME = 102;
@@ -132,13 +124,19 @@ public class FileAdapter extends RecyclerViewAdapter {
 
         @Override
         public int compare(Object o1, Object o2) {
-            FileBean f1 = (FileBean)o1;
-            FileBean f2 = (FileBean)o2;
-            if(f1!=null && f2 != null && f1.getName()!=null&&f2.getName()!=null){
-                return (f1.getName().compareTo(f2.getName()));
-            }
-            else {
-                return 0;
+            FileBean f1 = (FileBean) o1;
+            FileBean f2 = (FileBean) o2;
+            if ((f1.getFileType() == FileType.directory && f2.getFileType() == FileType.directory)
+                    || (f1.getFileType() != FileType.directory && f2.getFileType() != FileType.directory)) {
+                if (f1.getName() != null && f2.getName() != null) {
+                    return (f1.getName().compareTo(f2.getName()));
+                } else {
+                    return 0;
+                }
+            } else if (f1.getFileType() == FileType.directory) {
+                return -1;
+            } else {
+                return 1;
             }
         }
     }
@@ -147,13 +145,21 @@ public class FileAdapter extends RecyclerViewAdapter {
 
         @Override
         public int compare(Object o1, Object o2) {
-            FileBean f1 = (FileBean)o1;
-            FileBean f2 = (FileBean)o2;
-            if(f1!=null && f2 != null){
-                return ((int)(f2.getSize()-f1.getSize()));
-            }
-            else {
-                return 0;
+            FileBean f1 = (FileBean) o1;
+            FileBean f2 = (FileBean) o2;
+            if ((f1.getFileType() == FileType.directory && f2.getFileType() == FileType.directory)
+                    || (f1.getFileType() != FileType.directory && f2.getFileType() != FileType.directory)) {
+                if (f2.getSize() == f1.getSize()) {
+                    return 0;
+                } else if (f2.getSize() > f1.getSize()) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            } else if (f1.getFileType() == FileType.directory) {
+                return -1;
+            } else {
+                return 1;
             }
         }
     }
@@ -162,13 +168,21 @@ public class FileAdapter extends RecyclerViewAdapter {
 
         @Override
         public int compare(Object o1, Object o2) {
-            FileBean f1 = (FileBean)o1;
-            FileBean f2 = (FileBean)o2;
-            if(f1!=null && f2 != null){
-                return ((int)(f2.getTime()-f1.getTime()));
-            }
-            else {
-                return 0;
+            FileBean f1 = (FileBean) o1;
+            FileBean f2 = (FileBean) o2;
+            if ((f1.getFileType() == FileType.directory && f2.getFileType() == FileType.directory)
+                    || (f1.getFileType() != FileType.directory && f2.getFileType() != FileType.directory)) {
+                if (f2.getTime() == f1.getTime()) {
+                    return 0;
+                } else if (f2.getTime() > f1.getTime()) {
+                    return 1;
+                } else {
+                    return -1;
+                }
+            } else if (f1.getFileType() == FileType.directory) {
+                return -1;
+            } else {
+                return 1;
             }
         }
     }
@@ -176,6 +190,7 @@ public class FileAdapter extends RecyclerViewAdapter {
     public @interface SortType {
 
     }
+
     public void sort(@SortType int type) {
         if (sortCache == null) {
             sortCache = new ArrayList<>();
@@ -216,46 +231,50 @@ public class FileAdapter extends RecyclerViewAdapter {
         this.context = context;
         this.list = list;
         initMap();
-        mLayoutInflater = LayoutInflater.from( context ) ;
+        mLayoutInflater = LayoutInflater.from(context);
 
     }
 
     private void initMap() {
         if (this.list != null) {
             for (int i = 0; i < this.list.size(); i++) {
-                map.put(i, false);
+                if(list.get(i).getFileType() != FileType.directory && !map.keySet().contains(i)) {
+                    map.put(i, false);
+                }
             }
         }
     }
 
     //全选
-    public void checkAll(){
+    public void checkAll() {
+
         Iterator iter = map.entrySet().iterator();
         while (iter.hasNext()) {
             Map.Entry entry = (Map.Entry) iter.next();
-            map.put((Integer) entry.getKey(),true);
+            map.put((Integer) entry.getKey(), true);
         }
 
         notifyDataSetChanged();
     }
 
     //取消
-    public void cancel(){
+    public void cancel() {
+
         Iterator iter = map.entrySet().iterator();
         while (iter.hasNext()) {
             Map.Entry entry = (Map.Entry) iter.next();
-            map.put((Integer) entry.getKey(),false);
+            map.put((Integer) entry.getKey(), false);
         }
         notifyDataSetChanged();
     }
 
     //选择的数目
-    public int getCheckNum(){
+    public int getCheckNum() {
         int num = 0;
         Iterator iter = map.entrySet().iterator();
         while (iter.hasNext()) {
             Map.Entry entry = (Map.Entry) iter.next();
-            if ((Boolean) entry.getValue()){
+            if ((Boolean) entry.getValue()) {
                 num++;
             }
         }
@@ -264,46 +283,45 @@ public class FileAdapter extends RecyclerViewAdapter {
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view ;
+        View view;
         if (viewType == -1) {
-            view = mLayoutInflater.inflate(R.layout.list_item_dist, parent, false) ;
-            return new FileHolder( view );
-        }
-        else if ( viewType == 0 ){
+            view = mLayoutInflater.inflate(R.layout.list_item_dist, parent, false);
+            return new FileHolder(view);
+        } else if (viewType == 0) {
 
-            view = mLayoutInflater.inflate(R.layout.list_item_file, parent, false) ;
-            return new FileHolder( view );
-        }else {
-            view = mLayoutInflater.inflate(R.layout.list_item_line , parent, false) ;
-            return new LineHolder( view );
+            view = mLayoutInflater.inflate(R.layout.list_item_file, parent, false);
+            return new FileHolder(view);
+        } else {
+            view = mLayoutInflater.inflate(R.layout.list_item_line, parent, false);
+            return new LineHolder(view);
         }
     }
 
     @Override
-    public void onBindViewHolders(final RecyclerView.ViewHolder  holder,
+    public void onBindViewHolders(final RecyclerView.ViewHolder holder,
                                   final int position) {
-        if ( holder instanceof  FileHolder ){
+        if (holder instanceof FileHolder) {
             FileHolder fileHolder = (FileHolder) holder;
-            fileHolder.onBindViewHolder( fileHolder , this , position );
+            fileHolder.onBindViewHolder(fileHolder, this, position);
 
-        }else if ( holder instanceof  LineHolder ){
-            LineHolder lineHolder = (LineHolder) holder ;
-            lineHolder.onBindViewHolder( lineHolder , this , position );
+        } else if (holder instanceof LineHolder) {
+            LineHolder lineHolder = (LineHolder) holder;
+            lineHolder.onBindViewHolder(lineHolder, this, position);
         }
     }
 
     @Override
     public Object getAdapterData() {
-        return list ;
+        return list;
     }
 
-    public List<FileBean> getCheckFiles(){
+    public List<FileBean> getCheckFiles() {
         List<FileBean> files = new ArrayList<>();
         Iterator iter = map.entrySet().iterator();
         while (iter.hasNext()) {
             Map.Entry entry = (Map.Entry) iter.next();
-            if ((Boolean) entry.getValue()){
-                FileBean file = getItem((Integer)entry.getKey());
+            if ((Boolean) entry.getValue()) {
+                FileBean file = getItem((Integer) entry.getKey());
                 files.add(file);
             }
         }
@@ -312,12 +330,12 @@ public class FileAdapter extends RecyclerViewAdapter {
 
     @Override
     public FileBean getItem(int positon) {
-        return list.get( positon );
+        return list.get(positon);
     }
 
     @Override
     public int getItemViewType(int position) {
-        return list.get( position).getHolderType() ;
+        return list.get(position).getHolderType();
     }
 
     @Override
@@ -329,13 +347,20 @@ public class FileAdapter extends RecyclerViewAdapter {
         }
     }
 
-    public void refresh( List<FileBean> list ){
+    public void refresh(List<FileBean> list) {
         cancel();
         this.list = list;
+        initMap();
         notifyDataSetChanged();
     }
 
-    public void tmprefresh( List<FileBean> list ){
+    public void addToList(FileBean e){
+        this.list.add(e);
+
+        initMap();
+    }
+
+    public void tmprefresh(List<FileBean> list) {
         cancel();
         alist = this.list;
         this.list = list;
@@ -344,11 +369,11 @@ public class FileAdapter extends RecyclerViewAdapter {
     }
 
 
-    public void setCheckedChangeListener(CheckedChangeListener checkedChangeListener){
+    public void setCheckedChangeListener(CheckedChangeListener checkedChangeListener) {
         mCheckedChangeListener = checkedChangeListener;
     }
 
-    public interface CheckedChangeListener{
-        void onCheckedChanged(int position,CompoundButton buttonView, boolean isChecked);
+    public interface CheckedChangeListener {
+        void onCheckedChanged(int position, CompoundButton buttonView, boolean isChecked);
     }
 }

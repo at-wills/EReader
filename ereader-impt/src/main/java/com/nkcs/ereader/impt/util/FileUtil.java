@@ -39,7 +39,7 @@ public class FileUtil {
             return FileType.video;
         }
 
-        if (fileName.endsWith(".txt") || fileName.endsWith(".log") || fileName.endsWith(".xml")) {
+        if (fileName.endsWith(".txt")) {
             return FileType.txt;
         }
 

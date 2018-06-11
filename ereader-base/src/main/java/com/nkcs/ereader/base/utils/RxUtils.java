@@ -6,9 +6,11 @@ import com.trello.rxlifecycle2.LifecycleTransformer;
 import java.util.concurrent.Callable;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.ObservableSource;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 
@@ -60,6 +62,21 @@ public class RxUtils {
         return Observable.defer(() -> {
             try {
                 return Observable.just(callable.call());
+            } catch (Exception e) {
+                return Observable.error(e);
+            }
+        });
+    }
+
+    /**
+     * 转Observable
+     * @param subscribe
+     * @return Observable
+     */
+    public static <T> Observable<T> toObservable(ObservableOnSubscribe<T> subscribe) {
+        return Observable.defer(() -> {
+            try {
+                return Observable.create(subscribe);
             } catch (Exception e) {
                 return Observable.error(e);
             }

@@ -104,11 +104,51 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/title_recycler_view"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#ffffff"></android.support.v7.widget.RecyclerView>
+            android:layout_height="38dp"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/title_recycler_view"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3.5"
+                android:background="#ffffff">
+
+            </android.support.v7.widget.RecyclerView>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginRight="10dp"
+                android:background="#000000"/>
+
+            <LinearLayout
+                android:id="@+id/ll_upper_level"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginRight="5dp"
+                    android:src="@mipmap/file_icon_upper_level"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:text="上一级"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <View
             android:layout_width="match_parent"
@@ -121,87 +161,115 @@
         android:id="@id/linear2"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:gravity="bottom"
+        android:gravity="center"
         android:orientation="horizontal"
+        android:background="@color/title_gray"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:visibility="visible">
 
         <ImageButton
             android:id="@+id/btnBack"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:background="@android:color/darker_gray"
-            app:srcCompat="@android:drawable/ic_menu_revert" />
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            android:background="@color/title_gray"
+            android:scaleType="fitCenter"
+            android:layout_marginRight="15dp"
+            app:srcCompat="@mipmap/file_icon_back" />
 
         <Spinner
             android:id="@+id/spinnerforimpt"
-            android:layout_width="231dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@android:color/darker_gray"
-            android:entries="@array/spingarr"
-            android:visibility="visible" />
+            android:visibility="visible"
+            android:background="@android:color/transparent"/>
 
         <EditText
             android:id="@+id/searchEdit"
-            android:layout_width="240dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="@android:color/darker_gray"
-            android:visibility="gone" />
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:textColor="@android:color/white"
+            android:theme="@style/AppTheme.EditText" />
 
         <ImageButton
             android:id="@+id/btnSearch"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:background="@android:color/darker_gray"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:background="@color/title_gray"
             android:visibility="gone"
-            app:srcCompat="@android:drawable/ic_menu_search" />
+            android:scaleType="fitCenter"
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/file_icon_search" />
 
         <ImageButton
             android:id="@+id/btnList"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
-            android:background="@android:color/darker_gray"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
             android:visibility="visible"
-            app:srcCompat="@android:drawable/ic_menu_sort_by_size" />
+            android:background="@color/title_gray"
+            android:scaleType="fitCenter"
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/file_icon_sort" />
     </LinearLayout>
 
-
-    <TextView
-        android:id="@+id/numofchecked"
-        android:layout_width="wrap_content"
-        android:layout_height="50dp"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
         android:layout_alignParentBottom="true"
-        android:layout_gravity="bottom"
-        android:layout_marginLeft="24dp"
-        android:layout_marginStart="24dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:textAlignment="center"
-        android:textSize="18sp" />
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btnChooseAll"
-        android:layout_width="120dp"
-        android:layout_height="50dp"
-        android:layout_alignBottom="@+id/numofchecked"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_weight="1"
-        android:text="全选" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E5E5E5">
 
-    <Button
-        android:id="@+id/btnAddFile"
-        android:layout_width="120dp"
-        android:layout_height="50dp"
-        android:layout_alignBottom="@+id/numofchecked"
-        android:layout_centerHorizontal="true"
-        android:layout_weight="1"
-        android:text="加入书架" />
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center">
 
+            <TextView
+                android:id="@+id/numofchecked"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.45"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/btnChooseAll"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.1"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="全选" />
+
+            <TextView
+                android:id="@+id/btnAddFile"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.45"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:background="#1ABC9C"
+                android:text="加入书架" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -213,7 +281,7 @@
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="45dp"
             android:background="#ffffff"></android.support.v7.widget.RecyclerView>
 
         <LinearLayout
@@ -242,34 +310,4 @@
         </LinearLayout>
 
     </RelativeLayout>
-
-    <TextView
-        android:id="@+id/sortTime"
-        android:layout_width="120dp"
-        android:layout_height="50dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/linear2"
-        android:text="按时间倒序排序"
-        android:visibility="invisible" />
-
-    <TextView
-        android:id="@+id/sortName"
-        android:layout_width="120dp"
-        android:layout_height="50dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/sortTime"
-        android:text="按文件名称排序"
-        android:visibility="invisible" />
-
-    <TextView
-        android:id="@+id/sortSize"
-        android:layout_width="120dp"
-        android:layout_height="50dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/sortName"
-        android:text="按文件大小排序"
-        android:visibility="invisible" />
 </RelativeLayout>
