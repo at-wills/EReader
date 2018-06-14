@@ -9,42 +9,25 @@ import com.nkcs.ereader.home.R;
 import com.nkcs.ereader.home.ui.adaptor.BookAdapter;
 
 import java.io.File;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
-import java.util.List;
 
 public class BookCoverTool {
-    private static int currentCover = 0;
-    private static final int ALL_COVER = 6;
-    // 按照默认顺序绑定 book 和 cover，以在进行排序后保持封面顺序
-    private List<SimpleEntry<Integer, Integer>> bindList = new ArrayList<>();
-
-    public static void setNextCover(BookAdapter.BookViewHolder holder, Book book) {
+    public static void setCover(BookAdapter.BookViewHolder holder, Book book) {
         if ("".equals(book.getCover()) || book.getCover() == null) {
-            setNextCover(holder);
+            setCover(holder);
         } else {
             File imgFile = new File(book.getCover());
             if (imgFile.exists()) {
                 Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 ((ImageView) holder.findViewById(R.id.book_image)).setImageBitmap(bitmap);
             } else {
-                setNextCover(holder);
+                setCover(holder);
             }
         }
     }
 
-    private static void setNextCover(BookAdapter.BookViewHolder holder) {
-        setNextCover(holder, currentCover);
-        currentCover++;
-        if (currentCover == ALL_COVER) {
-            currentCover = 0;
-        }
-    }
-
-    // 可能没什么用？
-    private static void setNextCover(BookAdapter.BookViewHolder holder, int coverId) {
-        String cover = "cover" + String.valueOf(coverId);
-        holder.findViewById(R.id.book_image).setBackgroundResource(
-                holder.getResourceId(cover, "drawable"));
+    private static void setCover(BookAdapter.BookViewHolder holder) {
+        String cover = "book_cover_vector";
+        int resource = holder.getResourceId(cover, "drawable");
+        holder.findViewById(R.id.book_image).setBackgroundResource(resource);
     }
 }

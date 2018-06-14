@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/book_item"
     android:layout_width="match_parent"
     android:layout_height="195dp">
 
@@ -8,9 +8,9 @@
         android:id="@+id/book_image"
         android:layout_width="match_parent"
         android:layout_height="140dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
         android:layout_alignParentTop="true"
         android:layout_gravity="center"
         android:contentDescription="@string/book_picture"
@@ -25,6 +25,6 @@
         android:gravity="center"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="165dp"
         android:text="hhh"/>
 </RelativeLayout>

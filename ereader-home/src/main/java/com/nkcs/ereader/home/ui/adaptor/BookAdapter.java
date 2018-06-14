@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import com.nkcs.ereader.base.entity.Book;
 import com.nkcs.ereader.home.R;
+import com.nkcs.ereader.home.ui.fragment.HomeFragment;
 import com.nkcs.ereader.home.ui.utils.BookCoverTool;
 
 import java.util.ArrayList;
@@ -17,8 +18,12 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     private static final int TYPE_HEADER = 42;
     private static final int TYPE_BOOK = 43;
     public static final int GRID_COLUMNS = 3;
+    private HomeFragment homeFragment;
     private List<Book> bookList = new ArrayList<>();
 
+    public BookAdapter(HomeFragment homeFragment) {
+        this.homeFragment = homeFragment;
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -36,24 +41,24 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        final RecyclerView.ViewHolder holder1 = holder;
         if (holder instanceof HeaderViewHolder) {
-
+            holder.findViewById(R.id.book_shelf_import_btn)
+                    .setOnClickListener(e -> homeFragment.goImportPage());
         } else {
-            BookCoverTool.setNextCover((BookViewHolder) holder, bookList.get(position - 1));
+            BookCoverTool.setCover((BookViewHolder) holder, bookList.get(position - 1));
+            holder.findViewById(R.id.book_item).setOnLongClickListener(e -> {
+                homeFragment.turnOnBookEditMode();
+                
+                return true;
+            });
         }
     }
 
     public void addData() {
-        bookList.add(new Book());
-        bookList.add(new Book());
-        bookList.add(new Book());
-        bookList.add(new Book());
-        bookList.add(new Book());
-        bookList.add(new Book());
-        bookList.add(new Book());
-        bookList.add(new Book());
-        bookList.add(new Book());
-        bookList.add(new Book());
+        for (int i = 0; i < 16; i++) {
+            bookList.add(new Book());
+        }
         notifyDataSetChanged();
     }
 

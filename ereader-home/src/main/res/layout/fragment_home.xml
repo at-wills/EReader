@@ -12,7 +12,7 @@
 
     <include
         android:id="@+id/main_layout"
-        layout="@layout/home_main" />
+        layout="@layout/home_main_layout" />
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"

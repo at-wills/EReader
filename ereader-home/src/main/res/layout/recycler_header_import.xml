@@ -5,11 +5,12 @@
     android:layout_height="195dp">
 
     <RelativeLayout
+        android:id="@+id/book_shelf_import_btn"
         android:layout_width="match_parent"
         android:background="@color/importButtonBackground"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="20dp"
         android:layout_height="140dp">
         <ImageButton
             android:id="@+id/imageButton"
