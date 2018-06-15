@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="title_Name" type="id" />
+    <item name="linear2" type="id" />
+    <item name="numofchecked" type="id" />
+</resources>

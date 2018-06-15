@@ -1,2 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.nkcs.ereader.impt" />
+    package="com.nkcs.ereader.impt">
+
+    <application>
+        <activity android:name=".ui.activity.ImptActivity"></activity>
+    </application>
+
+</manifest>
