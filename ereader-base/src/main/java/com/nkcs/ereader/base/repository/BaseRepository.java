@@ -41,4 +41,20 @@ public abstract class BaseRepository {
                 .subscribeOn(Schedulers.io())
                 .compose(mLifecycleBinder.bindLifecycle());
     }
+
+    /**
+     * computation配置
+     * @return ObservableTransformer
+     */
+    public <T> ObservableTransformer<T, T> computationRxConfig() {
+        if (mLifecycleBinder == null) {
+            return tObservable -> tObservable
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.computation());
+        }
+        return tObservable -> tObservable
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.computation())
+                .compose(mLifecycleBinder.bindLifecycle());
+    }
 }

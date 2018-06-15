@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- For ImptFragment -->
+    <color name="title_gray">#7F8C8D</color>
+    <color name="sort_text_gray">#aaaaaa</color>
+</resources>
