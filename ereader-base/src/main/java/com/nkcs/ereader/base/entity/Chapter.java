@@ -5,13 +5,17 @@ import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Index;
 import org.greenrobot.greendao.annotation.Generated;
 
+import java.io.Serializable;
+
 /**
  * @author faunleaf
  * @date 2018/3/16
  */
 
 @Entity
-public class Chapter extends BaseEntity {
+public class Chapter extends BaseEntity implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id(autoincrement = true)
     private Long id;

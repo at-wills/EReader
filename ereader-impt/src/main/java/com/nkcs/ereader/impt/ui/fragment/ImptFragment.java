@@ -20,26 +20,23 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.nkcs.ereader.base.ui.fragment.BaseFragment;
-import com.nkcs.ereader.base.utils.LogUtils;
 import com.nkcs.ereader.base.utils.ToastUtils;
 import com.nkcs.ereader.impt.R;
-import com.nkcs.ereader.impt.adapter.FileAdapter;
-import com.nkcs.ereader.impt.adapter.SpinnerSimpleAdapter;
-import com.nkcs.ereader.impt.adapter.TitleAdapter;
-import com.nkcs.ereader.impt.adapter.base.RecyclerViewAdapter;
-import com.nkcs.ereader.impt.bean.FileBean;
+import com.nkcs.ereader.impt.ui.adapter.FileAdapter;
+import com.nkcs.ereader.impt.ui.adapter.SpinnerSimpleAdapter;
+import com.nkcs.ereader.impt.ui.adapter.TitleAdapter;
+import com.nkcs.ereader.impt.ui.adapter.base.RecyclerViewAdapter;
+import com.nkcs.ereader.impt.entity.FileBean;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
 
-import com.nkcs.ereader.impt.bean.FileType;
-import com.nkcs.ereader.impt.bean.TitlePath;
+import com.nkcs.ereader.impt.entity.FileType;
+import com.nkcs.ereader.impt.entity.TitlePath;
 import com.nkcs.ereader.impt.contract.ImptContract;
 import com.nkcs.ereader.impt.ui.widget.SortPopupWindow;
-import com.nkcs.ereader.impt.util.FileUtil;
+import com.nkcs.ereader.impt.utils.FileUtils;
 
 
 public class ImptFragment extends BaseFragment implements ImptContract.IView {
@@ -320,17 +317,17 @@ public class ImptFragment extends BaseFragment implements ImptContract.IView {
                         refreshTitleState( file.getName() , file.getPath() );
                     }else if ( fileType == FileType.apk ){
                         //安装app
-                        // FileUtil.openAppIntent( MainActivity.this , new File( file.getPath() ) );
+                        // FileUtils.openAppIntent( MainActivity.this , new File( file.getPath() ) );
                     }else if ( fileType == FileType.image ){
-                        //FileUtil.openImageIntent( MainActivity.this , new File( file.getPath() ));
+                        //FileUtils.openImageIntent( MainActivity.this , new File( file.getPath() ));
                     }else if ( fileType == FileType.txt ){
-                        // FileUtil.openTextIntent( MainActivity.this , new File( file.getPath() ) );
+                        // FileUtils.openTextIntent( MainActivity.this , new File( file.getPath() ) );
                     }else if ( fileType == FileType.music ){
-                        //FileUtil.openMusicIntent( MainActivity.this ,  new File( file.getPath() ) );
+                        //FileUtils.openMusicIntent( MainActivity.this ,  new File( file.getPath() ) );
                     }else if ( fileType == FileType.video ){
-                        //FileUtil.openVideoIntent( MainActivity.this ,  new File( file.getPath() ) );
+                        //FileUtils.openVideoIntent( MainActivity.this ,  new File( file.getPath() ) );
                     }else {
-                        //FileUtil.openApplicationIntent( MainActivity.this , new File( file.getPath() ) );
+                        //FileUtils.openApplicationIntent( MainActivity.this , new File( file.getPath() ) );
                     }
                 }
             }
@@ -343,7 +340,7 @@ public class ImptFragment extends BaseFragment implements ImptContract.IView {
                     FileBean fileBean = (FileBean) fileAdapter.getItem( position );
                     FileType fileType = fileBean.getFileType() ;
                     if ( fileType != null && fileType != FileType.directory ){
-                        //FileUtil.sendFile( MainActivity.this , new File( fileBean.getPath() ) );
+                        //FileUtils.sendFile( MainActivity.this , new File( fileBean.getPath() ) );
                     }
                 }
                 return false;
@@ -406,14 +403,14 @@ public class ImptFragment extends BaseFragment implements ImptContract.IView {
             fileBean.setName(file.getName());
             fileBean.setTime(file.lastModified());
             fileBean.setPath(file.getAbsolutePath());
-            fileBean.setFileType(FileUtil.getFileType(file));
-            fileBean.setChildCount(FileUtil.getFileChildCount(file));
+            fileBean.setFileType(FileUtils.getFileType(file));
+            fileBean.setChildCount(FileUtils.getFileChildCount(file));
             fileBean.setSize(file.length());
             fileBean.setHolderType( 0 );
             forsearchList.add(file);
             txtAdapter.addToList(fileBean);
         }
-        txtAdapter.notifyDataSetChanged();
+        txtAdapter.notifyItemRangeInserted(txtAdapter.getItemCount() - fileList.size(), fileList.size());
     }
 
     @Override
@@ -436,8 +433,8 @@ public class ImptFragment extends BaseFragment implements ImptContract.IView {
                     fileBean.setName(f.getName());
                     fileBean.setTime(f.lastModified());
                     fileBean.setPath(f.getAbsolutePath());
-                    fileBean.setFileType(FileUtil.getFileType(f));
-                    fileBean.setChildCount(FileUtil.getFileChildCount(f));
+                    fileBean.setFileType(FileUtils.getFileType(f));
+                    fileBean.setChildCount(FileUtils.getFileChildCount(f));
                     fileBean.setSize(f.length());
                     fileBean.setHolderType( 0 );
                     tmpList.add(fileBean);
@@ -467,7 +464,7 @@ public class ImptFragment extends BaseFragment implements ImptContract.IView {
                 if ( filesArray != null ){
                     List<File> fileList = new ArrayList<>() ;
                     Collections.addAll( fileList , filesArray ) ;  //把数组转化成list
-                    Collections.sort( fileList , FileUtil.comparator );  //按照名字排序
+                    Collections.sort( fileList , FileUtils.comparator );  //按照名字排序
 
                     for (File f : fileList ) {
                         if (f.isHidden()) {
@@ -478,8 +475,8 @@ public class ImptFragment extends BaseFragment implements ImptContract.IView {
                         fileBean.setName(f.getName());
                         fileBean.setTime(f.lastModified());
                         fileBean.setPath(f.getAbsolutePath());
-                        fileBean.setFileType( FileUtil.getFileType( f ));
-                        fileBean.setChildCount( FileUtil.getFileChildCount( f ));
+                        fileBean.setFileType( FileUtils.getFileType( f ));
+                        fileBean.setChildCount( FileUtils.getFileChildCount( f ));
                         fileBean.setSize( f.length() );
                         if(fileBean.getFileType() == FileType.directory)
                         {
