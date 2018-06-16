@@ -1,0 +1,6 @@
+<vector android:height="24dp" android:viewportHeight="20"
+    android:viewportWidth="20" android:width="24dp" xmlns:android="http://schemas.android.com/apk/res/android">
+    <path android:fillColor="@color/manageTabButtonImg" android:pathData="M3.1,1.9c0,-0.4 0.3,-0.6 0.6,-0.6h12.5c0.4,0 0.6,0.3 0.6,0.6s-0.3,0.6 -0.6,0.6H3.8C3.4,2.5 3.1,2.3 3.1,1.9zM10.6,5.9v12.2c0,0.4 -0.3,0.6 -0.6,0.6s-0.6,-0.3 -0.6,-0.6V5.9l-5.1,5.1c-0.3,0.3 -0.6,0.3 -0.9,0c-0.3,-0.2 -0.3,-0.6 0,-0.9L9.6,4C9.7,3.9 9.9,3.8 10,3.8c0.1,0 0.3,0.1 0.4,0.2l6.2,6.2c0.2,0.2 0.2,0.6 0,0.9c-0.3,0.3 -0.6,0.3 -0.9,0C15.7,11.1 10.6,5.9 10.6,5.9z"/>
+    <path android:fillColor="@color/manageTabButtonImg" android:pathData="M2.2,8.7h15.6v0.8h-15.6z"/>
+    <path android:fillColor="@color/manageTabButtonImg" android:pathData="M10,1.2c-4.3,0 -7.8,3.5 -7.8,7.8c0,4.3 3.5,7.8 7.8,7.8s7.8,-3.5 7.8,-7.8C17.8,4.8 14.3,1.2 10,1.2zM17.2,9.1c0,4 -3.2,7.2 -7.2,7.2s-7.2,-3.2 -7.2,-7.2S6,1.9 10,1.9S17.2,5.1 17.2,9.1z"/>
+</vector>

@@ -100,7 +100,7 @@ public class HomeFragment extends BaseFragment
     private void initRecyclerView() {
         RecyclerView recyclerView = findViewById(R.id.recycler_books);
 
-        GridLayoutManager layoutManager = new GridLayoutManager(getHoldingActivity(), BookAdapter.GRID_COLUMNS);
+        GridLayoutManager layoutManager = new GridLayoutManager(getHoldingActivity(), BookAdapter.GRID_COLUMNS_PER_ROW);
         recyclerView.setLayoutManager(layoutManager);
 
         adapter = new BookAdapter(this);
@@ -280,7 +280,11 @@ public class HomeFragment extends BaseFragment
             Toast.makeText(this.getContext(), "打开最近的书", Toast.LENGTH_SHORT).show();
         });
         findViewById(R.id.select_all).setOnClickListener(e -> {
-            adapter.selectAllUnselectAll(true);
+            if (!adapter.allSelected()) {
+                adapter.selectAllOrUnselectAll(true);
+            } else {
+                adapter.selectAllOrUnselectAll(false);
+            }
         });
         ((AppCompatEditText) findViewById(R.id.search_edit)).addTextChangedListener(new TextWatcher() {
             @Override
@@ -297,8 +301,8 @@ public class HomeFragment extends BaseFragment
                 adapter.search(str);
             }
         });
-        findViewById(R.id.pin_top).setOnClickListener(e -> {
-            adapter.pinTop();
+        findViewById(R.id.pin_top_btn).setOnClickListener(e -> {
+            adapter.pinBooksTopOrCancel();
         });
         findViewById(R.id.delete).setOnClickListener(e -> {
             adapter.delete();

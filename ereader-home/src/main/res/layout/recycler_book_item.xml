@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/book_item"
     android:layout_width="match_parent"
-    android:layout_height="162dp"
+    android:layout_height="180dp"
     android:background="@drawable/book_item_gradient">
 
     <View
@@ -15,7 +15,7 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="35dp"
         android:background="@drawable/book_item_shadow"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -32,7 +32,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="45dp"
         android:background="@drawable/book_item_border"
         android:contentDescription="@string/book_picture"
         android:scaleType="centerCrop"
@@ -85,7 +85,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="45dp"
         android:background="@drawable/book_image_shadow"
         android:contentDescription="@string/book_picture"
         android:scaleType="centerCrop"
@@ -99,7 +99,7 @@
      https://stackoverflow.com/a/38534042/7526989-->
 
     <ImageView
-        android:id="@+id/pin_top"
+        android:id="@+id/pin_top_img"
         android:layout_width="30dp"
         android:layout_height="15dp"
         android:layout_marginBottom="4dp"
@@ -118,7 +118,7 @@
         android:layout_height="26dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="35dp"
         android:background="@drawable/select"
         android:visibility="gone"
         android:scaleType="centerInside"

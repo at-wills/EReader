@@ -226,7 +226,7 @@
 
             <TextView
                 android:id="@+id/select_all"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:drawableTop="@drawable/select_all"
@@ -235,8 +235,8 @@
                 android:text="@string/select_all" />
 
             <TextView
-                android:id="@+id/pin_top"
-                android:layout_width="wrap_content"
+                android:id="@+id/pin_top_btn"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:drawableTop="@drawable/pin_top_btn"
@@ -246,7 +246,7 @@
 
             <TextView
                 android:id="@+id/delete"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:drawableTop="@drawable/delete"
@@ -256,7 +256,7 @@
 
             <TextView
                 android:id="@+id/share"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:drawableTop="@drawable/share"
@@ -266,7 +266,7 @@
 
             <TextView
                 android:id="@+id/detail"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:drawableTop="@drawable/detail"
