@@ -1,4 +1,4 @@
-package com.nkcs.ereader.impt.adapter;
+package com.nkcs.ereader.impt.ui.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -11,16 +11,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nkcs.ereader.impt.R;
-import com.nkcs.ereader.impt.adapter.base.RecyclerViewAdapter;
-import com.nkcs.ereader.impt.adapter.base.RecyclerViewHolder;
-import com.nkcs.ereader.impt.bean.FileBean;
-import com.nkcs.ereader.impt.bean.FileType;
-import com.nkcs.ereader.impt.util.FileUtil;
+import com.nkcs.ereader.impt.ui.adapter.base.RecyclerViewAdapter;
+import com.nkcs.ereader.impt.ui.adapter.base.RecyclerViewHolder;
+import com.nkcs.ereader.impt.entity.FileBean;
+import com.nkcs.ereader.impt.entity.FileType;
+import com.nkcs.ereader.impt.utils.FileUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -81,7 +80,7 @@ public class FileAdapter extends RecyclerViewAdapter {
                 fileHolder.fileChildCount.setVisibility(View.GONE);
 
                 fileHolder.fileSize.setVisibility(View.VISIBLE);
-                fileHolder.fileSize.setText(FileUtil.sizeToChange(fileBean.getSize()));
+                fileHolder.fileSize.setText(FileUtils.sizeToChange(fileBean.getSize()));
 
             }
 

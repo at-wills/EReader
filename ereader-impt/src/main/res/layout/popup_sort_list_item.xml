@@ -9,7 +9,7 @@
         android:id="@+id/popup_sort_list_item_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/black"
+        android:textColor="#666666"
         android:textSize="16sp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"

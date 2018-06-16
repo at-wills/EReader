@@ -1,4 +1,4 @@
-package com.nkcs.ereader.impt.adapter.base;
+package com.nkcs.ereader.impt.ui.adapter.base;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

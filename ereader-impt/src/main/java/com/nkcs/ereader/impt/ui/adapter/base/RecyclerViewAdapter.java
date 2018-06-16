@@ -1,9 +1,8 @@
-package com.nkcs.ereader.impt.adapter.base;
+package com.nkcs.ereader.impt.ui.adapter.base;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Filter;
 
-import com.nkcs.ereader.impt.adapter.FileAdapter;
+import com.nkcs.ereader.impt.ui.adapter.FileAdapter;
 
 
 public abstract class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

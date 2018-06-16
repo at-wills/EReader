@@ -1,4 +1,4 @@
-package com.nkcs.ereader.impt.bean;
+package com.nkcs.ereader.impt.entity;
 
 /**
  * Created by iris on 2018/4/24.

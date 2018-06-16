@@ -1,4 +1,4 @@
-package com.nkcs.ereader.impt.adapter;
+package com.nkcs.ereader.impt.ui.adapter;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.nkcs.ereader.impt.R;
-import com.nkcs.ereader.impt.adapter.base.RecyclerViewAdapter;
-import com.nkcs.ereader.impt.bean.TitlePath;
+import com.nkcs.ereader.impt.ui.adapter.base.RecyclerViewAdapter;
+import com.nkcs.ereader.impt.entity.TitlePath;
 
 import java.util.List;
 

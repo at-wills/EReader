@@ -1,4 +1,4 @@
-package com.nkcs.ereader.impt.adapter;
+package com.nkcs.ereader.impt.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Color;

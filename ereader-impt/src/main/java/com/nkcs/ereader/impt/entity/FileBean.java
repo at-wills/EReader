@@ -1,9 +1,4 @@
-package com.nkcs.ereader.impt.bean;
-
-import android.support.annotation.NonNull;
-
-import java.util.ArrayList;
-import java.util.List;
+package com.nkcs.ereader.impt.entity;
 
 /**
  * Created by iris on 2018/4/17.

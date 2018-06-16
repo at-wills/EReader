@@ -1,20 +1,15 @@
-package com.nkcs.ereader.impt.util;
+package com.nkcs.ereader.impt.utils;
 
 import java.io.File;
-import java.io.FileFilter;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
-import com.nkcs.ereader.impt.bean.FileType;
+
+import com.nkcs.ereader.impt.entity.FileType;
 
 /**
  * Created by iris on 2018/4/17.
  */
 
-public class FileUtil {
+public class FileUtils {
 
     /**
      * 获取文件类型

@@ -1,12 +1,12 @@
-package com.nkcs.ereader.impt.adapter;
+package com.nkcs.ereader.impt.ui.adapter;
 
 import android.view.View;
 import android.widget.TextView;
 
 import com.nkcs.ereader.impt.R;
-import com.nkcs.ereader.impt.adapter.base.RecyclerViewAdapter;
-import com.nkcs.ereader.impt.adapter.base.RecyclerViewHolder;
-import com.nkcs.ereader.impt.bean.TitlePath;
+import com.nkcs.ereader.impt.ui.adapter.base.RecyclerViewAdapter;
+import com.nkcs.ereader.impt.ui.adapter.base.RecyclerViewHolder;
+import com.nkcs.ereader.impt.entity.TitlePath;
 
 public class TitleHolder extends RecyclerViewHolder<TitleHolder> {
 
