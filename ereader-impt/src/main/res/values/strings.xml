@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ereader-impt</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hhh">Switch</string>
+    <string name="button">Button</string>
 </resources>

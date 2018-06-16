@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorReadDark">#E5292423</color>
+
+    <color name="read_menu_bg">#E5292423</color>
+    <color name="read_menu_text">#BBBBBB</color>
+    <color name="read_divider_narrow">#F6F6F6</color>
+
+
+    <color name="read_text_default">@color/colorReadDark</color>
+    <color name="read_text_light">#7D7872</color>
+    <color name="read_text_primary">@color/colorPrimary</color>
+
+    <color name="read_button_pressed">#0C000000</color>
+    <color name="read_button_selected">#E3E3E3</color>
+
+    <color name="read_bg_1">#CEC29C</color>
+    <color name="read_bg_2">#CCEBCC</color>
+    <color name="read_bg_3">#AAAAAA</color>
+    <color name="read_bg_4">#D1CEC5</color>
+    <color name="read_bg_5">#001C27</color>
+    <color name="read_bg_night">#000000</color>
+
+    <color name="read_font_1">#2C2C2C</color>
+    <color name="read_font_2">#2C2C2C</color>
+    <color name="read_font_3">#2C2C2C</color>
+    <color name="read_font_4">#2C2C2C</color>
+    <color name="read_font_5">#627176</color>
+    <color name="read_font_night">#99ffffff</color>
+
+</resources>

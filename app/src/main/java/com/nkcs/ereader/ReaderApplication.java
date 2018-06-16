@@ -7,8 +7,10 @@ import android.support.annotation.Nullable;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.nkcs.ereader.base.BaseApplication;
 import com.nkcs.ereader.base.db.BookDao;
+import com.nkcs.ereader.base.db.ChapterDao;
 import com.nkcs.ereader.base.db.DbHelper;
 import com.nkcs.ereader.base.entity.Book;
+import com.nkcs.ereader.base.entity.Chapter;
 
 import java.util.Map;
 import java.util.Set;
@@ -25,7 +27,7 @@ public class ReaderApplication extends BaseApplication {
         super.onCreate();
         ARouter.init(this);
 
-        SharedPreferences sp = getSharedPreferences("ereader_config", Context.MODE_PRIVATE);
+        SharedPreferences sp = getSharedPreferences("system_config", Context.MODE_PRIVATE);
         Boolean firstEnter = sp.getBoolean("first_enter", true);
         if (firstEnter) {
             testDb();
@@ -36,7 +38,12 @@ public class ReaderApplication extends BaseApplication {
     private void testDb() {
         BookDao bookDao = DbHelper.getInstance().getSession().getBookDao();
         Book book = new Book();
-        book.setTitle("test1");
+        book.setId(1L);
+        book.setTitle("斗罗大陆");
+        book.setHash("f04746e48eb51ecaa398e8fb096f4d6c");
+        book.setPath("/storage/emulated/0/斗罗大陆.txt");
+        book.setFormat("txt");
+        book.setHasFormat(false);
         bookDao.insert(book);
     }
 }

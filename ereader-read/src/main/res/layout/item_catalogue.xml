@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/selector_catalogue_bg"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/catalogue_tv_chapter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:drawableLeft="@drawable/selector_catalogue_read"
+        android:drawablePadding="10dp"
+        android:padding="15dp"
+        android:text="第一章 八十大寿"
+        android:textColor="@color/selector_chapter"
+        android:textSize="15sp"
+        android:singleLine="true"
+        android:ellipsize="end" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/read_divider_narrow" />
+
+</LinearLayout>
