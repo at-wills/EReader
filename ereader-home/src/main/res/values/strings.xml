@@ -31,5 +31,9 @@
     <string name="edit">编辑</string>
     <string name="complete">完成</string>
     <string name="import_from_file">导入</string>
+    <string name="import_forbid">不可用</string>
     <string name="book_picture">book picture</string>
+    <string name="select_book_to_edit">select book to edit</string>
+    <string name="detail">详情</string>
+    <string name="book_format">- %1$s -</string>
 </resources>

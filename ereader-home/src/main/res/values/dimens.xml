@@ -11,7 +11,7 @@
     <!--主页标题高度：全屏时-->
     <dimen name="homepage_title_height_full_screen">67dp</dimen>
     <!--主页部件海拔-->
-    <dimen name="homepage_elevation">4dp</dimen>
+    <dimen name="homepage_elevation">8dp</dimen>
     <!--编辑界面底部按钮的图像大小-->
     <dimen name="bottom_drawable">20dp</dimen>
     <!--编辑界面底部按钮高度-->
@@ -28,4 +28,5 @@
     <dimen name="homepage_image_btn_padding">15dp</dimen>
     <!--主页快速阅读按钮padding-->
     <dimen name="homepage_quick_read_padding">12dp</dimen>
+    <dimen name="book_shelf_edge">6dp</dimen>
 </resources>

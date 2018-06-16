@@ -2,6 +2,7 @@ package com.nkcs.ereader.home.ui.utils;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.nkcs.ereader.base.entity.Book;
@@ -11,23 +12,19 @@ import com.nkcs.ereader.home.ui.adaptor.BookAdapter;
 import java.io.File;
 
 public class BookCoverTool {
-    public static void setCover(BookAdapter.BookViewHolder holder, Book book) {
-        if ("".equals(book.getCover()) || book.getCover() == null) {
-            setCover(holder);
-        } else {
+    public static void hideText(BookAdapter.BookViewHolder holder, Book book) {
+        if (!"".equals(book.getCover()) && book.getCover() != null) {
             File imgFile = new File(book.getCover());
             if (imgFile.exists()) {
                 Bitmap bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 ((ImageView) holder.findViewById(R.id.book_image)).setImageBitmap(bitmap);
-            } else {
-                setCover(holder);
+                hideText(holder);
             }
         }
     }
 
-    private static void setCover(BookAdapter.BookViewHolder holder) {
-        String cover = "book_cover_vector";
-        int resource = holder.getResourceId(cover, "drawable");
-        holder.findViewById(R.id.book_image).setBackgroundResource(resource);
+    private static void hideText(BookAdapter.BookViewHolder holder) {
+        holder.findViewById(R.id.book_name).setVisibility(View.INVISIBLE);
+        holder.findViewById(R.id.book_format).setVisibility(View.INVISIBLE);
     }
 }

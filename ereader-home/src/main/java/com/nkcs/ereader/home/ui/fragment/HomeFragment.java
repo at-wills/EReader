@@ -11,8 +11,9 @@ import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,34 +25,36 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nkcs.ereader.base.entity.Book;
 import com.nkcs.ereader.base.ui.fragment.BaseFragment;
 import com.nkcs.ereader.home.R;
+import com.nkcs.ereader.home.contract.HomeContract;
 import com.nkcs.ereader.home.ui.adaptor.BookAdapter;
 import com.nkcs.ereader.home.ui.utils.SharedPreferenceManager;
 import com.nkcs.ereader.home.ui.utils.WindowTool;
+
+import java.util.List;
 
 /**
  * Created by 王利通 on 2018/4/22.
  */
 
 public class HomeFragment extends BaseFragment
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, HomeContract.IView {
     private DrawerLayout drawer;
     private boolean doubleBackToExitFirst = false;
     private LinearLayout bottomBtns;
     private RelativeLayout editLayout;
     private RelativeLayout originLayout;
-    private TextView editLayoutCancelBtn;
     private ImageButton quickReadBtn;
     private ImageButton originLayoutSearchBtn;
-    private ImageButton searchLayoutCancelBtn;
     private AppCompatEditText searchEdit;
     private RelativeLayout searchLayout;
-    ModeSwitcher modeSwitcher = new ModeSwitcher();
-    BookAdapter adapter;
-    GridLayoutManager layoutManager;
-    ImageButton menuBtn;
-    SharedPreferenceManager sharedPreferenceManager;
+    private ModeSwitcher modeSwitcher = new ModeSwitcher();
+    private BookAdapter adapter;
+    private ImageButton menuBtn;
+    public SharedPreferenceManager sharedPreferenceManager;
+    private HomeContract.IPresenter presenter;
 
     @Override
     protected int getLayoutResource() {
@@ -95,18 +98,16 @@ public class HomeFragment extends BaseFragment
     }
 
     private void initRecyclerView() {
-        RecyclerView recyclerView;
-        recyclerView = findViewById(R.id.recycler_books);
+        RecyclerView recyclerView = findViewById(R.id.recycler_books);
 
-        layoutManager = new GridLayoutManager(getHoldingActivity(), BookAdapter.GRID_COLUMNS);
+        GridLayoutManager layoutManager = new GridLayoutManager(getHoldingActivity(), BookAdapter.GRID_COLUMNS);
         recyclerView.setLayoutManager(layoutManager);
 
         adapter = new BookAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        adapter.addData();
     }
+
 
     private void showPopupMenu(View view, View standByView) {
         // the view is which the popup menu relays on
@@ -125,14 +126,14 @@ public class HomeFragment extends BaseFragment
             } else if (id == R.id.sort_item_by_name) {
                 sharedPreferenceManager.setSetting(
                         SharedPreferenceManager.HOME_BOOK_SORT_BY_TIME, false);
+                adapter.sort();
             } else if (id == R.id.sort_item_by_time) {
                 sharedPreferenceManager.setSetting(
                         SharedPreferenceManager.HOME_BOOK_SORT_BY_TIME, true
                 );
+                adapter.sort();
             } else if (id == R.id.list_show_books) {
-                sharedPreferenceManager.setSetting(
-                        SharedPreferenceManager.HOME_BOOK_SHOW_TRADITION, false
-                );
+                Toast.makeText(this.getContext(), "别点了，没做", Toast.LENGTH_SHORT).show();
             } else if (id == R.id.tradition_show_books) {
                 sharedPreferenceManager.setSetting(
                         SharedPreferenceManager.HOME_BOOK_SHOW_TRADITION, true);
@@ -175,6 +176,7 @@ public class HomeFragment extends BaseFragment
             return true;
         } else if (modeSwitcher.isSearching) {
             modeSwitcher.switchSearch(false);
+            adapter.endSearch();
         } else {
             if (doubleBackToExitFirst) {
                 return false;
@@ -187,12 +189,29 @@ public class HomeFragment extends BaseFragment
         return true;
     }
 
+    @Override
+    protected void onLoadData() {
+        presenter.getBooks();
+    }
+
+    @Override
+    public void onGetBooks(List<Book> books) {
+        adapter.addData(books);
+    }
+
+    @Override
+    public void setPresenter(HomeContract.IPresenter presenter) {
+        this.presenter = presenter;
+    }
+
     class ModeSwitcher {
         Boolean isEditing = false;
         Boolean isSearching = false;
 
         void switchEdit(Boolean isEditing) {
             this.isEditing = isEditing;
+            // 切换 recyclerView 的编辑状态
+            adapter.switchEdit(isEditing);
             if (isEditing) {
                 hideView(quickReadBtn).showView(editLayout)
                         .showView(bottomBtns).hideView(originLayout);
@@ -204,13 +223,12 @@ public class HomeFragment extends BaseFragment
 
         void switchSearch(Boolean isSearching) {
             this.isSearching = isSearching;
-
             if (isSearching) {
+                searchEdit.setText("");
                 showView(searchLayout).hideView(originLayout);
             } else {
                 showView(originLayout).hideView(searchLayout);
             }
-
             InputMethodManager imm = (InputMethodManager) getContext()
                     .getSystemService(Context.INPUT_METHOD_SERVICE);
             // 开关输入法
@@ -242,20 +260,54 @@ public class HomeFragment extends BaseFragment
         editLayout = findViewById(R.id.edit_layout);
         originLayout = findViewById(R.id.origin_layout);
         quickReadBtn = findViewById(R.id.quick_read_btn);
-        editLayoutCancelBtn = findViewById(R.id.cancel_edit_btn);
+        TextView editLayoutCancelBtn = findViewById(R.id.cancel_edit_btn);
         searchLayout = findViewById(R.id.search_layout);
         editLayoutCancelBtn = findViewById(R.id.cancel_edit_btn);
-        editLayoutCancelBtn.setOnClickListener(e -> modeSwitcher.switchEdit(false));
+        editLayoutCancelBtn.setOnClickListener(e -> {
+            modeSwitcher.switchEdit(false);
+        });
         originLayoutSearchBtn = findViewById(R.id.search_btn);
-        originLayoutSearchBtn.setOnClickListener(e -> modeSwitcher.switchSearch(true));
+        originLayoutSearchBtn.setOnClickListener(e -> {
+            modeSwitcher.switchSearch(true);
+        });
         searchEdit = findViewById(R.id.search_edit);
-        searchLayoutCancelBtn = findViewById(R.id.search_cancel_btn);
+        ImageButton searchLayoutCancelBtn = findViewById(R.id.search_cancel_btn);
         searchLayoutCancelBtn.setOnClickListener(e -> {
-            searchEdit.setText("");
+            adapter.endSearch();
             modeSwitcher.switchSearch(false);
         });
         quickReadBtn.setOnClickListener(view -> {
             Toast.makeText(this.getContext(), "打开最近的书", Toast.LENGTH_SHORT).show();
+        });
+        findViewById(R.id.select_all).setOnClickListener(e -> {
+            adapter.selectAllUnselectAll(true);
+        });
+        ((AppCompatEditText) findViewById(R.id.search_edit)).addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                String str = editable.toString();
+                adapter.search(str);
+            }
+        });
+        findViewById(R.id.pin_top).setOnClickListener(e -> {
+            adapter.pinTop();
+        });
+        findViewById(R.id.delete).setOnClickListener(e -> {
+            adapter.delete();
+        });
+        findViewById(R.id.share).setOnClickListener(e -> {
+            adapter.share();
+        });
+        findViewById(R.id.detail).setOnClickListener(e -> {
+            adapter.detail();
         });
     }
 
@@ -263,7 +315,7 @@ public class HomeFragment extends BaseFragment
         Toast.makeText(this.getContext(), "跳转到导入页面", Toast.LENGTH_SHORT).show();
     }
 
-    public void turnOnBookEditMode() {
-        modeSwitcher.switchEdit(true);
+    public void switchBookEditMode(boolean isEditing) {
+        modeSwitcher.switchEdit(isEditing);
     }
 }

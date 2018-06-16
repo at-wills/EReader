@@ -5,6 +5,8 @@ import android.view.KeyEvent;
 
 import com.nkcs.ereader.base.ui.activity.BaseActivity;
 import com.nkcs.ereader.home.R;
+import com.nkcs.ereader.home.presenter.HomePresenter;
+import com.nkcs.ereader.home.repository.HomeRepository;
 import com.nkcs.ereader.home.ui.fragment.HomeFragment;
 
 import site.gemus.openingstartanimation.NormalDrawStrategy;
@@ -34,6 +36,7 @@ public class HomeActivity extends BaseActivity {
                 .create();
         openingStartAnimation.show(this);
         homeFragment = getStoredFragment(HomeFragment.class);
+        new HomePresenter(homeFragment, new HomeRepository(this));
         addFragment(homeFragment);
     }
 

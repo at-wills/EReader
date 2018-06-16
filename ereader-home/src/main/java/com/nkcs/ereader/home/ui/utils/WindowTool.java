@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import com.nkcs.ereader.base.ui.fragment.BaseFragment;
-import com.nkcs.ereader.base.utils.LogUtils;
 import com.nkcs.ereader.home.R;
 
 /**
@@ -24,7 +23,6 @@ public class WindowTool {
         View view = fragment.findViewById(viewId);
         ViewGroup.LayoutParams params = view.getLayoutParams();
         params.height = height;
-        LogUtils.e(height);
         view.setLayoutParams(params);
     }
 

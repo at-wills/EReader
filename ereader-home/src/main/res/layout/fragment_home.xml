@@ -6,9 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
+    android:background="@drawable/wood2_with_color"
     tools:context="com.nkcs.ereader.home.ui.HomeActivity"
     tools:openDrawer="start">
-
 
     <include
         android:id="@+id/main_layout"

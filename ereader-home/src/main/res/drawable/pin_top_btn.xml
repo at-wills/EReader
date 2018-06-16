@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="@dimen/bottom_drawable"
+    android:height="@dimen/bottom_drawable"
+    android:viewportWidth="1024"
+    android:viewportHeight="1024">
+
+    <path
+        android:fillColor="@color/manageTabButtonImg"
+        android:pathData="M160 96c0-19.2 12.8-32 32-32h640c19.2 0 32 12.8 32 32s-12.8 32-32 32h-640c-19.2 0-32-12.8-32-32z m384 208v624c0 19.2-12.8 32-32 32s-32-12.8-32-32v-624l-262.4 262.4c-12.8 12.8-32 12.8-44.8 0-12.8-12.8-12.8-32 0-44.8l316.8-316.8c6.4-6.4 16-9.6 22.4-9.6s16 3.2 22.4 9.6l316.8 316.8c12.8 12.8 12.8 32 0 44.8-12.8 12.8-32 12.8-44.8 0l-262.4-262.4z" />
+</vector>
