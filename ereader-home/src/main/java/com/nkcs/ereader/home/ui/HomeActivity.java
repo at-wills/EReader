@@ -1,13 +1,22 @@
 package com.nkcs.ereader.home.ui;
 
-import android.support.v4.content.ContextCompat;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SwitchCompat;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import com.nkcs.ereader.base.ui.activity.BaseActivity;
 import com.nkcs.ereader.home.R;
 import com.nkcs.ereader.home.presenter.HomePresenter;
 import com.nkcs.ereader.home.repository.HomeRepository;
 import com.nkcs.ereader.home.ui.fragment.HomeFragment;
+import com.nkcs.ereader.home.ui.utils.SharedPreferenceManager;
 
 import site.gemus.openingstartanimation.NormalDrawStrategy;
 import site.gemus.openingstartanimation.OpeningStartAnimation;

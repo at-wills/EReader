@@ -1,5 +1,6 @@
 package com.nkcs.ereader.home.ui.fragment;
 
+import android.Manifest;
 import android.content.Context;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -18,10 +19,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,13 +68,6 @@ public class HomeFragment extends BaseFragment
     protected void onInitView() {
         sharedPreferenceManager = new SharedPreferenceManager(this.getContext());
 
-        // 根据用户设置决定是否全屏
-        WindowTool windowTool = new WindowTool(this);
-        if (sharedPreferenceManager.getSetting(SharedPreferenceManager.WINDOW_NO_LIMIT)) {
-            windowTool.setNoLimitsWindow();
-        } else {
-            windowTool.setFullWindow();
-        }
 
         // 初始化 recyclerView
         initRecyclerView();
@@ -91,6 +87,9 @@ public class HomeFragment extends BaseFragment
         // 初始化菜单
         menuBtn = findViewById(R.id.menu_btn);
         menuBtn.setOnClickListener(view -> showPopupMenu(view, originLayoutSearchBtn));
+
+        // 设置全屏/noLimit
+        adjustFullWindow();
     }
 
     public void showMenu() {
@@ -106,6 +105,16 @@ public class HomeFragment extends BaseFragment
         adapter = new BookAdapter(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+    }
+
+    public void adjustFullWindow() {
+        // 根据用户设置决定是否全屏
+        WindowTool windowTool = new WindowTool(this);
+        if (sharedPreferenceManager.getSetting(SharedPreferenceManager.WINDOW_NO_LIMIT)) {
+            windowTool.setNoLimitsWindow();
+        } else {
+            windowTool.setFullWindow();
+        }
     }
 
 
@@ -313,6 +322,28 @@ public class HomeFragment extends BaseFragment
         findViewById(R.id.detail).setOnClickListener(e -> {
             adapter.detail();
         });
+        findViewById(R.id.share).setOnClickListener(e -> {
+            callWithPermissions("share");
+        });
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        Menu menu = navigationView.getMenu();
+        MenuItem item = menu.findItem(R.id.full_screen);
+        Switch aSwitch = (Switch) item.getActionView().findViewById(R.id.switchForActionBar);
+        aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferenceManager spm = sharedPreferenceManager;
+                spm.setSetting(SharedPreferenceManager.WINDOW_NO_LIMIT, !isChecked);
+                adjustFullWindow();
+            }
+        });
+    }
+
+    @NeedsPermission(permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE},
+            permissionsText = {"读写手机存储"})
+    public void share() {
+        adapter.share();
     }
 
     public void goImportPage() {

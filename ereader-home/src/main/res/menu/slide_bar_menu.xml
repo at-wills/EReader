@@ -14,9 +14,9 @@
             android:icon="@drawable/bookmark"
             android:title="@string/bookmark" />
         <item
-            android:id="@+id/night_mode"
-            android:icon="@drawable/night_mode"
-            android:title="@string/night_mode"
+            android:id="@+id/full_screen"
+            android:icon="@drawable/full_screen"
+            android:title="@string/full_screen"
             app:actionLayout="@layout/switch_layout"
             app:showAsAction="always" />
         <item

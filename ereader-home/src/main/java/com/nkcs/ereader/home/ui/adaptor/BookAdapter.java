@@ -3,7 +3,11 @@ package com.nkcs.ereader.home.ui.adaptor;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
+import android.support.v4.content.FileProvider;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.util.SparseBooleanArray;
@@ -18,23 +22,17 @@ import android.widget.Toast;
 import com.nkcs.ereader.base.db.BookDao;
 import com.nkcs.ereader.base.db.DbHelper;
 import com.nkcs.ereader.base.entity.Book;
-import com.nkcs.ereader.base.utils.LogUtils;
 import com.nkcs.ereader.home.R;
 import com.nkcs.ereader.home.ui.fragment.HomeFragment;
 import com.nkcs.ereader.home.ui.utils.BookCoverTool;
 import com.nkcs.ereader.home.ui.utils.SharedPreferenceManager;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-
-import io.reactivex.annotations.NonNull;
-
-import static java.lang.Math.ceil;
 
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     // 宇宙的终极答案：42
@@ -118,7 +116,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
                 ImageView checkBox = (ImageView) holder.findViewById(R.id.check_box_image);
                 holder.findViewById(R.id.check_box_image).setVisibility(View.VISIBLE);
 
-                boolean checked = selectedBooks.get(bookList.get(position - 1).getId().intValue(), false);
+                boolean checked = selectedBooks.get(bookList.get(position - 1).getId().intValue());
                 if (checked) {
                     checkBox.setImageDrawable(getDrawable(R.drawable.selected));
                 }
@@ -146,7 +144,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
                     goReadPage();
                 } else {
                     // 选中书籍或取消
-                    selectedBooks.put(bookList.get(position - 1).getId().intValue(), !selectedBooks.get(bookList.get(position - 1).getId().intValue(), false));
+                    selectedBooks.put(bookList.get(position - 1).getId().intValue(), !selectedBooks.get(bookList.get(position - 1).getId().intValue()));
                     notifyDataSetChanged();
                 }
             });
@@ -275,10 +273,10 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         TextView selectView = homeFragment.findViewById(R.id.select_all);
         if (isSelect) {
             selectView.setText("反选");
-            selectView.setCompoundDrawablesWithIntrinsicBounds(null, getDrawable(R.drawable.unselect_all), null, null);
+            setTextViewTopDrawable(selectView, R.drawable.unselect_all);
         } else {
             selectView.setText("全选");
-            selectView.setCompoundDrawablesWithIntrinsicBounds(null, getDrawable(R.drawable.select_all), null, null);
+            setTextViewTopDrawable(selectView, R.drawable.select_all);
         }
         // 惊天 bug：bookList 里面有占位符，不能计算全部的
         for (int i = 0; i < listSizeExceptPlaceHolder(bookList); i++) {
@@ -401,42 +399,107 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
 
     // 分享书目
     public void share() {
-
+        List<Book> books = getSelectedBooks();
+        if (books.size() != 1) {
+            return;
+        }
+        Book book = books.get(0);
+        Intent share = new Intent(Intent.ACTION_SEND);
+        share.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        File file = new File(book.getPath());
+        Uri contentUri;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            share.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            contentUri = FileProvider.getUriForFile(homeFragment.getContext(), "com.nkcs.ereader.fileProvider", file);
+        } else {
+            contentUri = Uri.fromFile(file);
+        }
+        share.putExtra(Intent.EXTRA_STREAM, contentUri);
+        share.setType("*/*");
+        homeFragment.getContext().startActivity(Intent.createChooser(share, "分享"));
     }
 
     // 显示详情
     public void detail() {
+        List<Book> books = getSelectedBooks();
+        if (books.size() == 0) {
+            return;
+        }
+        if (books.size() == 1) {
+            Book book = books.get(0);
+            showAlertDialog("标题：" + book.getTitle() + "\n路径："
+                    + book.getPath() + "\n导入时间：" + book.getCreated());
+        } else {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (Book book :
+                    books) {
+                stringBuilder.append("-------------------------------\n")
+                        .append("标题：").append(book.getTitle())
+                        .append("\n路径：").append(book.getPath())
+                        .append("\n导入时间：").append(book.getCreated())
+                        .append("\n");
+            }
+            showAlertDialog(stringBuilder.toString());
+        }
+    }
 
+    private void showAlertDialog(String msg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(homeFragment.getContext());
+        builder.setTitle("详细信息");
+        builder.setMessage(msg);
+
+        //监听下方button点击事件
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        //设置对话框是可取消的
+        builder.setCancelable(true);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     // 设置“取消置顶”或“置顶”文字提示
-    private void setPinTopButtonText() {
+    private void setPinTopButtonShow() {
         TextView pinTopBtn = homeFragment.findViewById(R.id.pin_top_btn);
         if (selectedBooksAreAllPinnedToBeCancel()) {
             pinTopBtn.setText("取消置顶");
-            pinTopBtn.setCompoundDrawablesWithIntrinsicBounds(null,
-                    getDrawable(R.drawable.pin_top_cancel), null, null);
+            setTextViewTopDrawable(pinTopBtn, R.drawable.pin_top_cancel);
         } else {
             pinTopBtn.setText("置顶");
-            pinTopBtn.setCompoundDrawablesWithIntrinsicBounds(null,
-                    getDrawable(R.drawable.pin_top_btn), null, null);
+            setTextViewTopDrawable(pinTopBtn, R.drawable.pin_top_btn);
         }
+    }
+
+    private void setTextViewTopDrawable(TextView textView, int resource) {
+        textView.setCompoundDrawablesWithIntrinsicBounds(null, getDrawable(resource), null, null);
     }
 
     private List<Book> getSelectedBooks() {
         List<Book> books = new ArrayList<>();
         for (int i = 0; i < selectedBooks.size(); i++) {
             int key = selectedBooks.keyAt(i);
-            if (selectedBooks.get(key, false)) {
+            if (selectedBooks.get(key)) {
                 books.add(getBookById(key));
             }
         }
         return books;
     }
 
+    // 设置可以分享或禁用
+    private void setShareButtonShow() {
+        TextView shareBtn = homeFragment.findViewById(R.id.share);
+        if (getSelectedBooks().size() != 1) {
+            setTextViewTopDrawable(shareBtn, R.drawable.share_forbid);
+        } else {
+            setTextViewTopDrawable(shareBtn, R.drawable.share);
+        }
+    }
+
     private Book getBookById(int id) {
-        for (Book b :
-                bookList) {
+        for (Book b : bookList) {
             if (b.getId() == id) {
                 return b;
             }
@@ -461,7 +524,8 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         SparseBooleanArray selectedBooks = new SparseBooleanArray();
 
         void onSelectChange() {
-            setPinTopButtonText();
+            setPinTopButtonShow();
+            setShareButtonShow();
         }
 
         void clear() {
@@ -474,11 +538,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         }
 
         boolean get(int i) {
-            return selectedBooks.get(i);
-        }
-
-        boolean get(int i, boolean defaultValue) {
-            return selectedBooks.get(i, defaultValue);
+            return selectedBooks.get(i, false);
         }
 
         int size() {
@@ -517,7 +577,4 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         int selected = getSelectedBooks().size();
         return selected == bookList.size();
     }
-
-    // todo 文件权限
-    // todo 占位符计算问题，不管了
 }
