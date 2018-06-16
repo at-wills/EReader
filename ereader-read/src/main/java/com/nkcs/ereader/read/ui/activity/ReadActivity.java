@@ -2,7 +2,7 @@ package com.nkcs.ereader.read.ui.activity;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.nkcs.ereader.base.ui.activity.BaseActivity;
-import com.nkcs.ereader.base.ui.activity.RouterConstant;
+import com.nkcs.ereader.base.router.RouterConstant;
 import com.nkcs.ereader.read.R;
 import com.nkcs.ereader.read.presenter.ReadPresenter;
 import com.nkcs.ereader.read.repository.BookRepository;

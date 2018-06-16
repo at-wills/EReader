@@ -19,4 +19,6 @@
     <string name="page_mode_slide">滑动</string>
     <string name="page_mode_simulation">仿真</string>
     <string name="page_mode_translation">平移</string>
+
+    <string name="read_search_search_tip">输入关键词，看看TA在哪？</string>
 </resources>

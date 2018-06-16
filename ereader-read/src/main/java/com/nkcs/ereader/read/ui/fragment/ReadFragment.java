@@ -5,8 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -18,19 +16,21 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.nkcs.ereader.base.entity.Book;
 import com.nkcs.ereader.base.entity.Chapter;
+import com.nkcs.ereader.base.router.RouterConstant;
 import com.nkcs.ereader.base.ui.fragment.BaseFragment;
 import com.nkcs.ereader.base.utils.BrightnessUtils;
+import com.nkcs.ereader.base.utils.LogUtils;
 import com.nkcs.ereader.base.utils.ScreenUtils;
 import com.nkcs.ereader.base.utils.StringUtils;
 import com.nkcs.ereader.base.utils.SystemBarUtils;
@@ -38,12 +38,17 @@ import com.nkcs.ereader.base.utils.ToastUtils;
 import com.nkcs.ereader.read.R;
 import com.nkcs.ereader.read.contract.ReadContract;
 import com.nkcs.ereader.read.entity.Config;
+import com.nkcs.ereader.read.entity.RetrievalResult;
 import com.nkcs.ereader.read.ui.adapter.CatalogueAdapter;
 import com.nkcs.ereader.read.ui.widget.ReadBrightnessDialog;
 import com.nkcs.ereader.read.ui.widget.ReadSettingDialog;
 import com.nkcs.ereader.read.ui.widget.read.PageStyle;
 import com.nkcs.ereader.read.ui.widget.read.PageView;
 import com.nkcs.ereader.read.ui.widget.read.ReadView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.util.List;
@@ -277,14 +282,13 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
 
     @Override
     protected void onLoadData() {
-//        mPresenter.getBook(bookId);
         mPresenter.getReadConfig();
-        callWithPermissions("go");
+        callWithPermissions("getBook");
     }
 
     @NeedsPermission(permissions = { Manifest.permission.WRITE_EXTERNAL_STORAGE },
             permissionsText = { "读写手机存储" })
-    public void go() {
+    public void getBook() {
         mPresenter.getBook(bookId);
     }
 
@@ -341,7 +345,7 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
             }
         });
         mSbChapterProgress.setMax(book.getChapterList().size() - 1);
-        mSbChapterProgress.setProgress(book.getLastReadChapter());
+        mSbChapterProgress.setProgress(book.getLastReadChapter() != null ? book.getLastReadChapter() : 0);
     }
 
     @Override
@@ -487,7 +491,14 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
 
         TextView tvFulltextRetrieval = popupView.findViewById(R.id.read_tv_fulltext_retrieval);
         tvFulltextRetrieval.setOnClickListener(v -> {
-
+            window.dismiss();
+            Book book = mRvPage.getBook();
+            if (book == null) {
+                return;
+            }
+            ARouter.getInstance().build(RouterConstant.READ_SEARCH_PAGE)
+                    .withLong("bookId", book.getId())
+                    .navigation();
         });
         TextView tvShare = popupView.findViewById(R.id.read_tv_share);
         tvShare.setOnClickListener(v -> {
@@ -502,4 +513,25 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
             startActivity(Intent.createChooser(share, "分享"));
         });
     }
+
+    // region EventBus 相关
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        EventBus.getDefault().unregister(this);
+        super.onStop();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onMessageEvent(RetrievalResult event) {
+        mRvPage.skipToChapter(event.getChapter().getSequence());
+    }
+
+    // endregion
 }

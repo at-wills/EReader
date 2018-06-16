@@ -7,6 +7,7 @@ import org.greenrobot.greendao.annotation.OrderBy;
 import org.greenrobot.greendao.annotation.ToMany;
 import org.greenrobot.greendao.annotation.ToOne;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import org.greenrobot.greendao.annotation.Generated;
@@ -21,7 +22,9 @@ import com.nkcs.ereader.base.db.BookDao;
  */
 
 @Entity
-public class Book extends BaseEntity {
+public class Book extends BaseEntity implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id(autoincrement = true)
     private Long id;
