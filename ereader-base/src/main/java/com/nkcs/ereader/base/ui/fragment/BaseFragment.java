@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.nkcs.ereader.base.ui.activity.BaseActivity;
 import com.nkcs.ereader.base.utils.LogUtils;
+import com.nkcs.ereader.base.utils.PermissionUtils;
 import com.nkcs.ereader.base.utils.StringUtils;
 
 import java.lang.annotation.ElementType;
@@ -181,7 +182,9 @@ public abstract class BaseFragment extends Fragment {
             new AlertDialog.Builder(getHoldingActivity())
                     .setMessage("执行该操作需要权限：" + StringUtils.join("、", deniedPermissions))
                     .setNegativeButton("取消操作", null)
-                    .setPositiveButton("去设置", (dialog, which) -> {})
+                    .setPositiveButton("去设置", (dialog, which) -> {
+                        PermissionUtils.gotoPermission(getHoldingActivity());
+                    })
                     .setCancelable(false)
                     .show();
         }

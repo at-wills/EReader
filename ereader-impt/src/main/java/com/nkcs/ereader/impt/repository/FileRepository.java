@@ -54,7 +54,6 @@ public class FileRepository extends BaseRepository {
                                     queue.offer(f);
                                 }
                                 if (fileType == FileType.txt) {
-                                    LogUtils.e(f.getName());
                                     txtList.add(f);
                                 }
 
