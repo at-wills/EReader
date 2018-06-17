@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="@dimen/bottom_drawable"
+    android:height="@dimen/bottom_drawable"
+    android:viewportWidth="1024"
+    android:viewportHeight="1024">
+
+    <path
+        android:fillColor="@color/manageTabButtonImg"
+        android:pathData="M128.04 816.814c-16.473 0-31.964-6.413-43.607-18.057-11.654-11.654-18.074-27.14-18.074-43.613V129.392c0-16.462 6.425-31.948 18.08-43.602C96.086 74.146 111.566 67.72 128.04 67.72h433.79c20.955 0 38.009 17.049 38.009 38.003s-17.054 38.014-38.008 38.014H142.38v597.059h570.863V465.523c0-21.182 17.238-38.426 38.427-38.426s38.43 17.244 38.43 38.426v289.62c0 16.474-6.423 31.959-18.078 43.614-11.638 11.644-27.129 18.057-43.607 18.057H128.04z" />
+    <path
+        android:fillColor="@color/manageTabButtonImg"
+        android:pathData="M319.99 960.957c-20.953 0-38.002-17.048-38.002-38.002s17.043-38.003 37.992-38.003l563.517-0.38V393.23c0-20.954 17.048-38.014 38.003-38.014 10.32 0 19.966 3.961 27.156 11.145 7.179 7.205 11.128 16.755 11.123 26.902l-0.52 512.817c-0.038 30.027-24.498 54.486-54.53 54.519l-584.738 0.358z" />
+</vector>
