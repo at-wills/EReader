@@ -33,9 +33,10 @@ public class BookDao extends AbstractDao<Book, Long> {
         public final static Property TotalChapter = new Property(6, Integer.class, "totalChapter", false, "TOTAL_CHAPTER");
         public final static Property HasFormat = new Property(7, Boolean.class, "hasFormat", false, "HAS_FORMAT");
         public final static Property Created = new Property(8, java.util.Date.class, "created", false, "CREATED");
-        public final static Property LastReadChapter = new Property(9, Integer.class, "lastReadChapter", false, "LAST_READ_CHAPTER");
-        public final static Property LastReadPage = new Property(10, Integer.class, "lastReadPage", false, "LAST_READ_PAGE");
-        public final static Property Progress = new Property(11, Double.class, "progress", false, "PROGRESS");
+        public final static Property PinTopDate = new Property(9, java.util.Date.class, "pinTopDate", false, "PIN_TOP_DATE");
+        public final static Property LastReadChapter = new Property(10, Integer.class, "lastReadChapter", false, "LAST_READ_CHAPTER");
+        public final static Property LastReadPage = new Property(11, Integer.class, "lastReadPage", false, "LAST_READ_PAGE");
+        public final static Property Progress = new Property(12, Double.class, "progress", false, "PROGRESS");
     }
 
     private DaoSession daoSession;
@@ -63,9 +64,10 @@ public class BookDao extends AbstractDao<Book, Long> {
                 "\"TOTAL_CHAPTER\" INTEGER," + // 6: totalChapter
                 "\"HAS_FORMAT\" INTEGER," + // 7: hasFormat
                 "\"CREATED\" INTEGER," + // 8: created
-                "\"LAST_READ_CHAPTER\" INTEGER," + // 9: lastReadChapter
-                "\"LAST_READ_PAGE\" INTEGER," + // 10: lastReadPage
-                "\"PROGRESS\" REAL);"); // 11: progress
+                "\"PIN_TOP_DATE\" INTEGER," + // 9: pinTopDate
+                "\"LAST_READ_CHAPTER\" INTEGER," + // 10: lastReadChapter
+                "\"LAST_READ_PAGE\" INTEGER," + // 11: lastReadPage
+                "\"PROGRESS\" REAL);"); // 12: progress
         // Add Indexes
         db.execSQL("CREATE UNIQUE INDEX " + constraint + "IDX_BOOK_HASH ON \"BOOK\"" +
                 " (\"HASH\" ASC);");
@@ -126,19 +128,24 @@ public class BookDao extends AbstractDao<Book, Long> {
             stmt.bindLong(9, created.getTime());
         }
  
+        java.util.Date pinTopDate = entity.getPinTopDate();
+        if (pinTopDate != null) {
+            stmt.bindLong(10, pinTopDate.getTime());
+        }
+ 
         Integer lastReadChapter = entity.getLastReadChapter();
         if (lastReadChapter != null) {
-            stmt.bindLong(10, lastReadChapter);
+            stmt.bindLong(11, lastReadChapter);
         }
  
         Integer lastReadPage = entity.getLastReadPage();
         if (lastReadPage != null) {
-            stmt.bindLong(11, lastReadPage);
+            stmt.bindLong(12, lastReadPage);
         }
  
         Double progress = entity.getProgress();
         if (progress != null) {
-            stmt.bindDouble(12, progress);
+            stmt.bindDouble(13, progress);
         }
     }
 
@@ -191,19 +198,24 @@ public class BookDao extends AbstractDao<Book, Long> {
             stmt.bindLong(9, created.getTime());
         }
  
+        java.util.Date pinTopDate = entity.getPinTopDate();
+        if (pinTopDate != null) {
+            stmt.bindLong(10, pinTopDate.getTime());
+        }
+ 
         Integer lastReadChapter = entity.getLastReadChapter();
         if (lastReadChapter != null) {
-            stmt.bindLong(10, lastReadChapter);
+            stmt.bindLong(11, lastReadChapter);
         }
  
         Integer lastReadPage = entity.getLastReadPage();
         if (lastReadPage != null) {
-            stmt.bindLong(11, lastReadPage);
+            stmt.bindLong(12, lastReadPage);
         }
  
         Double progress = entity.getProgress();
         if (progress != null) {
-            stmt.bindDouble(12, progress);
+            stmt.bindDouble(13, progress);
         }
     }
 
@@ -230,9 +242,10 @@ public class BookDao extends AbstractDao<Book, Long> {
             cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6), // totalChapter
             cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0, // hasFormat
             cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)), // created
-            cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9), // lastReadChapter
-            cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10), // lastReadPage
-            cursor.isNull(offset + 11) ? null : cursor.getDouble(offset + 11) // progress
+            cursor.isNull(offset + 9) ? null : new java.util.Date(cursor.getLong(offset + 9)), // pinTopDate
+            cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10), // lastReadChapter
+            cursor.isNull(offset + 11) ? null : cursor.getInt(offset + 11), // lastReadPage
+            cursor.isNull(offset + 12) ? null : cursor.getDouble(offset + 12) // progress
         );
         return entity;
     }
@@ -248,9 +261,10 @@ public class BookDao extends AbstractDao<Book, Long> {
         entity.setTotalChapter(cursor.isNull(offset + 6) ? null : cursor.getInt(offset + 6));
         entity.setHasFormat(cursor.isNull(offset + 7) ? null : cursor.getShort(offset + 7) != 0);
         entity.setCreated(cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)));
-        entity.setLastReadChapter(cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9));
-        entity.setLastReadPage(cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10));
-        entity.setProgress(cursor.isNull(offset + 11) ? null : cursor.getDouble(offset + 11));
+        entity.setPinTopDate(cursor.isNull(offset + 9) ? null : new java.util.Date(cursor.getLong(offset + 9)));
+        entity.setLastReadChapter(cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10));
+        entity.setLastReadPage(cursor.isNull(offset + 11) ? null : cursor.getInt(offset + 11));
+        entity.setProgress(cursor.isNull(offset + 12) ? null : cursor.getDouble(offset + 12));
      }
     
     @Override

@@ -8,7 +8,7 @@ import io.reactivex.disposables.Disposable;
  * @date 2018/3/24
  */
 
-public abstract class BaseDbSubscriber<T> implements Observer<T> {
+public abstract class CommonSubscriber<T> implements Observer<T> {
 
     protected abstract void onSuccess(T t);
 

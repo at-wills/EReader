@@ -60,8 +60,6 @@ public class ChapterDao extends AbstractDao<Chapter, Long> {
         // Add Indexes
         db.execSQL("CREATE INDEX " + constraint + "IDX_CHAPTER_BOOK_ID ON \"CHAPTER\"" +
                 " (\"BOOK_ID\" ASC);");
-        db.execSQL("CREATE UNIQUE INDEX " + constraint + "IDX_CHAPTER_SEQUENCE ON \"CHAPTER\"" +
-                " (\"SEQUENCE\" ASC);");
     }
 
     /** Drops the underlying database table. */

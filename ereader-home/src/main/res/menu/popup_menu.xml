@@ -7,9 +7,12 @@
     <item
         android:id="@+id/manage_item"
         android:title="@string/manage_item" />
+    <!--<item-->
+        <!--android:id="@+id/list_show_books"-->
+        <!--android:title="@string/list_show_books" />-->
     <item
-        android:id="@+id/list_show_books"
-        android:title="@string/list_show_books" />
+        android:id="@+id/cloud_bookshelf"
+        android:title="@string/cloud_bookshelf" />
     <item
         android:id="@+id/tradition_show_books"
         android:title="@string/tradition_show_books" />

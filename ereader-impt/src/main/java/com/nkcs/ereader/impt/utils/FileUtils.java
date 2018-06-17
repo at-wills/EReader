@@ -81,7 +81,10 @@ public class FileUtils {
         if (file.isDirectory()) {
             File[] files = file.listFiles();
             for (File f : files) {
-                if (f.isHidden()) continue;
+                if (f.isHidden() || (getFileType(f) != FileType.directory
+                        && getFileType(f) != FileType.txt)) {
+                    continue;
+                }
                 count++;
             }
         }

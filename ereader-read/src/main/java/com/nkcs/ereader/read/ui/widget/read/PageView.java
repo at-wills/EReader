@@ -50,7 +50,7 @@ public class PageView extends View {
         }
     };
 
-    protected PageMode mPageMode;
+    protected PageMode mPageMode = PageMode.SIMULATION;
     protected OnPageTouchListener mOnPageTouchListener;
 
     private float mStartX;

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="login_menu_bg">@color/colorPrimaryDark</color>
+    <color name="login_menu_text">#BBBBBB</color>
+
+</resources>

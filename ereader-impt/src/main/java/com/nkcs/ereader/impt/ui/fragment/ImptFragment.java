@@ -19,7 +19,9 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.nkcs.ereader.base.entity.Book;
 import com.nkcs.ereader.base.ui.fragment.BaseFragment;
+import com.nkcs.ereader.base.utils.LogUtils;
 import com.nkcs.ereader.base.utils.ToastUtils;
 import com.nkcs.ereader.impt.R;
 import com.nkcs.ereader.impt.ui.adapter.FileAdapter;
@@ -97,14 +99,19 @@ public class ImptFragment extends BaseFragment implements ImptContract.IView {
             files = fileAdapter.getCheckFiles();
         }
         if (files.size() > 0) {
+            List<Book> bookList = new ArrayList<>();
             for (FileBean file : files) {
-                String name = file.getName();
-                /*
-
-                  这里是接口！！！！！！！！！！！！！！！！！！！！！
-                 */
-                numofchecked.setText(name);
+                // 接口
+                Book book = new Book();
+                int pos = file.getName().lastIndexOf('.');
+                book.setTitle(file.getName().substring(0, pos));
+                book.setHash(com.nkcs.ereader.base.utils.FileUtils.fileToMD5(file.getPath()));
+                book.setPath(file.getPath());
+                book.setFormat(file.getName().substring(pos + 1));
+                book.setHasFormat(false);
+                bookList.add(book);
             }
+            mPresenter.importBook(bookList);
         }
     }
 
@@ -367,8 +374,6 @@ public class ImptFragment extends BaseFragment implements ImptContract.IView {
                 titleAdapter.removeLast();
             }
         });
-
-
     }
 
     @Override
@@ -389,6 +394,12 @@ public class ImptFragment extends BaseFragment implements ImptContract.IView {
     public void getFile(String path ) {
         rootFile = new File( path + File.separator  )  ;
         new MyTask(rootFile).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR , "") ;
+    }
+
+    @Override
+    public void onDestroyView() {
+        mPresenter.cancelGetTargetFile();
+        super.onDestroyView();
     }
 
     @Override
@@ -478,14 +489,13 @@ public class ImptFragment extends BaseFragment implements ImptContract.IView {
                         fileBean.setFileType( FileUtils.getFileType( f ));
                         fileBean.setChildCount( FileUtils.getFileChildCount( f ));
                         fileBean.setSize( f.length() );
-                        if(fileBean.getFileType() == FileType.directory)
-                        {
+                        if (fileBean.getFileType() == FileType.directory) {
                             fileBean.setHolderType(-1);
+                            fileBeenList.add(fileBean);
+                        } else if (fileBean.getFileType() == FileType.txt) {
+                            fileBean.setHolderType(0);
+                            fileBeenList.add(fileBean);
                         }
-                        else{
-                            fileBean.setHolderType( 0 );
-                        }
-                        fileBeenList.add(fileBean);
                     }
                 }
             }

@@ -8,11 +8,12 @@ import java.util.List;
 
 public interface HomeContract {
     interface IPresenter extends BasePresenter {
+        void deleteBooks(List<Book> bookList);
+
         void getBooks();
     }
 
     interface IView extends BaseView<IPresenter> {
         void onGetBooks(List<Book> books);
-
     }
 }

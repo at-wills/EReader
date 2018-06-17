@@ -8,7 +8,9 @@ import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -60,7 +62,7 @@ import java.util.List;
 
 public class ReadFragment extends BaseFragment implements ReadContract.IView {
 
-    private Long bookId = 1L;
+    private Long bookId;
     private ReadContract.IPresenter mPresenter;
 
     private DrawerLayout mDlSlide;
@@ -111,6 +113,14 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
         }
     };
 
+    public static ReadFragment newInstance(Long bookId) {
+        ReadFragment readFragment = new ReadFragment();
+        Bundle bundle = new Bundle();
+        bundle.putLong("bookId", bookId);
+        readFragment.setArguments(bundle);
+        return readFragment;
+    }
+
     @Override
     protected int getLayoutResource() {
         return R.layout.fragment_read;
@@ -118,6 +128,8 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
 
     @Override
     protected void onInitView() {
+        initDataFromIntent();
+
         // 侧滑栏
         mDlSlide = findViewById(R.id.read_dl_slide);
         mDlSlide.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
@@ -211,6 +223,11 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
         // 目录
         mTvCatalogue = findViewById(R.id.read_tv_catalogue);
         mTvCatalogue.setOnClickListener(v -> {
+            if (mCatalogueAdapter.getItemCount() == 1
+                    && "暂无".equals(mCatalogueAdapter.getItem(0).getTitle())) {
+                ToastUtils.showText("本文档无目录信息");
+                return;
+            }
             toggleMenu(true);
             mCatalogueAdapter.scrollToSelected();
             mDlSlide.openDrawer(mDrawerDirection);
@@ -278,6 +295,12 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
         intentFilter.addAction(Intent.ACTION_BATTERY_CHANGED);
         intentFilter.addAction(Intent.ACTION_TIME_TICK);
         getHoldingActivity().registerReceiver(mReceiver, intentFilter);
+    }
+
+    private void initDataFromIntent() {
+        if (getArguments() != null) {
+            bookId = getArguments().getLong("bookId");
+        }
     }
 
     @Override
@@ -507,8 +530,17 @@ public class ReadFragment extends BaseFragment implements ReadContract.IView {
             if (book == null) {
                 return;
             }
+
             Intent share = new Intent(Intent.ACTION_SEND);
-            share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(book.getPath())));
+            File file = new File(book.getPath());
+            Uri contentUri;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                share.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                contentUri = FileProvider.getUriForFile(getContext(), "com.nkcs.ereader.fileProvider", file);
+            } else {
+                contentUri = Uri.fromFile(file);
+            }
+            share.putExtra(Intent.EXTRA_STREAM, contentUri);
             share.setType("*/*");
             startActivity(Intent.createChooser(share, "分享"));
         });

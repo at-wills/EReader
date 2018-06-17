@@ -3,7 +3,7 @@ package com.nkcs.ereader.home.presenter;
 import android.util.Log;
 
 import com.nkcs.ereader.base.entity.Book;
-import com.nkcs.ereader.base.subscriber.BaseDbSubscriber;
+import com.nkcs.ereader.base.subscriber.CommonSubscriber;
 import com.nkcs.ereader.base.utils.ToastUtils;
 import com.nkcs.ereader.home.contract.HomeContract;
 import com.nkcs.ereader.home.repository.HomeRepository;
@@ -24,11 +24,17 @@ public class HomePresenter implements HomeContract.IPresenter {
 
 
     @Override
+    public void deleteBooks(List<Book> bookList) {
+        repository.deleteBooks(bookList).subscribe(new BooksSubscriber());
+    }
+
+    @Override
     public void getBooks() {
         repository.getBooks().subscribe(new BooksSubscriber());
     }
 
-    class BooksSubscriber extends BaseDbSubscriber<List<Book>> {
+    class BooksSubscriber extends CommonSubscriber<List<Book>> {
+
         @Override
         protected void onSuccess(List<Book> books) {
             view.onGetBooks(books);
@@ -36,8 +42,7 @@ public class HomePresenter implements HomeContract.IPresenter {
 
         @Override
         protected void onFailure(Throwable e) {
-            ToastUtils.showText("fuck " + e.getMessage());
-            Log.d("fuck", "onFailure: " + e.getMessage());
+            ToastUtils.showText(e.getMessage());
         }
     }
 }

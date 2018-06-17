@@ -12,6 +12,7 @@ import com.nkcs.ereader.base.db.DbHelper;
 import com.nkcs.ereader.base.entity.Book;
 import com.nkcs.ereader.base.entity.Chapter;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
@@ -25,25 +26,29 @@ public class ReaderApplication extends BaseApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        ARouter.openDebug();
+        ARouter.openLog();
         ARouter.init(this);
 
         SharedPreferences sp = getSharedPreferences("system_config", Context.MODE_PRIVATE);
         Boolean firstEnter = sp.getBoolean("first_enter", true);
         if (firstEnter) {
-            testDb();
+//            testDb();
             sp.edit().putBoolean("first_enter", false).apply();
         }
     }
 
     private void testDb() {
         BookDao bookDao = DbHelper.getInstance().getSession().getBookDao();
-        Book book = new Book();
-        book.setId(1L);
-        book.setTitle("斗罗大陆");
-        book.setHash("f04746e48eb51ecaa398e8fb096f4d6c");
-        book.setPath("/storage/emulated/0/斗罗大陆.txt");
-        book.setFormat("txt");
-        book.setHasFormat(false);
-        bookDao.insert(book);
+        for (int i = 0; i < 20; ++i) {
+            Book book = new Book();
+            book.setId(Long.valueOf(i));
+            book.setTitle("斗罗大陆");
+            book.setHash("" + i);
+            book.setPath("/storage/emulated/0/斗罗大陆.txt");
+            book.setFormat("txt");
+            book.setHasFormat(false);
+            bookDao.insert(book);
+        }
     }
 }

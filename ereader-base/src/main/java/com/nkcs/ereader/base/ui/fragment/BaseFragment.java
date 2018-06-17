@@ -1,5 +1,6 @@
 package com.nkcs.ereader.base.ui.fragment;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -40,6 +41,8 @@ public abstract class BaseFragment extends Fragment {
 
     protected View mRootView;
     protected BaseActivity mActivity;
+
+    private Dialog mLoadingDialog;
 
     public <T extends View> T findViewById(@IdRes int id){
         return mRootView.findViewById(id);
@@ -100,6 +103,22 @@ public abstract class BaseFragment extends Fragment {
      */
     protected BaseActivity getHoldingActivity() {
         return mActivity;
+    }
+
+    protected void showLoadingDialog() {
+        if (mLoadingDialog == null) {
+            mLoadingDialog = new AlertDialog.Builder(getHoldingActivity())
+                    .setMessage("请稍后...")
+                    .setCancelable(false)
+                    .create();
+        }
+        mLoadingDialog.show();
+    }
+
+    protected void hideLoadingDialog() {
+        if (mLoadingDialog != null){
+            mLoadingDialog.dismiss();
+        }
     }
 
     // region 请求权限相关

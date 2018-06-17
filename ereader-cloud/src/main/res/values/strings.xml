@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">ereader-cloud</string>
+    <string name="book_picture">book picture</string>
+    <string name="book_format">- %1$s -</string>
+</resources>

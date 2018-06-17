@@ -7,8 +7,10 @@ package com.nkcs.ereader.base.router;
 
 public class RouterConstant {
 
-    public final static String HOME_PAGE = "/reader/home";
-    public final static String IMPORT_PAGE = "/reader/import";
-    public final static String READ_PAGE = "/reader/read";
-    public final static String READ_SEARCH_PAGE = "/reader/read_search";
+    public final static String HOME_PAGE = "/home/index";
+    public final static String IMPORT_PAGE = "/import/index";
+    public final static String READ_PAGE = "/read/index";
+    public final static String READ_SEARCH_PAGE = "/read/search";
+    public final static String LOGIN_PAGE = "/login/index";
+    public final static String CLOUD_PAGE = "/cloud/index";
 }

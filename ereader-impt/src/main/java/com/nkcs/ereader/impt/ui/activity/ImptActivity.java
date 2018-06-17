@@ -9,6 +9,7 @@ import com.nkcs.ereader.base.router.RouterConstant;
 import com.nkcs.ereader.base.ui.activity.BaseActivity;
 import com.nkcs.ereader.impt.R;
 import com.nkcs.ereader.impt.presenter.ImptPresenter;
+import com.nkcs.ereader.impt.repository.BookRepository;
 import com.nkcs.ereader.impt.repository.FileRepository;
 import com.nkcs.ereader.impt.ui.fragment.ImptFragment;
 
@@ -36,7 +37,7 @@ public class ImptActivity extends BaseActivity {
     @Override
     protected void onInitView() {
         mImptFragment = getStoredFragment(ImptFragment.class);
-        new ImptPresenter(mImptFragment, new FileRepository(this));
+        new ImptPresenter(mImptFragment, new BookRepository(this), new FileRepository(this));
         addFragment(mImptFragment);
     }
 }

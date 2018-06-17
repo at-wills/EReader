@@ -41,7 +41,7 @@ public class HomeActivity extends BaseActivity {
                 .setDrawStategy(new NormalDrawStrategy())
                 .setAppName("一读")
                 .setAppStatement("read my love")
-                .setAnimationInterval(2000)
+                .setAnimationInterval(3000)
                 .create();
         openingStartAnimation.show(this);
         homeFragment = getStoredFragment(HomeFragment.class);

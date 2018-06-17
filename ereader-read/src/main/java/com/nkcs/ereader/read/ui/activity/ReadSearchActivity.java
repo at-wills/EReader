@@ -2,9 +2,11 @@ package com.nkcs.ereader.read.ui.activity;
 
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.nkcs.ereader.base.entity.Book;
 import com.nkcs.ereader.base.ui.activity.BaseActivity;
 import com.nkcs.ereader.base.router.RouterConstant;
+import com.nkcs.ereader.base.utils.LogUtils;
 import com.nkcs.ereader.read.R;
 import com.nkcs.ereader.read.presenter.ReadPresenter;
 import com.nkcs.ereader.read.presenter.ReadSearchPresenter;
@@ -21,7 +23,7 @@ import com.nkcs.ereader.read.ui.fragment.ReadSearchFragment;
 public class ReadSearchActivity extends BaseActivity {
 
     @Autowired(required = true)
-    Long bookId = 1L;
+    Long bookId = 0L;
 
     ReadSearchFragment mReadSearchFragment;
 

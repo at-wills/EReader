@@ -1,0 +1,37 @@
+apply plugin: 'com.android.library'
+
+apply from: '../common_dependencies.gradle'
+
+android {
+    compileSdkVersion rootProject.ext.android["compileSdkVersion"]
+    defaultConfig {
+        minSdkVersion rootProject.ext.android["minSdkVersion"]
+        targetSdkVersion rootProject.ext.android["targetSdkVersion"]
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner rootProject.ext.android["testRunner"]
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    if (rootProject.ext.aarMode) {
+        compile(name: "ereader-base-release", ext: "aar")
+        compile(name: "ereader-account-release", ext: "aar")
+    } else {
+        implementation project(":ereader-base")
+        implementation project(":ereader-account")
+    }
+}

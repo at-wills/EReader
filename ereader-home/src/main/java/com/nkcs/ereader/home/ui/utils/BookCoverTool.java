@@ -7,7 +7,7 @@ import android.widget.ImageView;
 
 import com.nkcs.ereader.base.entity.Book;
 import com.nkcs.ereader.home.R;
-import com.nkcs.ereader.home.ui.adaptor.BookAdapter;
+import com.nkcs.ereader.home.ui.adapter.BookAdapter;
 
 import java.io.File;
 

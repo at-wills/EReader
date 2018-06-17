@@ -17,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -48,6 +49,7 @@ public class BookRepository extends BaseRepository {
                         chapter.setHasRead(true);
                         mChapterDao.update(chapter);
                         book.setLastReadChapter(chapter.getSequence());
+                        book.setCreated(new Date());
                         book.update();
                     });
                     return getBookWithChapters(book.getId());
