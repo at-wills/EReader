@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--侧边栏图片宽度-->
+    <dimen name="nav_header_img_height">180dp</dimen>
+    <!--主页顶部按钮边长-->
+    <dimen name="homepage_button_side">50dp</dimen>
+    <!--主页快速开始阅读按钮边长-->
+    <dimen name="homepage_quick_button_side">60dp</dimen>
+    <!--主页标题高度-->
+    <dimen name="homepage_title_height">55dp</dimen>
+    <!--主页标题高度：全屏时-->
+    <dimen name="homepage_title_height_full_screen">67dp</dimen>
+    <!--主页部件海拔-->
+    <dimen name="homepage_elevation">8dp</dimen>
+    <!--编辑界面底部按钮的图像大小-->
+    <dimen name="bottom_drawable">20dp</dimen>
+    <!--编辑界面底部按钮高度-->
+    <dimen name="bottom_height">60dp</dimen>
+    <!--编辑界面底部按钮的图像距顶部高度-->
+    <dimen name="bottom_drawable_top_padding">10dp</dimen>
+    <!--标题字体大小-->
+    <dimen name="title_text_size">17sp</dimen>
+    <!--顶部占位矩形高度-->
+    <dimen name="placeholder_height">20dp</dimen>
+    <!--书籍管理界面侧边按钮的空白-->
+    <dimen name="manage_side_btn_padding">13dp</dimen>
+    <!--主页图像按钮padding-->
+    <dimen name="homepage_image_btn_padding">15dp</dimen>
+    <!--主页快速阅读按钮padding-->
+    <dimen name="homepage_quick_read_padding">12dp</dimen>
+    <dimen name="book_shelf_edge">6dp</dimen>
+</resources>

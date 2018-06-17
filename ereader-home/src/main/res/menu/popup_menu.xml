@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/import_item"
+        android:title="@string/import_item" />
+    <item
+        android:id="@+id/manage_item"
+        android:title="@string/manage_item" />
+    <item
+        android:id="@+id/list_show_books"
+        android:title="@string/list_show_books" />
+    <item
+        android:id="@+id/tradition_show_books"
+        android:title="@string/tradition_show_books" />
+    <item
+        android:id="@+id/sort_item_by_name"
+        android:title="@string/sort_item_by_name" />
+    <item
+        android:id="@+id/sort_item_by_time"
+        android:title="@string/sort_item_by_time" />
+</menu>

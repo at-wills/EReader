@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimaryDark">#3e2723</color>
+    <color name="manageTabButtonImg">#bfbfbf</color>
+    <color name="defaultBackground">#ffffff</color>
+    <color name="importButtonBackground">#f6f6f6</color>
+    <color name="book_shelf_normal_wood">#c9b495</color>
+    <color name="book_shelf_center_wood">#a4907a</color>
+    <color name="book_shelf_shadow_wood">#806c5f</color>
+    <color name="book_shelf_edge">#d5c5ae</color>
+    <color name="book_extension">#aaa</color>
+</resources>
