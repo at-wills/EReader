@@ -25,6 +25,8 @@ public class ReaderApplication extends BaseApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        ARouter.openDebug();
+        ARouter.openLog();
         ARouter.init(this);
 
         SharedPreferences sp = getSharedPreferences("system_config", Context.MODE_PRIVATE);

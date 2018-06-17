@@ -13,6 +13,7 @@ import android.util.AttributeSet;
 
 import com.nkcs.ereader.base.entity.Book;
 import com.nkcs.ereader.base.entity.Chapter;
+import com.nkcs.ereader.base.subscriber.CommonSubscriber;
 import com.nkcs.ereader.base.utils.FileUtils;
 import com.nkcs.ereader.base.utils.LogUtils;
 import com.nkcs.ereader.base.utils.RxUtils;
@@ -686,7 +687,7 @@ public class ReadView extends PageView {
 
         // 调用异步进行预加载加载
         Chapter nextChapter = mBook.getChapterList().get(mCurChapter + 1);
-        RxUtils.toObservable(() -> BookFormatter.getFormatter(mBook).loadChapter(nextChapter)).subscribe(new Observer<BufferedReader>() {
+        RxUtils.toObservable(() -> BookFormatter.getFormatter(mBook).loadChapter(nextChapter)).subscribe(new CommonSubscriber<BufferedReader>() {
 
             @Override
             public void onSubscribe(Disposable d) {
@@ -694,12 +695,12 @@ public class ReadView extends PageView {
             }
 
             @Override
-            public void onNext(BufferedReader reader) {
+            public void onSuccess(BufferedReader reader) {
                 mNextPageList = loadPages(nextChapter, reader);
             }
 
             @Override
-            public void onError(Throwable e) {}
+            public void onFailure(Throwable e) {}
 
             @Override
             public void onComplete() {
@@ -709,13 +710,10 @@ public class ReadView extends PageView {
     }
 
     private <T> void runInBackground(Callable<T> callable, Consumer<T> onSuccess) {
-        RxUtils.toObservable(callable).subscribe(new Observer<T>() {
+        RxUtils.toObservable(callable).subscribe(new CommonSubscriber<T>() {
 
             @Override
-            public void onSubscribe(Disposable d) {}
-
-            @Override
-            public void onNext(T t) {
+            public void onSuccess(T t) {
                 if (onSuccess != null) {
                     try {
                         onSuccess.accept(t);
@@ -727,13 +725,10 @@ public class ReadView extends PageView {
             }
 
             @Override
-            public void onError(Throwable e) {
+            public void onFailure(Throwable e) {
                 // TODO: 显示错误信息
                 mStatus = STATUS_ERROR;
             }
-
-            @Override
-            public void onComplete() {}
         });
     }
 

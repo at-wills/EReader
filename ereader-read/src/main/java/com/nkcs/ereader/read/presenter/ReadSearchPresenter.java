@@ -3,8 +3,7 @@ package com.nkcs.ereader.read.presenter;
 import android.support.annotation.NonNull;
 
 import com.nkcs.ereader.base.entity.Book;
-import com.nkcs.ereader.base.subscriber.BaseDbSubscriber;
-import com.nkcs.ereader.read.contract.ReadContract;
+import com.nkcs.ereader.base.subscriber.CommonSubscriber;
 import com.nkcs.ereader.read.contract.ReadSearchContract;
 import com.nkcs.ereader.read.entity.RetrievalResult;
 import com.nkcs.ereader.read.repository.BookRepository;
@@ -34,7 +33,7 @@ public class ReadSearchPresenter implements ReadSearchContract.IPresenter {
 
     @Override
     public void getBook(Long bookId) {
-        mBookRepository.getBook(bookId).subscribe(new BaseDbSubscriber<Book>() {
+        mBookRepository.getBook(bookId).subscribe(new CommonSubscriber<Book>() {
 
             @Override
             protected void onSuccess(Book book) {
@@ -55,7 +54,7 @@ public class ReadSearchPresenter implements ReadSearchContract.IPresenter {
             mFullTextDisp = null;
         }
 
-        mBookRepository.retrievalFullText(book, searchKey).subscribe(new Observer<List<RetrievalResult>>() {
+        mBookRepository.retrievalFullText(book, searchKey).subscribe(new CommonSubscriber<List<RetrievalResult>>() {
 
             @Override
             public void onSubscribe(Disposable d) {
@@ -64,12 +63,12 @@ public class ReadSearchPresenter implements ReadSearchContract.IPresenter {
             }
 
             @Override
-            public void onNext(List<RetrievalResult> resultList) {
+            public void onSuccess(List<RetrievalResult> resultList) {
                 mView.onRetrievalFullText(resultList);
             }
 
             @Override
-            public void onError(Throwable e) {
+            public void onFailure(Throwable e) {
                 mView.showTips(e.getMessage());
             }
 

@@ -38,6 +38,10 @@ ext {
             "rxjava"                : "io.reactivex.rxjava2:rxjava:2.1.10",
             "rxandroid"             : "io.reactivex.rxjava2:rxandroid:2.0.2",
             "rxlifecycle"           : "com.trello.rxlifecycle2:rxlifecycle:2.2.1",
-            "rxlifecycle-android"   : "com.trello.rxlifecycle2:rxlifecycle-android:2.2.1"
+            "rxlifecycle-android"   : "com.trello.rxlifecycle2:rxlifecycle-android:2.2.1",
+
+            "retrofit"              : "com.squareup.retrofit2:retrofit:2.4.0",
+            "converter-gson"        : "com.squareup.retrofit2:converter-gson:2.4.0",
+            "adapter-rxjava"        : "com.squareup.retrofit2:adapter-rxjava2:2.4.0"
     ]
 }

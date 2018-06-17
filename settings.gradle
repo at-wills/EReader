@@ -1,1 +1,1 @@
-include ':app', ':ereader-base', ':ereader-home', ':ereader-impt', ':ereader-read'
+include ':app', ':ereader-base', ':ereader-home', ':ereader-impt', ':ereader-read', ':ereader-cloud', ':ereader-account'

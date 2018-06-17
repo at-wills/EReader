@@ -2,14 +2,12 @@ package com.nkcs.ereader.impt.presenter;
 
 import android.support.annotation.NonNull;
 
-import com.nkcs.ereader.base.subscriber.BaseDbSubscriber;
+import com.nkcs.ereader.base.subscriber.CommonSubscriber;
 import com.nkcs.ereader.impt.contract.ImptContract;
 import com.nkcs.ereader.impt.repository.FileRepository;
 
 import java.io.File;
 import java.util.List;
-
-import io.reactivex.functions.Consumer;
 
 /**
  * @author faunleaf
@@ -29,7 +27,7 @@ public class ImptPresenter implements ImptContract.IPresenter {
 
     @Override
     public void getTargetFile(File file) {
-        mFileRepository.getTargetFile(file).subscribe(new BaseDbSubscriber<List<File>>() {
+        mFileRepository.getTargetFile(file).subscribe(new CommonSubscriber<List<File>>() {
 
             @Override
             protected void onSuccess(List<File> fileList) {

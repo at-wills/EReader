@@ -26,6 +26,7 @@ android {
 }
 
 dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation rootProject.ext.dependencies["appcompat-v7"]
 
     if (rootProject.ext.aarMode) {
@@ -33,10 +34,14 @@ dependencies {
         compile(name: "ereader-home-release", ext: "aar")
         compile(name: "ereader-impt-release", ext: "aar")
         compile(name: "ereader-read-release", ext: "aar")
+        compile(name: "ereader-account-release", ext: "aar")
+        compile(name: "ereader-cloud-release", ext: "aar")
     } else {
         implementation project(":ereader-base")
         implementation project(":ereader-home")
         implementation project(":ereader-impt")
         implementation project(":ereader-read")
+        implementation project(":ereader-account")
+        implementation project(":ereader-cloud")
     }
 }

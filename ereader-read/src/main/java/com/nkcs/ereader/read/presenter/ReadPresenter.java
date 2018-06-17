@@ -1,11 +1,10 @@
 package com.nkcs.ereader.read.presenter;
 
 import android.support.annotation.NonNull;
-import android.util.Pair;
 
 import com.nkcs.ereader.base.entity.Book;
 import com.nkcs.ereader.base.entity.Chapter;
-import com.nkcs.ereader.base.subscriber.BaseDbSubscriber;
+import com.nkcs.ereader.base.subscriber.CommonSubscriber;
 import com.nkcs.ereader.read.contract.ReadContract;
 import com.nkcs.ereader.read.entity.Config;
 import com.nkcs.ereader.read.repository.BookRepository;
@@ -13,9 +12,7 @@ import com.nkcs.ereader.read.repository.ConfigRepository;
 import com.nkcs.ereader.read.ui.widget.read.PageStyle;
 import com.nkcs.ereader.read.ui.widget.read.PageView;
 
-import java.io.BufferedReader;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 /**
  * @author faunleaf
@@ -38,7 +35,7 @@ public class ReadPresenter implements ReadContract.IPresenter {
 
     @Override
     public void changeBrightness(int brightness, boolean systemBrightness) {
-        mConfigRepository.saveBrigtnessConfig(brightness, systemBrightness).subscribe(new BaseDbSubscriber<Config>() {
+        mConfigRepository.saveBrigtnessConfig(brightness, systemBrightness).subscribe(new CommonSubscriber<Config>() {
 
             @Override
             protected void onSuccess(Config config) {
@@ -54,7 +51,7 @@ public class ReadPresenter implements ReadContract.IPresenter {
 
     @Override
     public void changeNightMode(boolean nightMode) {
-        mConfigRepository.saveNightModeConfig(nightMode).subscribe(new BaseDbSubscriber<Config>() {
+        mConfigRepository.saveNightModeConfig(nightMode).subscribe(new CommonSubscriber<Config>() {
 
             @Override
             protected void onSuccess(Config config) {
@@ -70,7 +67,7 @@ public class ReadPresenter implements ReadContract.IPresenter {
 
     @Override
     public void changeTextSize(int textSize) {
-        mConfigRepository.saveTextSizeConfig(textSize).subscribe(new BaseDbSubscriber<Config>() {
+        mConfigRepository.saveTextSizeConfig(textSize).subscribe(new CommonSubscriber<Config>() {
 
             @Override
             protected void onSuccess(Config config) {
@@ -86,7 +83,7 @@ public class ReadPresenter implements ReadContract.IPresenter {
 
     @Override
     public void changePageMode(PageView.PageMode pageMode) {
-        mConfigRepository.savePageModeConfig(pageMode).subscribe(new BaseDbSubscriber<Config>() {
+        mConfigRepository.savePageModeConfig(pageMode).subscribe(new CommonSubscriber<Config>() {
 
             @Override
             protected void onSuccess(Config config) {
@@ -102,7 +99,7 @@ public class ReadPresenter implements ReadContract.IPresenter {
 
     @Override
     public void changePageStyle(PageStyle pageStyle) {
-        mConfigRepository.savePageStyleConfig(pageStyle).subscribe(new BaseDbSubscriber<Config>() {
+        mConfigRepository.savePageStyleConfig(pageStyle).subscribe(new CommonSubscriber<Config>() {
 
             @Override
             protected void onSuccess(Config config) {
@@ -118,7 +115,7 @@ public class ReadPresenter implements ReadContract.IPresenter {
 
     @Override
     public void getReadConfig() {
-        mConfigRepository.getAllConfig().subscribe(new BaseDbSubscriber<Config>() {
+        mConfigRepository.getAllConfig().subscribe(new CommonSubscriber<Config>() {
 
             @Override
             protected void onSuccess(Config config) {
@@ -134,7 +131,7 @@ public class ReadPresenter implements ReadContract.IPresenter {
 
     @Override
     public void changeLastReadChapter(Book book, Chapter chapter) {
-        mBookRepository.changeLastReadChapter(book, chapter).subscribe(new BaseDbSubscriber<Book>() {
+        mBookRepository.changeLastReadChapter(book, chapter).subscribe(new CommonSubscriber<Book>() {
 
             @Override
             protected void onSuccess(Book book) {}
@@ -148,7 +145,7 @@ public class ReadPresenter implements ReadContract.IPresenter {
 
     @Override
     public void formatChapters(Book book, List<Chapter> chapterList) {
-        mBookRepository.formatChapters(book, chapterList).subscribe(new BaseDbSubscriber<Book>() {
+        mBookRepository.formatChapters(book, chapterList).subscribe(new CommonSubscriber<Book>() {
 
             @Override
             protected void onSuccess(Book book) {
@@ -164,7 +161,7 @@ public class ReadPresenter implements ReadContract.IPresenter {
 
     @Override
     public void getBook(Long bookId) {
-        mBookRepository.getBook(bookId).subscribe(new BaseDbSubscriber<Book>() {
+        mBookRepository.getBook(bookId).subscribe(new CommonSubscriber<Book>() {
 
             @Override
             protected void onSuccess(Book book) {
