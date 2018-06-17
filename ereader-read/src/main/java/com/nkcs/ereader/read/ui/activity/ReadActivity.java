@@ -1,5 +1,6 @@
 package com.nkcs.ereader.read.ui.activity;
 
+import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.nkcs.ereader.base.ui.activity.BaseActivity;
 import com.nkcs.ereader.base.router.RouterConstant;
@@ -8,6 +9,7 @@ import com.nkcs.ereader.read.presenter.ReadPresenter;
 import com.nkcs.ereader.read.repository.BookRepository;
 import com.nkcs.ereader.read.repository.ConfigRepository;
 import com.nkcs.ereader.read.ui.fragment.ReadFragment;
+import com.nkcs.ereader.read.ui.fragment.ReadSearchFragment;
 
 /**
  * @author faunleaf
@@ -16,6 +18,9 @@ import com.nkcs.ereader.read.ui.fragment.ReadFragment;
 
 @Route(path = RouterConstant.READ_PAGE)
 public class ReadActivity extends BaseActivity {
+
+    @Autowired(required = true)
+    Long bookId = 0L;
 
     ReadFragment mReadFragment;
 
@@ -31,7 +36,7 @@ public class ReadActivity extends BaseActivity {
 
     @Override
     protected void onInitView() {
-        mReadFragment = getStoredFragment(ReadFragment.class);
+        mReadFragment = ReadFragment.newInstance(bookId);
         new ReadPresenter(mReadFragment, new BookRepository(this), new ConfigRepository(this));
         addFragment(mReadFragment);
     }

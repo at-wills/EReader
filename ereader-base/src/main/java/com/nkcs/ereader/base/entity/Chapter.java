@@ -22,7 +22,6 @@ public class Chapter extends BaseEntity implements Serializable {
     private String title;
     @Index
     private Long bookId;
-    @Index(unique = true)
     private Integer sequence;
 
     private Long start;

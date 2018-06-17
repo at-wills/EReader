@@ -17,9 +17,6 @@ import com.nkcs.ereader.base.ui.activity.BaseActivity;
 @Route(path = RouterConstant.LOGIN_PAGE)
 public class LoginActivity extends BaseActivity {
 
-    @Autowired(required = true)
-    String target = "";
-
     LoginFragment mLoginFragment;
 
     @Override
@@ -34,7 +31,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void onInitView() {
-        mLoginFragment = LoginFragment.newInstance(target, getIntent().getExtras());
+        mLoginFragment = LoginFragment.newInstance(getIntent().getExtras());
         new LoginPresenter(mLoginFragment, new AccountRepository(this));
         addFragment(mLoginFragment);
     }

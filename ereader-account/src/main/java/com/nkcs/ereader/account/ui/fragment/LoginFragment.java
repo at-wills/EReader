@@ -43,7 +43,7 @@ public class LoginFragment extends BaseFragment implements LoginContract.IView {
 
     private Button mBtnLogin;
 
-    public static LoginFragment newInstance(String target, Bundle bundle) {
+    public static LoginFragment newInstance(Bundle bundle) {
         LoginFragment loginFragment = new LoginFragment();
         loginFragment.setArguments(new Bundle(bundle));
         return loginFragment;
@@ -86,9 +86,12 @@ public class LoginFragment extends BaseFragment implements LoginContract.IView {
     @Override
     public void onLogin(String token) {
         Session.getInstance().setUserToken(token);
-        ARouter.getInstance().build(arguments.getString("target"))
-                .with(arguments)
-                .navigation();
+        String target = arguments.getString("target");
+        if (target != null && !"".equals(target)) {
+            ARouter.getInstance().build(arguments.getString("target"))
+                    .with(arguments)
+                    .navigation();
+        }
         removeFragment();
     }
 

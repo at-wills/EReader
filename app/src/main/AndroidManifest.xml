@@ -11,15 +11,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".impt.ui.activity.ImptActivity" />
-
-        <activity android:name=".read.ui.activity.ReadActivity"
+        <activity android:name=".home.ui.HomeActivity"
             android:theme="@style/ReadTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".impt.ui.activity.ImptActivity" />
+
+        <activity android:name=".read.ui.activity.ReadActivity"
+            android:theme="@style/ReadTheme" />
         <activity android:name=".read.ui.activity.ReadSearchActivity"
             android:theme="@style/ReadTheme" />
 

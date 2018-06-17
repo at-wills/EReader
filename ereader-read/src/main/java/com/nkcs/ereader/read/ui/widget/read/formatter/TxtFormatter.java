@@ -60,6 +60,14 @@ public class TxtFormatter extends BookFormatter {
         List<Chapter> chapterList = new ArrayList<>();
         RandomAccessFile bookStream = getFileStream(mBook.getPath());
         if (!checkExistChapter(bookStream)) {
+            Chapter chapter = new Chapter();
+            chapter.setTitle("暂无");
+            chapter.setBookId(mBook.getId());
+            chapter.setSequence(chapterList.size());
+            chapter.setStart(0L);
+            chapter.setEnd(bookStream.length());
+            chapter.setHasRead(false);
+            chapterList.add(chapter);
             FileUtils.close(bookStream);
             return chapterList;
         }

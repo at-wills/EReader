@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimaryDark">#3e2723</color>
     <color name="manageTabButtonImg">#bfbfbf</color>
     <color name="defaultBackground">#ffffff</color>
     <color name="importButtonBackground">#f6f6f6</color>

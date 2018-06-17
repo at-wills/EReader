@@ -119,7 +119,7 @@ public class ReadView extends PageView {
         mBook = book;
         mOnBookChangeListener = listener;
 
-        if (mBook.getHasFormat()) {
+        if (mBook.getHasFormat() != null && mBook.getHasFormat()) {
             int chapter = mBook.getLastReadChapter() != null ? mBook.getLastReadChapter() : 0;
             skipToChapter(chapter);
         } else {

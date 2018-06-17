@@ -1,5 +1,7 @@
 package com.nkcs.ereader.base.subscriber;
 
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 import io.reactivex.Observer;
@@ -14,6 +16,8 @@ import retrofit2.Response;
 
 public abstract class ResponseSubscriber<T> implements Observer<Response<T>> {
 
+    private final static int UNAUTHORIZED_CODE = 401;
+
     protected abstract void onSuccess(T t);
 
     protected abstract void onFailure(Throwable e);
@@ -25,6 +29,8 @@ public abstract class ResponseSubscriber<T> implements Observer<Response<T>> {
     public void onNext(Response<T> response) {
         if (response.isSuccessful()) {
             onSuccess(response.body());
+        } else if (response.code() == UNAUTHORIZED_CODE){
+            onFailure(new Throwable("您的登录已过时"));
         } else {
            String error = parseToNetworkErrorStr(response.errorBody());
            onFailure(new Throwable(error));
@@ -44,8 +50,9 @@ public abstract class ResponseSubscriber<T> implements Observer<Response<T>> {
             return null;
         }
         try {
-            return errorBody.string();
-        } catch (IOException e) {
+            JSONObject jsonObject = new JSONObject(errorBody.string());
+            return jsonObject.getString("message");
+        } catch (Exception e) {
             return null;
         }
     }

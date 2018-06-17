@@ -37,6 +37,7 @@ public class Book extends BaseEntity implements Serializable {
     private Integer totalChapter;
     private Boolean hasFormat;
     private Date created;
+    private Date pinTopDate;
 
     private Integer lastReadChapter;
     private Integer lastReadPage;
@@ -45,17 +46,20 @@ public class Book extends BaseEntity implements Serializable {
     @ToMany(referencedJoinProperty = "bookId")
     @OrderBy("sequence ASC")
     private List<Chapter> chapterList;
+
     /** Used to resolve relations */
     @Generated(hash = 2040040024)
     private transient DaoSession daoSession;
+
     /** Used for active entity operations. */
     @Generated(hash = 1097957864)
     private transient BookDao myDao;
 
-    @Generated(hash = 1236338351)
+    @Generated(hash = 1998967551)
     public Book(Long id, String title, String hash, String path, String cover,
             String format, Integer totalChapter, Boolean hasFormat, Date created,
-            Integer lastReadChapter, Integer lastReadPage, Double progress) {
+            Date pinTopDate, Integer lastReadChapter, Integer lastReadPage,
+            Double progress) {
         this.id = id;
         this.title = title;
         this.hash = hash;
@@ -65,6 +69,7 @@ public class Book extends BaseEntity implements Serializable {
         this.totalChapter = totalChapter;
         this.hasFormat = hasFormat;
         this.created = created;
+        this.pinTopDate = pinTopDate;
         this.lastReadChapter = lastReadChapter;
         this.lastReadPage = lastReadPage;
         this.progress = progress;
@@ -144,6 +149,14 @@ public class Book extends BaseEntity implements Serializable {
 
     public void setCreated(Date created) {
         this.created = created;
+    }
+
+    public Date getPinTopDate() {
+        return this.pinTopDate;
+    }
+
+    public void setPinTopDate(Date pinTopDate) {
+        this.pinTopDate = pinTopDate;
     }
 
     public Integer getLastReadChapter() {
@@ -240,4 +253,6 @@ public class Book extends BaseEntity implements Serializable {
         this.daoSession = daoSession;
         myDao = daoSession != null ? daoSession.getBookDao() : null;
     }
+
+    
 }

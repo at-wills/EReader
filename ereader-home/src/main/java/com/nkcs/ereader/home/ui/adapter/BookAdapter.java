@@ -1,4 +1,4 @@
-package com.nkcs.ereader.home.ui.adaptor;
+package com.nkcs.ereader.home.ui.adapter;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.v4.content.FileProvider;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,11 +16,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nkcs.ereader.base.db.BookDao;
 import com.nkcs.ereader.base.db.DbHelper;
 import com.nkcs.ereader.base.entity.Book;
+import com.nkcs.ereader.base.event.LogoutEvent;
+import com.nkcs.ereader.base.utils.LogUtils;
+import com.nkcs.ereader.base.utils.StringUtils;
 import com.nkcs.ereader.home.R;
 import com.nkcs.ereader.home.ui.fragment.HomeFragment;
 import com.nkcs.ereader.home.ui.utils.BookCoverTool;
@@ -141,7 +142,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
             });
             bookItem.setOnClickListener(e -> {
                 if (!isEditing) {
-                    goReadPage();
+                    homeFragment.goReadPage(bookList.get(position - 1));
                 } else {
                     // 选中书籍或取消
                     selectedBooks.put(bookList.get(position - 1).getId().intValue(), !selectedBooks.get(bookList.get(position - 1).getId().intValue()));
@@ -169,7 +170,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
                 } else if (book2.getCreated() == null) {
                     return -1;
                 } else {
-                    return book.getCreated().after(book2.getCreated()) ? 1 : -1;
+                    return book.getCreated().after(book2.getCreated()) ? -1 : 1;
                 }
             });
         } else {
@@ -214,6 +215,10 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
             book.setId(NOT_BOOK_BUT_JUST_PLACE_HOLDERS_ID);
             list.add(book);
         }
+    }
+
+    public List<Book> getItems() {
+        return bookList;
     }
 
     @Override
@@ -263,10 +268,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         BookViewHolder(ViewGroup parent, View itemView) {
             super(parent, itemView);
         }
-    }
-
-    private void goReadPage() {
-        Toast.makeText(this.homeFragment.getContext(), "前往阅读页面", Toast.LENGTH_SHORT).show();
     }
 
     public void selectAllOrUnselectAll(boolean isSelect) {
@@ -353,48 +354,13 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        BookDao bookDao = DbHelper.getInstance().getSession().getBookDao();
-                        List<Book> books = getSelectedBooks();
-                        if (deleteFile[0]) {
-                            for (Book book : books) {
-                                if (book.getPath() == null) {
-                                    Log.e("delete modal sure",
-                                            "错误，无路径文件 " + book.toString());
-                                    deleteFromList(bookDao, book);
-                                    continue;
-                                }
-                                File file = new File(book.getPath());
-                                if (file.exists()) {
-                                    if (!file.delete()) {
-                                        Log.e("delete modal sure", "删除文件失败：" + file.getAbsolutePath());
-                                    } else {
-                                        deleteFromList(bookDao, book);
-                                    }
-                                }
-                                Log.e("delete modal sure",
-                                        "文件不存在 " + book.toString());
-                            }
-                        } else {
-                            for (Book book : books) {
-                                deleteFromList(bookDao, book);
-                            }
-                        }
-                        supplyPlaceHolderBooksToTail(bookList);
+                        homeFragment.deleteBook(getSelectedBooks(), deleteFile[0]);
+//                        supplyPlaceHolderBooksToTail(bookList);
                         selectAllOrUnselectAll(false);
-                        notifyDataSetChanged();
                         dialog.dismiss();
                     }
                 }).create();
         dialog.show();
-    }
-
-    // 从列表以及数据库中删除
-    private void deleteFromList(BookDao bookDao, Book book) {
-        bookDao.delete(book);
-        dealBackupList(book, true);
-        bookList.remove(book);
-        // 我也是无奈了
-        selectedBooks.put(book.getId().intValue(), false);
     }
 
     // 分享书目
@@ -405,7 +371,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         }
         Book book = books.get(0);
         Intent share = new Intent(Intent.ACTION_SEND);
-        share.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         File file = new File(book.getPath());
         Uri contentUri;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -428,7 +393,8 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
         if (books.size() == 1) {
             Book book = books.get(0);
             showAlertDialog("标题：" + book.getTitle() + "\n路径："
-                    + book.getPath() + "\n导入时间：" + book.getCreated());
+                    + book.getPath() + "\n最后阅读时间："
+                    + StringUtils.dateConvert(book.getCreated(), "yyyy-MM-dd HH:mm:ss"));
         } else {
             StringBuilder stringBuilder = new StringBuilder();
             for (Book book :
@@ -436,7 +402,8 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
                 stringBuilder.append("-------------------------------\n")
                         .append("标题：").append(book.getTitle())
                         .append("\n路径：").append(book.getPath())
-                        .append("\n导入时间：").append(book.getCreated())
+                        .append("\n最后阅读时间：")
+                        .append(StringUtils.dateConvert(book.getCreated(), "yyyy-MM-dd HH:mm:ss"))
                         .append("\n");
             }
             showAlertDialog(stringBuilder.toString());

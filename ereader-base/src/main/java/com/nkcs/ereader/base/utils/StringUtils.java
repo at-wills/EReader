@@ -27,7 +27,13 @@ public class StringUtils {
     }
 
     public static String dateConvert(long time,String pattern) {
-        Date date = new Date(time);
+        return dateConvert(new Date(time), pattern);
+    }
+
+    public static String dateConvert(Date date,String pattern) {
+        if (date == null) {
+            return null;
+        }
         SimpleDateFormat format = new SimpleDateFormat(pattern);
         return format.format(date);
     }

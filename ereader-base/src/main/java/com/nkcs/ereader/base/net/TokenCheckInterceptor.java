@@ -1,5 +1,6 @@
 package com.nkcs.ereader.base.net;
 
+import com.nkcs.ereader.base.event.LogoutEvent;
 import com.nkcs.ereader.base.net.session.Session;
 
 import org.greenrobot.eventbus.EventBus;
@@ -26,12 +27,14 @@ public class TokenCheckInterceptor implements Interceptor {
     public Response intercept(Chain chain) throws IOException {
         Request request = chain.request();
         Request.Builder builder = request.newBuilder();
+        builder.header(ACCESS_TOKEN_HEADER, "Bearer " + Session.getInstance().getUserToken());
         builder.header(ACCEPT_HEADER, "application/json");
         Request modifyRequest = builder.build();
 
         Response response = chain.proceed(modifyRequest);
         if (response.code() == UNAUTHORIZED_CODE) {
             Session.getInstance().logout();
+            EventBus.getDefault().postSticky(new LogoutEvent());
         }
         return response;
     }

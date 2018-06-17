@@ -4,4 +4,10 @@
     <color name="cloud_menu_bg">@color/colorPrimaryDark</color>
     <color name="cloud_menu_text">#BBBBBB</color>
 
+    <color name="book_shelf_normal_wood">#c9b495</color>
+    <color name="book_shelf_center_wood">#a4907a</color>
+    <color name="book_shelf_shadow_wood">#806c5f</color>
+    <color name="book_shelf_edge">#d5c5ae</color>
+    <color name="book_extension">#aaa</color>
+
 </resources>

@@ -14,6 +14,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,14 +29,17 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.nkcs.ereader.base.entity.Book;
+import com.nkcs.ereader.base.router.RouterConstant;
 import com.nkcs.ereader.base.ui.fragment.BaseFragment;
 import com.nkcs.ereader.home.R;
 import com.nkcs.ereader.home.contract.HomeContract;
-import com.nkcs.ereader.home.ui.adaptor.BookAdapter;
+import com.nkcs.ereader.home.ui.adapter.BookAdapter;
 import com.nkcs.ereader.home.ui.utils.SharedPreferenceManager;
 import com.nkcs.ereader.home.ui.utils.WindowTool;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -141,8 +145,10 @@ public class HomeFragment extends BaseFragment
                         SharedPreferenceManager.HOME_BOOK_SORT_BY_TIME, true
                 );
                 adapter.sort();
-            } else if (id == R.id.list_show_books) {
-                Toast.makeText(this.getContext(), "别点了，没做", Toast.LENGTH_SHORT).show();
+//            } else if (id == R.id.list_show_books) {
+//                Toast.makeText(this.getContext(), "别点了，没做", Toast.LENGTH_SHORT).show();
+            } else if (id == R.id.cloud_bookshelf) {
+                ARouter.getInstance().build(RouterConstant.CLOUD_PAGE).navigation();
             } else if (id == R.id.tradition_show_books) {
                 sharedPreferenceManager.setSetting(
                         SharedPreferenceManager.HOME_BOOK_SHOW_TRADITION, true);
@@ -154,15 +160,16 @@ public class HomeFragment extends BaseFragment
         popupMenu.show();
     }
 
-    /*
-     * hide popupmenu item according to configure database */
+    /**
+     * hide popupmenu item according to configure database
+     */
     private void setPopupMenuItemHide(Menu menu) {
         // 根据之前的设置，设置弹出菜单的项目
         if (sharedPreferenceManager.getSetting(SharedPreferenceManager.HOME_BOOK_SHOW_TRADITION)) {
             menu.findItem(R.id.tradition_show_books).setVisible(false);
-        } else {
+        }/* else {
             menu.findItem(R.id.list_show_books).setVisible(false);
-        }
+        }*/
         if (sharedPreferenceManager.getSetting(SharedPreferenceManager.HOME_BOOK_SORT_BY_TIME)) {
             menu.findItem(R.id.sort_item_by_time).setVisible(false);
         } else {
@@ -199,7 +206,8 @@ public class HomeFragment extends BaseFragment
     }
 
     @Override
-    protected void onLoadData() {
+    public void onStart() {
+        super.onStart();
         presenter.getBooks();
     }
 
@@ -269,9 +277,8 @@ public class HomeFragment extends BaseFragment
         editLayout = findViewById(R.id.edit_layout);
         originLayout = findViewById(R.id.origin_layout);
         quickReadBtn = findViewById(R.id.quick_read_btn);
-        TextView editLayoutCancelBtn = findViewById(R.id.cancel_edit_btn);
         searchLayout = findViewById(R.id.search_layout);
-        editLayoutCancelBtn = findViewById(R.id.cancel_edit_btn);
+        TextView editLayoutCancelBtn = findViewById(R.id.cancel_edit_btn);
         editLayoutCancelBtn.setOnClickListener(e -> {
             modeSwitcher.switchEdit(false);
         });
@@ -286,7 +293,16 @@ public class HomeFragment extends BaseFragment
             modeSwitcher.switchSearch(false);
         });
         quickReadBtn.setOnClickListener(view -> {
-            Toast.makeText(this.getContext(), "打开最近的书", Toast.LENGTH_SHORT).show();
+            Book book = null;
+            for (Book b : adapter.getItems()) {
+                if (b.getCreated() != null
+                        && (book == null || b.getCreated().after(book.getCreated()))) {
+                    book = b;
+                }
+            }
+            if (book != null) {
+                goReadPage(book);
+            }
         });
         findViewById(R.id.select_all).setOnClickListener(e -> {
             if (!adapter.allSelected()) {
@@ -314,16 +330,13 @@ public class HomeFragment extends BaseFragment
             adapter.pinBooksTopOrCancel();
         });
         findViewById(R.id.delete).setOnClickListener(e -> {
-            adapter.delete();
-        });
-        findViewById(R.id.share).setOnClickListener(e -> {
-            adapter.share();
-        });
-        findViewById(R.id.detail).setOnClickListener(e -> {
-            adapter.detail();
+            callWithPermissions("delete");
         });
         findViewById(R.id.share).setOnClickListener(e -> {
             callWithPermissions("share");
+        });
+        findViewById(R.id.detail).setOnClickListener(e -> {
+            adapter.detail();
         });
 
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -342,12 +355,46 @@ public class HomeFragment extends BaseFragment
 
     @NeedsPermission(permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE},
             permissionsText = {"读写手机存储"})
+    public void delete() {
+        adapter.delete();
+    }
+
+    @NeedsPermission(permissions = {Manifest.permission.WRITE_EXTERNAL_STORAGE},
+            permissionsText = {"读写手机存储"})
     public void share() {
         adapter.share();
     }
 
     public void goImportPage() {
-        Toast.makeText(this.getContext(), "跳转到导入页面", Toast.LENGTH_SHORT).show();
+        ARouter.getInstance().build(RouterConstant.IMPORT_PAGE).navigation();
+    }
+
+    public void goReadPage(Book book) {
+        ARouter.getInstance().build(RouterConstant.READ_PAGE)
+                .withLong("bookId", book.getId())
+                .navigation();
+    }
+
+    public void deleteBook(List<Book> bookList, boolean deleteFile) {
+        if (deleteFile) {
+            for (Book book : bookList) {
+                if (book.getPath() == null) {
+                    Log.e("delete modal sure",
+                            "错误，无路径文件 " + book.toString());
+                    continue;
+                }
+                File file = new File(book.getPath());
+                if (file.exists()) {
+                    if (!file.delete()) {
+                        Log.e("delete modal sure", "删除文件失败：" + file.getAbsolutePath());
+                    }
+                } else {
+                    Log.e("delete modal sure",
+                            "文件不存在 " + book.toString());
+                }
+            }
+        }
+        presenter.deleteBooks(bookList);
     }
 
     public void switchBookEditMode(boolean isEditing) {

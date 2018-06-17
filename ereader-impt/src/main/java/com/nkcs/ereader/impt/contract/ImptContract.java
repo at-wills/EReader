@@ -2,6 +2,7 @@ package com.nkcs.ereader.impt.contract;
 
 import com.nkcs.ereader.base.contract.BasePresenter;
 import com.nkcs.ereader.base.contract.BaseView;
+import com.nkcs.ereader.base.entity.Book;
 
 import java.io.File;
 import java.util.List;
@@ -22,6 +23,10 @@ public interface ImptContract {
 
     interface IPresenter extends BasePresenter {
 
+        void cancelGetTargetFile();
+
         void getTargetFile(File file);
+
+        void importBook(List<Book> bookList);
     }
 }

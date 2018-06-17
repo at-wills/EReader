@@ -65,6 +65,7 @@ public class FileRepository extends BaseRepository {
                         }
                     }
                     emitter.onNext(txtList);
+                    emitter.onComplete();
                 }).compose(computationRxConfig());
     }
 }

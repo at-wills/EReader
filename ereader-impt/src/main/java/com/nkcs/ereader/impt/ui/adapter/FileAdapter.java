@@ -17,6 +17,7 @@ import com.nkcs.ereader.impt.entity.FileBean;
 import com.nkcs.ereader.impt.entity.FileType;
 import com.nkcs.ereader.impt.utils.FileUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -50,6 +51,7 @@ public class FileAdapter extends RecyclerViewAdapter {
             fileHolder.fileName.setText(fileBean.getName());
 
             if (fileBean.getFileType() != FileType.directory) {
+                fileHolder.checkBox.setVisibility(View.VISIBLE);
                 fileHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
@@ -67,7 +69,6 @@ public class FileAdapter extends RecyclerViewAdapter {
                 }
 
                 fileHolder.checkBox.setChecked(map.get(position));
-
             }
 
             FileType fileType = fileBean.getFileType();
@@ -78,27 +79,25 @@ public class FileAdapter extends RecyclerViewAdapter {
 
             } else {
                 fileHolder.fileChildCount.setVisibility(View.GONE);
-
                 fileHolder.fileSize.setVisibility(View.VISIBLE);
                 fileHolder.fileSize.setText(FileUtils.sizeToChange(fileBean.getSize()));
-
             }
 
             //设置图标
             if (fileType == FileType.directory) {
                 fileHolder.fileIcon.setImageResource(R.mipmap.file_icon_dir);
-            } else if (fileType == FileType.music) {
-                fileHolder.fileIcon.setImageResource(R.mipmap.file_icon_music);
-            } else if (fileType == FileType.video) {
-                fileHolder.fileIcon.setImageResource(R.mipmap.file_icon_video);
+//            } else if (fileType == FileType.music) {
+//                fileHolder.fileIcon.setImageResource(R.mipmap.file_icon_music);
+//            } else if (fileType == FileType.video) {
+//                fileHolder.fileIcon.setImageResource(R.mipmap.file_icon_video);
             } else if (fileType == FileType.txt) {
                 fileHolder.fileIcon.setImageResource(R.mipmap.file_icon_txt);
-            } else if (fileType == FileType.zip) {
-                fileHolder.fileIcon.setImageResource(R.mipmap.file_icon_zip);
-            } else if (fileType == FileType.image) {
-                // Glide.with(fileHolder.itemView.getContext()).load(new File(fileBean.getPath())).into(fileHolder.fileIcon);
-            } else if (fileType == FileType.apk) {
-                fileHolder.fileIcon.setImageResource(R.mipmap.file_icon_apk);
+//            } else if (fileType == FileType.zip) {
+//                fileHolder.fileIcon.setImageResource(R.mipmap.file_icon_zip);
+//            } else if (fileType == FileType.image) {
+//                Glide.with(fileHolder.itemView.getContext()).load(new File(fileBean.getPath())).into(fileHolder.fileIcon);
+//            } else if (fileType == FileType.apk) {
+//                fileHolder.fileIcon.setImageResource(R.mipmap.file_icon_apk);
             } else {
                 fileHolder.fileIcon.setImageResource(R.mipmap.file_icon_other);
             }
@@ -287,7 +286,6 @@ public class FileAdapter extends RecyclerViewAdapter {
             view = mLayoutInflater.inflate(R.layout.list_item_dist, parent, false);
             return new FileHolder(view);
         } else if (viewType == 0) {
-
             view = mLayoutInflater.inflate(R.layout.list_item_file, parent, false);
             return new FileHolder(view);
         } else {
