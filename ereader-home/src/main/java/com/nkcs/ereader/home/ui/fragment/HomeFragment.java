@@ -343,6 +343,7 @@ public class HomeFragment extends BaseFragment
         Menu menu = navigationView.getMenu();
         MenuItem item = menu.findItem(R.id.full_screen);
         Switch aSwitch = (Switch) item.getActionView().findViewById(R.id.switchForActionBar);
+        aSwitch.setChecked(!sharedPreferenceManager.getSetting(SharedPreferenceManager.WINDOW_NO_LIMIT));
         aSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

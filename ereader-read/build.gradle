@@ -5,6 +5,7 @@ apply from: '../common_dependencies.gradle'
 android {
     compileSdkVersion rootProject.ext.android["compileSdkVersion"]
     defaultConfig {
+        vectorDrawables.useSupportLibrary = true
         minSdkVersion rootProject.ext.android["minSdkVersion"]
         targetSdkVersion rootProject.ext.android["targetSdkVersion"]
         versionCode 1
